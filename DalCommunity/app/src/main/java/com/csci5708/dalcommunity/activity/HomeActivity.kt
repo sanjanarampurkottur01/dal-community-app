@@ -39,6 +39,7 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.OnImageInItemClickListener
         Toast.makeText(this,"test",Toast.LENGTH_LONG).show()
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_top_comment, R.anim.slide_out_down_comment)
         fragmentTransaction.replace(R.id.fragment_container, CommentFragment())
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
