@@ -19,14 +19,24 @@
             android:background="@color/card_background"
             >
 
+            <ImageView
+                android:id="@+id/user_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/user_profile_outline"
+                />
+
             <TextView
                 android:id="@+id/user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/username"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_color"
+                android:layout_toEndOf="@id/user_icon"
                 />
 
             <TextView
@@ -76,23 +86,31 @@
                     />
 
                 <ImageView
-                    android:id="@+id/dislike"
+                    android:id="@+id/comment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/dislike_outline"
+                    android:src="@drawable/comment_outline"
                     android:layout_toEndOf="@id/like"
                     android:layout_marginStart="16dp"
                     />
 
                 <ImageView
-                    android:id="@+id/report"
+                    android:id="@+id/send"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/report"
-                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/send_outline"
+                    android:layout_toEndOf="@id/comment"
                     android:layout_marginStart="16dp"
                     />
 
+                <ImageView
+                    android:id="@+id/save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/save_outline"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="16dp"
+                    />
             </RelativeLayout>
 
         </RelativeLayout>

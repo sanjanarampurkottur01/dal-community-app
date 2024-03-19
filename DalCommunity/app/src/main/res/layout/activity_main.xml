@@ -7,7 +7,7 @@
     android:paddingStart="6dp"
     android:paddingEnd="6dp"
     android:background="@color/background"
-    tools:context=".HomeActivity">
+    tools:context=".activity.HomeActivity">
 
     <TextView
         android:id="@+id/greetings"
@@ -24,6 +24,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/greetings"
+        />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_container"
+        android:layout_marginTop="16dp"
         />
 
 </RelativeLayout>
