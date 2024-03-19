@@ -7,4 +7,18 @@
     <string name="petitionHeader">Create Petition</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="report_options">
+        <item>Spam</item>
+        <item>Nudity or Sexual Activity</item>
+        <item>Hate Speech or Symbols</item>
+        <item>Violence</item>
+        <item>Bullying / Harassment</item>
+        <item>False Information</item>
+        <item>Scam</item>
+        <item>Suicide or Self-injury</item>
+        <item>Sale of illegal items</item>
+        <item>Intellectual Property Violation</item>
+        <item>Other</item>
+    </string-array>
 </resources>

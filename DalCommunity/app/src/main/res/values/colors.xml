@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#EEEEFF</color>
     <color name="card_background">#F9F9FF</color>
+    <color name="separator_color">#BDBDBD</color>
     <color name="text_color">#5151C6</color>
     <color name="text_hint">#759F93</color>
     <color name="dark_gray">#455A54</color>

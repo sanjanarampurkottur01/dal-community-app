@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.adapter.HomeAdapter
+import com.csci5708.dalcommunity.fragment.ReportFragment
 import com.example.dalcommunity.R
 
-class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
+class HomeActivity : AppCompatActivity(), HomeAdapter.OnImageInItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,7 +31,7 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
         val posts = listOf("", "", "")
 
         var adapter = HomeAdapter(this, posts)
-        adapter.setOnCommentClickListener(this)
+        adapter.setOnImageInItemClickListener(this)
         recyclerView.adapter = adapter
     }
 
@@ -39,6 +40,15 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
         val fragmentManager = supportFragmentManager
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, CommentFragment())
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    }
+
+    override fun onReportClick(position: Int) {
+        Toast.makeText(this,"Report Clicked",Toast.LENGTH_LONG).show()
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, ReportFragment())
         fragmentTransaction.addToBackStack(null)
         fragmentTransaction.commit()
     }
