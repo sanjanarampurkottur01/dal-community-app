@@ -7,7 +7,7 @@
     android:paddingStart="6dp"
     android:paddingEnd="6dp"
     android:background="@color/background"
-    tools:context=".HomeActivity">
+    tools:context=".activity.HomeActivity">
 
     <TextView
         android:id="@+id/greetings"

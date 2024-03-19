@@ -1,10 +1,11 @@
-package com.example.dalcommunity
+package com.example.dalcommunity.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dalcommunity.R
 
 class HomeAdapter(private val context: Context, private val posts: List<String>) :
     RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
@@ -23,6 +24,6 @@ class HomeAdapter(private val context: Context, private val posts: List<String>)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //
+
     }
 }

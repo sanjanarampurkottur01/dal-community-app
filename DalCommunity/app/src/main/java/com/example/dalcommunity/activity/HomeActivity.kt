@@ -1,4 +1,4 @@
-package com.example.dalcommunity
+package com.example.dalcommunity.activity
 
 import android.os.Bundle
 import android.view.Window
@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dalcommunity.adapter.HomeAdapter
+import com.example.dalcommunity.R
 
 
 class HomeActivity : AppCompatActivity() {
