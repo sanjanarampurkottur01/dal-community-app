@@ -1,15 +1,18 @@
-package com.example.dalcommunity
+package com.example.dalcommunity.activity
 
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.dalcommunity.fragment.CommentFragment
+import com.example.dalcommunity.adapter.HomeAdapter
+import com.example.dalcommunity.R
 
-
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,6 +30,16 @@ class HomeActivity : AppCompatActivity() {
         val posts = listOf("", "", "")
 
         var adapter = HomeAdapter(this, posts)
+        adapter.setOnCommentClickListener(this)
         recyclerView.adapter = adapter
+    }
+
+    override fun onCommentClick(position: Int) {
+        Toast.makeText(this,"test",Toast.LENGTH_LONG).show()
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.fragment_container, CommentFragment())
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 }
