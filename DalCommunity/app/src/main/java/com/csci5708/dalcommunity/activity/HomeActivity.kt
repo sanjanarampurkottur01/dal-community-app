@@ -1,4 +1,4 @@
-package com.example.dalcommunity.activity
+package com.csci5708.dalcommunity.activity
 
 import android.os.Bundle
 import android.view.Window
@@ -8,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dalcommunity.fragment.CommentFragment
-import com.example.dalcommunity.adapter.HomeAdapter
+import com.csci5708.dalcommunity.fragment.CommentFragment
+import com.csci5708.dalcommunity.adapter.HomeAdapter
 import com.example.dalcommunity.R
 
 class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {

@@ -1,5 +1,4 @@
-package com.example.dalcommunity.fragment
-
+package com.csci5708.dalcommunity.fragment
 
 import android.view.View
 import android.os.Bundle
@@ -10,9 +9,9 @@ import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.animation.ObjectAnimator
 import android.text.Editable
-import com.example.dalcommunity.model.Comment
+import com.csci5708.dalcommunity.model.Comment
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dalcommunity.adapter.CommentAdapter
+import com.csci5708.dalcommunity.adapter.CommentAdapter
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.EditText

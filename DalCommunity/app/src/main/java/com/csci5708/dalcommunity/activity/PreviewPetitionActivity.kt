@@ -1,4 +1,4 @@
-package com.example.dalcommunity.activity.petitionactivity
+package com.csci5708.dalcommunity.activity
 
 import android.content.Context
 import android.content.Intent

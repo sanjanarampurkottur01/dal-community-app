@@ -1,8 +1,6 @@
-package com.example.dalcommunity.activity.petitionactivity
+package com.csci5708.dalcommunity.activity
 
-import android.app.Activity
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -61,7 +59,7 @@ class PetitionActivity : AppCompatActivity() {
     }
     private fun saveUserId(userId: String) {
         // Get SharedPreferences instance
-        val sharedPreferences: SharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
 
         // Get SharedPreferences editor
         val editor = sharedPreferences.edit()
@@ -99,7 +97,7 @@ class PetitionActivity : AppCompatActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             when (requestCode) {
                 REQUEST_IMAGE_CAPTURE -> {
                     val imageBitmap = data?.extras?.get("data") as Bitmap

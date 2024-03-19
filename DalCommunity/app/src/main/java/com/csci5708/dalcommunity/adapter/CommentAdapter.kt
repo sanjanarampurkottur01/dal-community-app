@@ -1,10 +1,10 @@
-package com.example.dalcommunity.adapter
+package com.csci5708.dalcommunity.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.dalcommunity.model.Comment
+import com.csci5708.dalcommunity.model.Comment
 import com.example.dalcommunity.R
 
 class CommentAdapter(private val comments: List<Comment>) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {

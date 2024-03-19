@@ -1,10 +1,11 @@
-package com.example.dalcommunity.activity.petitionactivity
+package com.csci5708.dalcommunity.provider
 
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import com.csci5708.dalcommunity.util.ParcelFileDescriptorUtil
 
 // ImageContentProvider.kt
 class ImageContentProvider : ContentProvider() {

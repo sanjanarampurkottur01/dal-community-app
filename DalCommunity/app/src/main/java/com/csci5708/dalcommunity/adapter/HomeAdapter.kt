@@ -1,4 +1,4 @@
-package com.example.dalcommunity.adapter
+package com.csci5708.dalcommunity.adapter
 
 import android.content.Context
 import android.view.LayoutInflater

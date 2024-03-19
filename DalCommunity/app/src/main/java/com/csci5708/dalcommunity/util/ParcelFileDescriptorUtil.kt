@@ -1,4 +1,4 @@
-package com.example.dalcommunity.activity.petitionactivity
+package com.csci5708.dalcommunity.util
 
 import android.os.ParcelFileDescriptor
 import java.io.IOException
