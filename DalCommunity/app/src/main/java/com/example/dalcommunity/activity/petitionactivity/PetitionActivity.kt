@@ -1,4 +1,4 @@
-package com.example.dalcommunity.petitionactivity
+package com.example.dalcommunity.activity.petitionactivity
 
 import android.app.Activity
 import android.content.ContentValues
