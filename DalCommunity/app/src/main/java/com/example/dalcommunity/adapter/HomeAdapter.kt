@@ -26,7 +26,7 @@ class HomeAdapter(private val context: Context, private val posts: List<String>)
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Logic to set data from the actual post
-        val currentItem = posts[position]
+//        val currentItem = posts[position]
     }
 
     fun setOnCommentClickListener(listener: onCommentClickListener) {
