@@ -1,0 +1,87 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.csci5708.dalcommunity.fragment.ProfileFragment"
+    android:background="@color/dark_background">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/profile_name_background"
+            android:layout_width="337dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="44dp"
+            android:alpha="0.1"
+            android:background="@color/white"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/profile_page_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/gradient_background"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_name_background"
+            app:layout_constraintStart_toStartOf="@+id/profile_name_background"
+            app:layout_constraintTop_toTopOf="@+id/profile_name_background"
+            app:layout_constraintVertical_bias="0.571"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
+
+        <TextView
+            android:id="@+id/profile_page_name"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="24dp"
+            android:text="John Doe"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toEndOf="@+id/profile_page_image"
+            app:layout_constraintTop_toTopOf="@+id/profile_name_background" />
+
+        <TextView
+            android:id="@+id/profile_page_email"
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="14dp"
+            android:text="johndoe@example.com"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_name_background"
+            app:layout_constraintStart_toEndOf="@+id/profile_page_image"
+            app:layout_constraintTop_toBottomOf="@+id/profile_page_name"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/profile_page_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/profile_edit_button"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_name_background"
+            app:layout_constraintEnd_toEndOf="@+id/profile_name_background"
+            app:layout_constraintTop_toTopOf="@+id/profile_name_background"
+            app:layout_constraintVertical_bias="0.482" />
+
+        <ImageView
+            android:id="@+id/profile_page_account_settings_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/option_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_name_background" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
