@@ -52,13 +52,11 @@
             android:layout_width="wrap_content"
             android:layout_height="18dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="6dp"
             android:text="johndoe@example.com"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_name_background"
             app:layout_constraintStart_toEndOf="@+id/profile_page_image"
-            app:layout_constraintTop_toBottomOf="@+id/profile_page_name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/profile_page_name" />
 
         <ImageView
             android:id="@+id/profile_page_edit_button"
@@ -75,13 +73,49 @@
             android:id="@+id/profile_page_account_settings_option"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="36dp"
             android:src="@drawable/option_item"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profile_name_background" />
 
+        <ImageView
+            android:id="@+id/profile_page_posts_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/option_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_page_account_settings_option" />
+
+        <TextView
+            android:id="@+id/profile_page_account_settings_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Account Settings"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_page_account_settings_option"
+            app:layout_constraintEnd_toEndOf="@+id/profile_page_account_settings_option"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/profile_page_account_settings_option"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <TextView
+            android:id="@+id/profile_page_posts_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My Posts"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_page_posts_option"
+            app:layout_constraintEnd_toEndOf="@+id/profile_page_posts_option"
+            app:layout_constraintHorizontal_bias="0.083"
+            app:layout_constraintStart_toStartOf="@+id/profile_page_posts_option"
+            app:layout_constraintTop_toTopOf="@+id/profile_page_posts_option" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
