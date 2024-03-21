@@ -13,8 +13,10 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroupOverlay
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
@@ -32,11 +34,24 @@ import androidx.core.view.WindowInsetsCompat
 import com.csci5708.dalcommunity.activity.PetitionActivity.Companion.REQUEST_IMAGE_CAPTURE
 import com.example.dalcommunity.R
 
-class ProfileDetailActivity : AppCompatActivity() {
+class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var profileImageView: ImageView
     private lateinit var imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
 
-    private val interestsArray = arrayOf("Sports", "Hiking", "Programming", "Arts")
+    private val interestsArray = arrayOf("None", "Sports", "Hiking", "Programming", "Arts")
+
+    private var profileName: String = "John Doe"
+
+    private var profileEmail: String = "jdoe@example.com"
+
+    private var profileDescription: String = "Hi! I am John Doe."
+
+    private var firstInterestSelected: String = "None"
+
+    private var secondInterestSelected: String = "None"
+
+    private var thirdInterestSelected: String = "None"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -53,14 +68,7 @@ class ProfileDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        val firstSpinner: Spinner = findViewById(R.id.profile_detail_first_interest_spinner)
-        val secondSpinner: Spinner = findViewById(R.id.profile_detail_second_interest_spinner)
-        val thirdSpinner: Spinner = findViewById(R.id.profile_detail_third_interest_spinner)
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, interestsArray.toList())
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        firstSpinner.adapter = arrayAdapter
-        secondSpinner.adapter = arrayAdapter
-        thirdSpinner.adapter = arrayAdapter
+        setupInterestSpinners()
 
         profileImageView = findViewById(R.id.profile_detail_image)
         imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -113,6 +121,27 @@ class ProfileDetailActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Setup and configure all the Spinner components in this layout
+     */
+    private fun setupInterestSpinners() {
+        val firstSpinner: Spinner = findViewById(R.id.profile_detail_first_interest_spinner)
+        val secondSpinner: Spinner = findViewById(R.id.profile_detail_second_interest_spinner)
+        val thirdSpinner: Spinner = findViewById(R.id.profile_detail_third_interest_spinner)
+        val arrayAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, interestsArray.toList())
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        firstSpinner.adapter = arrayAdapter
+        secondSpinner.adapter = arrayAdapter
+        thirdSpinner.adapter = arrayAdapter
+        firstSpinner.onItemSelectedListener = this
+        secondSpinner.onItemSelectedListener = this
+        thirdSpinner.onItemSelectedListener = this
+        firstSpinner.setSelection(arrayAdapter.getPosition(firstInterestSelected))
+        secondSpinner.setSelection(arrayAdapter.getPosition(secondInterestSelected))
+        thirdSpinner.setSelection(arrayAdapter.getPosition(thirdInterestSelected))
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home)
             finish()
@@ -150,5 +179,22 @@ class ProfileDetailActivity : AppCompatActivity() {
             val profileImage: Bitmap = data?.extras?.get("data") as Bitmap
             profileImageView.setImageBitmap(profileImage)
         }
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val interest = parent?.getItemAtPosition(position)
+
+//        Toast.makeText(this, "$interest ${parent?.id}", Toast.LENGTH_SHORT).show()
+        when (parent?.id) {
+            R.id.profile_detail_first_interest_spinner -> firstInterestSelected = interest as String
+            R.id.profile_detail_second_interest_spinner -> secondInterestSelected =
+                interest as String
+
+            R.id.profile_detail_third_interest_spinner -> thirdInterestSelected = interest as String
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("Not yet implemented")
     }
 }
