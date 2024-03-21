@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context="com.csci5708.dalcommunity.activity.ProfileDetailActivity">
 
+    <LinearLayout
+        android:id="@+id/profile_detail_dim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#70000000"
+        android:visibility="invisible"
+        android:orientation="horizontal" />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/profile_detail_toolbar"
@@ -43,14 +50,15 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/profile_detail_description_input"
-        android:layout_width="313dp"
-        android:layout_height="159dp"
+        android:layout_width="315dp"
+        android:layout_height="100dp"
         android:background="@drawable/bg_rounded"
+        android:gravity="top"
         android:inputType="textMultiLine"
         android:text="@string/profile_detail_description_placeholder"
-        android:gravity="top"
         android:textColor="@color/input_text_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_description_text" />
 
@@ -106,7 +114,7 @@
         android:id="@+id/profile_detail_save_button"
         android:layout_width="315dp"
         android:layout_height="52dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="172dp"
         android:background="@drawable/btnbackground"
         android:text="@string/profile_detail_save_changes_button"
         android:textColor="@color/white"
@@ -115,7 +123,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_description_input" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profile_detail_image_edit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/profile_detail_image"
@@ -125,5 +133,4 @@
         app:layout_constraintTop_toTopOf="@+id/profile_detail_image"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/profile_image_edit_button" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.CAMERA" />
+<!--    <uses-permission android:name="android.permission.CAMERA" />-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -22,13 +22,10 @@
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
         <activity
-            android:name="com.csci5708.dalcommunity.activity.PreviewPetitionActivity"
+            android:name="com.csci5708.dalcommunity.activity.ProfileDetailActivity"
             android:exported="false" />
         <activity
-            android:name="com.csci5708.dalcommunity.activity.PetitionActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.csci5708.dalcommunity.activity.HomeActivity"
+            android:name="com.csci5708.dalcommunity.activity.ProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +33,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.PreviewPetitionActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.PetitionActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.HomeActivity"
+            android:exported="true"/>
+
         <provider
             android:name="com.csci5708.dalcommunity.provider.ImageContentProvider"
             android:authorities="com.example.dalcommunity.imageprovider"
