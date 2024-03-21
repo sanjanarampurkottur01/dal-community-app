@@ -15,9 +15,11 @@ import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.ViewGroupOverlay
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupWindow
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -34,6 +36,7 @@ class ProfileDetailActivity : AppCompatActivity() {
     private lateinit var profileImageView: ImageView
     private lateinit var imagePicker: ActivityResultLauncher<PickVisualMediaRequest>
 
+    private val interestsArray = arrayOf("Sports", "Hiking", "Programming", "Arts")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -49,6 +52,15 @@ class ProfileDetailActivity : AppCompatActivity() {
         supportActionBar?.title = "Edit Profile"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        val firstSpinner: Spinner = findViewById(R.id.profile_detail_first_interest_spinner)
+        val secondSpinner: Spinner = findViewById(R.id.profile_detail_second_interest_spinner)
+        val thirdSpinner: Spinner = findViewById(R.id.profile_detail_third_interest_spinner)
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, interestsArray.toList())
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        firstSpinner.adapter = arrayAdapter
+        secondSpinner.adapter = arrayAdapter
+        thirdSpinner.adapter = arrayAdapter
 
         profileImageView = findViewById(R.id.profile_detail_image)
         imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
