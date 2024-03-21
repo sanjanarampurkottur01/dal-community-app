@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.csci5708.dalcommunity.activity.AccountSettingsActivity
 import com.csci5708.dalcommunity.activity.ProfileDetailActivity
+import com.csci5708.dalcommunity.activity.UserPostsActivity
 import com.example.dalcommunity.R
 
 /**
@@ -43,6 +44,16 @@ class ProfileFragment : Fragment() {
         accountSettingsTxt.setOnClickListener {
             val accountSettingsIntent = Intent(activity, AccountSettingsActivity::class.java)
             activity?.startActivity(accountSettingsIntent)
+        }
+        val myPostsImg: ImageView = view.findViewById(R.id.profile_page_posts_option)
+        myPostsImg.setOnClickListener {
+            val userPostsActivityIntent = Intent(activity, UserPostsActivity::class.java)
+            activity?.startActivity(userPostsActivityIntent)
+        }
+        val myPostsTxt: TextView = view.findViewById(R.id.profile_page_posts_text)
+        myPostsTxt.setOnClickListener {
+            val userPostsActivityIntent = Intent(activity, UserPostsActivity::class.java)
+            activity?.startActivity(userPostsActivityIntent)
         }
         return view
     }
