@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import com.csci5708.dalcommunity.activity.AccountSettingsActivity
 import com.csci5708.dalcommunity.activity.ProfileDetailActivity
 import com.example.dalcommunity.R
 
@@ -32,6 +34,16 @@ class ProfileFragment : Fragment() {
             activity?.startActivity(profileDetailIntent)
         }
 
+        val accountSettingsImg: ImageView = view.findViewById(R.id.profile_page_account_settings_option)
+        accountSettingsImg.setOnClickListener {
+            val accountSettingsIntent = Intent(activity, AccountSettingsActivity::class.java)
+            activity?.startActivity(accountSettingsIntent)
+        }
+        val accountSettingsTxt: TextView = view.findViewById(R.id.profile_page_account_settings_text)
+        accountSettingsTxt.setOnClickListener {
+            val accountSettingsIntent = Intent(activity, AccountSettingsActivity::class.java)
+            activity?.startActivity(accountSettingsIntent)
+        }
         return view
     }
 }

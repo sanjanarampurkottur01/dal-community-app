@@ -4,9 +4,7 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
-
-<!--    <uses-permission android:name="android.permission.CAMERA" />-->
+        android:required="false" /> <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,6 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.AccountSettingsActivity"
+            android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.ProfileDetailActivity"
             android:exported="false" />
@@ -41,7 +45,7 @@
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"
-            android:exported="true"/>
+            android:exported="true" />
 
         <provider
             android:name="com.csci5708.dalcommunity.provider.ImageContentProvider"
