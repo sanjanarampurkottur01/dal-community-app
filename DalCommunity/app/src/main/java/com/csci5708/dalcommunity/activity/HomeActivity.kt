@@ -1,5 +1,6 @@
 package com.csci5708.dalcommunity.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
@@ -73,6 +74,8 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
+            val profileActivityIntent = Intent(this, ProfileActivity::class.java)
+            startActivity(profileActivityIntent)
         }
     }
 
