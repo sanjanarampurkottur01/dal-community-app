@@ -6,10 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.csci5708.dalcommunity.activity.AccountSettingsActivity
 import com.csci5708.dalcommunity.activity.ProfileDetailActivity
+import com.csci5708.dalcommunity.activity.TempActivity
 import com.csci5708.dalcommunity.activity.UserPostsActivity
 import com.example.dalcommunity.R
 
@@ -55,6 +57,12 @@ class ProfileFragment : Fragment() {
             val userPostsActivityIntent = Intent(activity, UserPostsActivity::class.java)
             activity?.startActivity(userPostsActivityIntent)
         }
+        val profileLogoutButton: Button = view.findViewById(R.id.profile_page_log_out_button)
+        profileLogoutButton.setOnClickListener {
+            val intent = Intent(activity, TempActivity::class.java)
+            activity?.startActivity(intent)
+        }
+
         return view
     }
 }
