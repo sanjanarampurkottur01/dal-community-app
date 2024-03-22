@@ -1,25 +1,19 @@
 package com.csci5708.dalcommunity.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.csci5708.dalcommunity.model.Collections
 import com.csci5708.dalcommunity.model.PollPost
-import com.csci5708.dalcommunity.model.PollValue
 import com.example.dalcommunity.R
 
-class PollAdapter(val context: Context, private var pollPost: PollPost) : RecyclerView.Adapter<PollAdapter.ViewHolder>() {
-
+class PollAdapter(val context: Context, private var pollPost: PollPost) :
+    RecyclerView.Adapter<PollAdapter.ViewHolder>() {
     lateinit var view: View
     private var previousPosition = -1
 
@@ -46,12 +40,12 @@ class PollAdapter(val context: Context, private var pollPost: PollPost) : Recycl
 
     override fun onBindViewHolder(holder: PollAdapter.ViewHolder, position: Int) {
         val pollValue = pollPost.pollValuesList[position]
-        holder.pollSeekBar.setOnTouchListener{ v, event ->
-                when (event.action) {
-                    else -> {
-                        true
-                    }
+        holder.pollSeekBar.setOnTouchListener { v, event ->
+            when (event.action) {
+                else -> {
+                    true
                 }
+            }
         }
         holder.pollTitle.tag = position
         holder.pollTitle.text = pollValue.title
