@@ -1,0 +1,31 @@
+<!-- activity_create_post.xml -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreatePostActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/btnToChooseFromGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Picture From Gallery"
+        android:layout_centerInParent="true"/>
+
+    <Button
+        android:id="@+id/btnToClickPicture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click A Photo Now"
+        android:layout_below="@id/btnToChooseFromGallery"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

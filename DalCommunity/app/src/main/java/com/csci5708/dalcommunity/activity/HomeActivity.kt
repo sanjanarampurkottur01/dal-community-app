@@ -1,8 +1,10 @@
 package com.csci5708.dalcommunity.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -11,11 +13,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.adapter.HomeAdapter
 import com.example.dalcommunity.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val addPostBtn = findViewById<FloatingActionButton>(R.id.create_post_fab)
+
+        addPostBtn.setOnClickListener {
+            startActivity(Intent(this, CreatePostActivity::class.java))
+        }
 
         val window: Window = this.window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
