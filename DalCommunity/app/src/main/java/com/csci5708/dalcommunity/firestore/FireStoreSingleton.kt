@@ -1,5 +1,6 @@
 package com.csci5708.dalcommunity.firestore
 
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 
 object FireStoreSingleton {
@@ -38,6 +39,17 @@ object FireStoreSingleton {
             }
             .addOnFailureListener{ e ->
                 onComplete(false)
+            }
+    }
+
+    fun addData(collection: String, data: Any, onComplete: (DocumentReference) -> Unit, onFailure: (Exception) -> Unit) {
+        fireStoreInstance.collection(collection)
+            .add(data)
+            .addOnSuccessListener {
+                onComplete(it)
+            }
+            .addOnFailureListener { e ->
+                onFailure(e)
             }
     }
 }
