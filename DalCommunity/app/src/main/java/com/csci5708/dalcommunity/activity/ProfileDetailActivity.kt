@@ -22,6 +22,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -32,7 +33,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.csci5708.dalcommunity.activity.PetitionActivity.Companion.REQUEST_IMAGE_CAPTURE
+import com.csci5708.dalcommunity.firestore.FireStoreSingleton
+import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var profileImageView: ImageView
@@ -51,6 +56,8 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
     private var secondInterestSelected: String = "None"
 
     private var thirdInterestSelected: String = "None"
+
+    private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,6 +125,34 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
             chooseFromLibButton.setOnClickListener {
                 imagePicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             }
+        }
+
+        val saveButton: Button = findViewById(R.id.profile_detail_save_button)
+        saveButton.setOnClickListener {
+            val nameTv: TextView = findViewById(R.id.profile_detail_name_input)
+            val emailTv: TextView = findViewById(R.id.profile_detail_email_input)
+            val descriptionTv: TextView = findViewById(R.id.profile_detail_description_input)
+
+            val userDetail = User(
+                nameTv.text.toString(),
+                emailTv.text.toString(),
+                descriptionTv.text.toString(),
+                firstInterestSelected,
+                secondInterestSelected,
+                thirdInterestSelected
+            )
+
+            val userDetailUpdateOnSuccess: (DocumentReference) -> Unit = { doc: DocumentReference ->
+                Toast.makeText(this, doc.id, Toast.LENGTH_SHORT).show()
+            }
+            val userDetailUpdateOnFailure =
+                { e: Exception -> Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show() }
+            FireStoreSingleton.addData(
+                "users",
+                userDetail,
+                userDetailUpdateOnSuccess,
+                userDetailUpdateOnFailure
+            )
         }
     }
 
