@@ -11,4 +11,9 @@
     <string name="password">Password</string>
     <string name="not_a_user_yet">Not a user yet?</string>
     <string name="sign_up">Sign Up!</string>
+    <string name="profile_detail_name_placeholder">Name</string>
+    <string name="profile_detail_description_placeholder">Description</string>
+    <string name="profile_detail_email_placeholder">Email</string>
+    <string name="profile_detail_save_changes_button">Save Changes</string>
+    <string name="profile_page_log_out_button_text">Log out</string>
 </resources>

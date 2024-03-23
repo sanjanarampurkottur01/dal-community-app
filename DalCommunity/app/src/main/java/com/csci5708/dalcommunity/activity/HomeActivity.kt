@@ -3,6 +3,7 @@ package com.csci5708.dalcommunity.activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
@@ -91,6 +92,8 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
+            val profileActivityIntent = Intent(this, ProfileActivity::class.java)
+            startActivity(profileActivityIntent)
         }
     }
 
