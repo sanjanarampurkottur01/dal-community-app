@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 class PreviewPetitionActivity : AppCompatActivity() {
     private lateinit var communityGroupSpinner: Spinner
     private lateinit var publishButton: Button
+    private lateinit var discardButton: Button
     private lateinit var petitionTitleTextView: TextView
     private lateinit var petitionDescTextView: TextView
     private val PREF_NAME = "user_details"
@@ -51,11 +52,22 @@ class PreviewPetitionActivity : AppCompatActivity() {
         }
         communityGroupSpinner = findViewById(R.id.linkGroup)
         publishButton = findViewById(R.id.publishBtn)
+        discardButton = findViewById(R.id.discardBtn)
         fetchCommunityGroups()
         publishButton.setOnClickListener {
             publishPetition()
         }
+        discardButton.setOnClickListener {
+            discardPetition()
+        }
     }
+
+    private fun discardPetition() {
+        val intent = Intent(this, PetitionActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
     private fun fetchCommunityGroups() {
         firestore.collection("community-groups")
             .get()
@@ -72,7 +84,6 @@ class PreviewPetitionActivity : AppCompatActivity() {
             })
             .addOnFailureListener(OnFailureListener { exception ->
                 Toast.makeText(this, "Failed to load community groups: ${exception.message}", Toast.LENGTH_SHORT).show()
-
             })
     }
     private fun publishPetition() {

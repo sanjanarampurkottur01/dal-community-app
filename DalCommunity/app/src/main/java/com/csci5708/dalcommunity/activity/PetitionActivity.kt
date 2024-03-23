@@ -22,10 +22,7 @@ class PetitionActivity : AppCompatActivity() {
     private lateinit var petitionTitleEditText: EditText
     private lateinit var petitionDescEditText: EditText
     private lateinit var petitionImageView: ImageView
-    // Define the SharedPreferences file name
     private val PREF_NAME = "user_details"
-
-    // Define the key for saving userId
     private val KEY_USER_ID = "user_id"
 
     companion object {
