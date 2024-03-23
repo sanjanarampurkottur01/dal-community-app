@@ -59,8 +59,9 @@ class ProfileFragment : Fragment() {
         }
         val profileLogoutButton: Button = view.findViewById(R.id.profile_page_log_out_button)
         profileLogoutButton.setOnClickListener {
-            val intent = Intent(activity, TempActivity::class.java)
-            activity?.startActivity(intent)
+            // TODO: REMOVE TEMP ACTIVITY BEFORE SUBMISSION
+//            val intent = Intent(activity, TempActivity::class.java)
+//            activity?.startActivity(intent)
         }
 
         return view
