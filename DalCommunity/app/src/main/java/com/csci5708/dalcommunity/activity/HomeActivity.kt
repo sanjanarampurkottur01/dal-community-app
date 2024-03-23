@@ -123,6 +123,7 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
                                 "Welcome!",
                                 Toast.LENGTH_SHORT,
                             ).show()
+                            getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(IS_SIGNED_IN, true).apply()
                             dialog.dismiss()
                         } else {
                             Toast.makeText(
@@ -180,6 +181,7 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
                                                 "You have successfully Logged In!",
                                                 Toast.LENGTH_SHORT,
                                             ).show()
+                                            getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit().putBoolean(IS_SIGNED_IN, true).apply()
                                             dialog.dismiss()
                                         } else {
                                             Toast.makeText(
