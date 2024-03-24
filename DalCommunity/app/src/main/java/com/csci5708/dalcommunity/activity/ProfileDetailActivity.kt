@@ -42,11 +42,8 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.userProfileChangeRequest
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.storage
-import org.w3c.dom.Text
 import java.io.ByteArrayOutputStream
 
 class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
@@ -165,7 +162,7 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
                 val data = baos.toByteArray()
                 val profileImageRef =
                     storageRef.child("profile_image/" + Firebase.auth.currentUser?.email.toString() + ".jpg")
-                var uploadTask = profileImageRef.putBytes(data)
+                val uploadTask = profileImageRef.putBytes(data)
                 uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful) {
                         task.exception?.let {
@@ -225,11 +222,11 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
             "users",
             Firebase.auth.currentUser?.email.toString(),
             { d: DocumentSnapshot -> getUserDataOnSuccess(d) },
-            { e -> getUserDataOnFailure(e) }
+            { getUserDataOnFailure() }
         )
     }
 
-    private fun getUserDataOnFailure(e: Exception) {
+    private fun getUserDataOnFailure() {
         Toast.makeText(this, "Error fetching user details!", Toast.LENGTH_SHORT).show()
     }
 

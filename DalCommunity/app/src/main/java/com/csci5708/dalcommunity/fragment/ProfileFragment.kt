@@ -15,11 +15,9 @@ import android.widget.Toast
 import com.csci5708.dalcommunity.activity.AccountSettingsActivity
 import com.csci5708.dalcommunity.activity.HomeActivity
 import com.csci5708.dalcommunity.activity.ProfileDetailActivity
-import com.csci5708.dalcommunity.activity.TempActivity
 import com.csci5708.dalcommunity.activity.UserPostsActivity
 import com.csci5708.dalcommunity.constants.AppConstants
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
-import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -47,7 +45,7 @@ class ProfileFragment : Fragment() {
                 "users",
                 Firebase.auth.currentUser?.email.toString(),
                 { d: DocumentSnapshot -> getUserDataOnSuccess(d) },
-                { e -> getUserDataOnFailure(e) }
+                { e -> getUserDataOnFailure() }
             )
         }
     }
@@ -113,7 +111,7 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    private fun getUserDataOnFailure(e: Exception) {
+    private fun getUserDataOnFailure() {
         Toast.makeText(activity, "Failed to get user data", Toast.LENGTH_LONG).show()
     }
 
