@@ -38,12 +38,17 @@ object FireStoreSingleton {
             .addOnSuccessListener {
                 onComplete(true)
             }
-            .addOnFailureListener{ e ->
+            .addOnFailureListener { e ->
                 onComplete(false)
             }
     }
 
-    fun addData(collection: String, data: Any, onComplete: (DocumentReference) -> Unit, onFailure: (Exception) -> Unit) {
+    fun addData(
+        collection: String,
+        data: Any,
+        onComplete: (DocumentReference) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         fireStoreInstance.collection(collection)
             .add(data)
             .addOnSuccessListener {
@@ -63,6 +68,30 @@ object FireStoreSingleton {
             .addOnFailureListener {
                 onComplete(false)
             }
+    }
+
+    fun getData(
+        collection: String,
+        document: String,
+        onSuccess: (DocumentSnapshot) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        fireStoreInstance.collection(collection)
+            .document(document)
+            .get()
+            .addOnSuccessListener { onSuccess(it) }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+
+    fun updateDataField(
+        collection: String,
+        document: String,
+        fieldName: String,
+        value: Any,
+        onComplete: (Boolean) -> Unit
+    ) {
+        fireStoreInstance.collection(collection).document(document).update(fieldName, value)
+            .addOnSuccessListener { onComplete(true) }.addOnFailureListener { onComplete(false) }
     }
     fun get(collection: String, field: String, value: Any, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
         fireStoreInstance.collection(collection)
