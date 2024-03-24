@@ -1,6 +1,7 @@
 package com.csci5708.dalcommunity.fragment
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -11,11 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Button
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.google.firebase.auth.auth
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -23,6 +26,8 @@ import com.csci5708.dalcommunity.adapter.PetitionAdapter
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.Petition
 import com.example.dalcommunity.R
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 
 class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
@@ -50,6 +55,8 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
 
     private fun fetchPetitions() {
         petitions.clear()
+        val auth = Firebase.auth
+        val currentUser = auth.currentUser
         FireStoreSingleton.getAllDocumentsOfCollection("petitions",
             { documents ->
                 for (document in documents) {
@@ -58,7 +65,11 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
                         petition.id = document.id
                     }
                     if (petition != null) {
-                        petitions.add(petition)
+                        if (currentUser != null) {
+                            if (petition.user == currentUser.email) {
+                                petitions.add(petition)
+                            }
+                        }
                     }
                 }
                 petitionAdapter.notifyDataSetChanged()
@@ -78,6 +89,10 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         val numberOfPetition = dialogView.findViewById<TextView>(R.id.viewPetitionSignedNumber)
         val imageOfPetition = dialogView.findViewById<ImageView>(R.id.viewImagePetition)
         val close = dialogView.findViewById<RelativeLayout>(R.id.close_icon)
+        val checkboxSignIn = dialogView.findViewById<CheckBox>(R.id.petitionSignIn)
+        val signInPetitionBtn = dialogView.findViewById<Button>(R.id.signInPetitionBtn)
+        checkboxSignIn.visibility = View.GONE
+        signInPetitionBtn.visibility = View.GONE
 
         titleOfPetition.text = petition.title
         descriptionOfPetition.text = petition.description
@@ -94,7 +109,6 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(dialogView)
-//        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
         val layoutParams = WindowManager.LayoutParams()
