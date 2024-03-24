@@ -53,6 +53,17 @@ object FireStoreSingleton {
                 onFailure(e)
             }
     }
+
+    fun addData(collection: String, document: String, data: Any, onComplete: (Boolean) -> Unit) {
+        fireStoreInstance.collection(collection)
+            .document(document)
+            .set(data).addOnSuccessListener {
+                onComplete(true)
+            }
+            .addOnFailureListener {
+                onComplete(false)
+            }
+    }
     fun get(collection: String, field: String, value: Any, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
         fireStoreInstance.collection(collection)
             .whereEqualTo(field, value)

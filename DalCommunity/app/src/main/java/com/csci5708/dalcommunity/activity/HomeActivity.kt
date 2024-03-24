@@ -19,8 +19,10 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.HomeAdapter
+import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
+import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.Firebase
@@ -172,6 +174,8 @@ class HomeActivity : AppCompatActivity() {
                                     "User Creation Successful.",
                                     Toast.LENGTH_SHORT,
                                 ).show()
+                                /* Create a document with user ID = emailID in users collection in Firestore */
+                                createUserEntryInFirestore()
                                 auth.signInWithEmailAndPassword(
                                     userEmailSignUp.text.toString(),
                                     passwordSignUp.text.toString()
@@ -217,5 +221,40 @@ class HomeActivity : AppCompatActivity() {
             signUpDialog.show()
         }
         dialog.show()
+    }
+
+    private fun createUserEntryInFirestore() {
+        val currentUser = Firebase.auth.currentUser!!
+        val userDetails = User(
+            "",
+            currentUser.email!!,
+            "",
+            "",
+            "",
+            ""
+        )
+        val onComplete = { b: Boolean ->
+            if (b) {
+                Toast.makeText(this, "User created in Firestore!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Failed to create user in Firestore!", Toast.LENGTH_LONG).show()
+            }
+        }
+        FireStoreSingleton.addData(
+            "users",
+            userDetails.email,
+            userDetails,
+            onComplete
+        )
+    }
+
+    override fun onCommentClick(position: Int) {
+        Toast.makeText(this,"test",Toast.LENGTH_LONG).show()
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(R.anim.slide_in_top_comment, R.anim.slide_out_down_comment)
+        fragmentTransaction.replace(R.id.fragment_container, CommentFragment())
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
     }
 }
