@@ -33,7 +33,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener, ViewPager.OnPageChangeListener {
+class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
 
 
     private lateinit var recyclerView: RecyclerView
@@ -56,23 +56,6 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener, Vi
             adapter = petitionAdapter
         }
     }
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onPageSelected(position: Int) {
-        // This method will be called whenever the tab is switched
-        // Perform your desired action here, such as fetching petitions
-
-        Toast.makeText(requireContext(), "Resume called", Toast.LENGTH_SHORT).show()
-        fetchPetitions()
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {
-        TODO("Not yet implemented")
-    }
-
     private fun fetchPetitions() {
         petitions.clear()
         getAllDocumentsOfCollection("petitions",
@@ -190,8 +173,6 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener, Vi
     }
     override fun onResume() {
         super.onResume()
-        Toast.makeText(requireContext(), "Resume called", Toast.LENGTH_SHORT).show()
-
         fetchPetitions()
     }
 }
