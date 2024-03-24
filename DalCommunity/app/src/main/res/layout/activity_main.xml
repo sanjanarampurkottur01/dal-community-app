@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingTop="16dp"
     android:background="@color/background"
+    android:paddingTop="16dp"
     tools:context="com.csci5708.dalcommunity.activity.HomeActivity">
 
     <FrameLayout
@@ -18,8 +18,7 @@
         android:id="@+id/bottom_sheet_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        >
+        android:layout_alignParentBottom="true">
 
         <FrameLayout
             android:id="@+id/bottom_sheet"
@@ -27,65 +26,64 @@
             android:layout_height="200dp"
             android:background="@drawable/navigation_fragment_background"
             android:elevation="8dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            >
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-        </FrameLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_anchor="@+id/bottom_sheet"
-            app:layout_anchorGravity="center">
-
-            <ImageView
-                android:id="@+id/open_close_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/up_arrow" />
-
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/open_close_icon">
+                android:layout_height="match_parent"
+                app:layout_anchor="@+id/bottom_sheet"
+                app:layout_anchorGravity="center">
 
                 <ImageView
-                    android:id="@+id/home_icon"
+                    android:id="@+id/open_close_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="8dp"
-                    android:layout_weight="25"
-                    android:src="@drawable/home" />
+                    android:src="@drawable/up_arrow" />
 
-                <ImageView
-                    android:id="@+id/time_table_icon"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="25"
-                    android:src="@drawable/time_table_outline" />
+                    android:layout_below="@id/open_close_icon">
 
-                <ImageView
-                    android:id="@+id/settings_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="25"
-                    android:src="@drawable/settings_outline" />
+                    <ImageView
+                        android:id="@+id/home_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="25"
+                        android:src="@drawable/home" />
 
-                <ImageView
-                    android:id="@+id/user_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="25"
-                    android:src="@drawable/user_outline" />
+                    <ImageView
+                        android:id="@+id/time_table_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="25"
+                        android:src="@drawable/time_table_outline" />
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/settings_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="25"
+                        android:src="@drawable/settings_outline" />
 
-        </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/user_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="25"
+                        android:src="@drawable/user_outline" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </FrameLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
