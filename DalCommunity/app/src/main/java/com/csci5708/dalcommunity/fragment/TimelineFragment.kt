@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.activity.CreatePostActivity
@@ -24,10 +25,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [TimelineFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener {
+class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener, FragmentManager.OnBackStackChangedListener {
 
     private var param1: String? = null
     private var param2: String? = null
+
+    override fun onResume() {
+        super.onResume()
+        view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.VISIBLE
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,10 +43,20 @@ class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener {
         }
     }
 
+    override fun onBackStackChanged() {
+        // Check if back stack is empty
+        val backStackEmpty = activity?.supportFragmentManager?.backStackEntryCount == 0
+        // Make FloatingActionButton visible when back stack is empty
+        if (backStackEmpty) {
+            view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.VISIBLE
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        activity?.supportFragmentManager?.addOnBackStackChangedListener(this)
         val view = inflater.inflate(R.layout.fragment_timeline, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         val addPostButton = view.findViewById<FloatingActionButton>(R.id.create_post_fab)
@@ -83,6 +99,7 @@ class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener {
     }
 
     override fun onCommentClick(position: Int) {
+        view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.INVISIBLE
         Toast.makeText(activity,"test", Toast.LENGTH_LONG).show()
         val fragmentManager = activity?.supportFragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
@@ -90,5 +107,10 @@ class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener {
         fragmentTransaction?.replace(R.id.fragment_container, CommentFragment())
         fragmentTransaction?.addToBackStack(null)
         fragmentTransaction?.commit()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        activity?.supportFragmentManager?.removeOnBackStackChangedListener(this)
     }
 }
