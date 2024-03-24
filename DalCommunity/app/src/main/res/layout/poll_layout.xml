@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/poll_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <SeekBar
+                android:id="@+id/poll_seekbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="25"
+                android:progressDrawable="@drawable/poll_drawable"
+                android:thumb="@android:color/transparent" />
+
+            <TextView
+                android:id="@+id/poll_title_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="40dp"
+                android:text="Test"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/poll_percentage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="40dp"
+                android:text="25%"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/poll_header"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_purple_stroke"
+        android:gravity="center"
+        android:text="TEST"
+        android:textColor="@color/text_color"
+        android:textSize="16sp"/>
+</RelativeLayout>
