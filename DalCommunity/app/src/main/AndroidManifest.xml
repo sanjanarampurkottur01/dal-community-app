@@ -38,9 +38,6 @@
             android:name="com.csci5708.dalcommunity.activity.ProfileActivity"
             android:exported="true" />
         <activity
-            android:name="com.csci5708.dalcommunity.activity.PreviewPetitionActivity"
-            android:exported="false" />
-        <activity
             android:name="com.csci5708.dalcommunity.activity.PetitionActivity"
             android:exported="false" />
         <activity
