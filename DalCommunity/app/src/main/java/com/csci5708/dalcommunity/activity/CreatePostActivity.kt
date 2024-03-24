@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.GridView
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dalcommunity.R
 
 class CreatePostActivity : AppCompatActivity() {
 
-    private lateinit var btnToChooseFromGallery: Button
-    private lateinit var btnToClickPicture: Button
+    private lateinit var btnToChooseFromGallery: ImageView
+    private lateinit var btnToClickPicture: ImageView
     private lateinit var gridView: GridView
 
     private val REQUEST_IMAGE_CAPTURE = 1
@@ -21,8 +22,8 @@ class CreatePostActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_post)
 
-        btnToChooseFromGallery = findViewById(R.id.btnToChooseFromGallery)
-        btnToClickPicture = findViewById(R.id.btnToClickPicture)
+        btnToChooseFromGallery = findViewById(R.id.image_gallery_icon)
+        btnToClickPicture = findViewById(R.id.image_camera_icon)
        // gridView = findViewById(R.id.gridView)
 
         btnToChooseFromGallery.setOnClickListener {

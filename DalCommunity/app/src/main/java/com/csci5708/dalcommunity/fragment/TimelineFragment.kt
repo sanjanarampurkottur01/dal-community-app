@@ -1,5 +1,6 @@
 package com.csci5708.dalcommunity.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.csci5708.dalcommunity.activity.CreatePostActivity
 import com.csci5708.dalcommunity.adapter.HomeAdapter
 import com.example.dalcommunity.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,6 +43,7 @@ class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_timeline, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
+        val addPostButton = view.findViewById<FloatingActionButton>(R.id.create_post_fab)
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
@@ -48,6 +52,11 @@ class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener {
         var adapter = HomeAdapter(requireContext(), posts)
         adapter.setOnCommentClickListener(this)
         recyclerView.adapter = adapter
+
+        addPostButton.setOnClickListener {
+            val intent = Intent(activity, CreatePostActivity::class.java)
+            startActivity(intent)
+        }
 
         // Inflate the layout for this fragment
         return view
