@@ -18,6 +18,12 @@
     <string name="enter_new_password_again">Enter New Password Again</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="what_do_you_want_to_poll">What do you want to poll?</string>
+    <string name="create_poll">Create Poll</string>
+    <string name="option_1">Option 1</string>
+    <string name="option_2">Option 2</string>
+    <string name="option_3">Option 3</string>
+    <string name="option_4">Option 4</string>
 
     <string-array name="report_options">
         <item>Spam</item>

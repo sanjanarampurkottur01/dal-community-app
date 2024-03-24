@@ -27,6 +27,8 @@ class CreatePostActivity : AppCompatActivity() {
     private lateinit var btnToGetLocation: ImageView
     private lateinit var postCaption: EditText
     private lateinit var locationTextView: TextView
+    private lateinit var btnToCreatePollPost: ImageView
+    private lateinit var gridView: GridView
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_GET_LOCATION = 2
@@ -45,6 +47,8 @@ class CreatePostActivity : AppCompatActivity() {
 
         btnToChooseFromGallery = findViewById(R.id.image_gallery_icon)
         btnToClickPicture = findViewById(R.id.image_camera_icon)
+        btnToCreatePollPost = findViewById(R.id.image_poll_icon)
+       // gridView = findViewById(R.id.gridView)
         btnToGetLocation = findViewById(R.id.image_location_icon)
         postCaption = findViewById(R.id.post_content_edit_text)
 
@@ -77,6 +81,11 @@ class CreatePostActivity : AppCompatActivity() {
                 // Permission has already been granted, start accessing location
                 startGetLocationActivity()
             }
+        }
+
+        btnToCreatePollPost.setOnClickListener {
+            val createPollPostIntent = Intent(this, CreatePollPostActivity::class.java)
+            startActivity(createPollPostIntent)
         }
     }
 
