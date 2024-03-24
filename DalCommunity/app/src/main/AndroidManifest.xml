@@ -20,6 +20,9 @@
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
         <activity
+            android:name="com.csci5708.dalcommunity.activity.PokeActivity"
+            android:exported="false" />
+        <activity
             android:name="com.csci5708.dalcommunity.activity.TempActivity"
             android:exported="false" />
         <activity
