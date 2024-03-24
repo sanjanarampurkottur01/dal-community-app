@@ -52,7 +52,7 @@ class PetitionActivity : AppCompatActivity() {
 
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.getTabAt(0)?.customView = createTabView("Create Petition")
-        tabLayout.getTabAt(1)?.customView = createTabView("View Petition")
+        tabLayout.getTabAt(1)?.customView = createTabView("View All Petitions")
         tabLayout.getTabAt(2)?.customView = createTabView("Track Petition")
 
     }

@@ -10,5 +10,6 @@ data class Petition(
     val number_signed: Int = 0,
     val user: String? = null,
     val creation_date: Timestamp? = null,
-    val community: String? = null
+    val community: String? = null,
+    val signed_user: List<String>? = null
 )

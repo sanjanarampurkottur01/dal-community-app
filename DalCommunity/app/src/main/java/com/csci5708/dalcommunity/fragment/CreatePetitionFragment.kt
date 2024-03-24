@@ -30,7 +30,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.example.dalcommunity.R
+import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -61,8 +65,12 @@ class CreatePetitionFragment : Fragment() {
         petitionTitleEditText = view.findViewById(R.id.petitionTitle)
         petitionDescEditText = view.findViewById(R.id.petitionDesc)
 
-        val userId = "5xQA5pUMURfJQR5Wd2NJ" // Your user ID
-        saveUserId(userId)
+        val auth = Firebase.auth
+        val currentUser = auth.currentUser
+        val userId = currentUser?.uid
+        if (userId != null) {
+            saveUserId(userId)
+        }
 
         petitionImage = view.findViewById(R.id.petitionImage)
         petitionImage.setOnClickListener {
@@ -244,16 +252,18 @@ class CreatePetitionFragment : Fragment() {
     }
 
     private fun publishPetition(isImageInPetition: Boolean, imageView: ImageView) {
+        val auth = Firebase.auth
+        val currentUser = auth.currentUser
         val petitionTitle = petitionTitleEditText?.text.toString()
         val petitionDesc = petitionDescEditText?.text.toString()
         val communityGroup = communityGroupSpinner.selectedItem.toString()
-        val sharedPreferences = requireActivity().getSharedPreferences(PREF_NAME, MODE_PRIVATE)
-        val userId = sharedPreferences.getString(KEY_USER_ID, "")
-        if (userId.isNullOrEmpty()) {
-            Toast.makeText(requireContext(), "User ID not found", Toast.LENGTH_SHORT).show()
-            return
+        if (currentUser != null) {
+            if (currentUser.email.isNullOrEmpty()) {
+                Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
+                return
+            }
         }
-        var imgUrlForFireStore = "" //TODO: upload image to imgBBor firestore
+        var imgUrlForFireStore = "" //TODO: upload image to imgBBor firestore storePetitionImage(imageView)
         FireStoreSingleton.get("community-groups", "name", communityGroup,
             { documents ->
                 if (documents.isNotEmpty()) {
@@ -263,9 +273,10 @@ class CreatePetitionFragment : Fragment() {
                         "description" to petitionDesc,
                         "creation_date" to Timestamp.now(), // Adding creation date
                         "number_signed" to 0, // Default number of signed
-                        "community-group" to communityGroupId,
-                        "user" to userId,
-                        "imgUrl" to imgUrlForFireStore
+                        "community" to communityGroupId,
+                        "user" to (currentUser?.email ?: ""),
+                        "imgUrl" to imgUrlForFireStore,
+                        "signed_user" to ArrayList<String>()
                     )
                     FireStoreSingleton.addData("petitions", petitionData) { success ->
                         if (success) {
@@ -282,8 +293,5 @@ class CreatePetitionFragment : Fragment() {
                 Toast.makeText(requireContext(), "Failed to retrieve community group: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
         )
-    }
-
-    private fun uploadImgToImgBB(imageView: ImageView, expiration: Int, apiKey: String) {
     }
 }
