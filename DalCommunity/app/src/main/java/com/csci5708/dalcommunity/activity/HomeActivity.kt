@@ -20,13 +20,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.HomeAdapter
 import com.csci5708.dalcommunity.fragment.CommentFragment
+import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 
-class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
+class HomeActivity : AppCompatActivity() {
     val SHARED_PREFERENCES = "sharedPref"
     val IS_SIGNED_IN = "isSignedIn"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +39,10 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
             showLoginDialog()
         }
 
+        val fragmentManager = supportFragmentManager
+        fragmentManager.beginTransaction()
+            .replace(R.id.home_fragment_container, TimelineFragment())
+            .commit()
 
         val window: Window = this.window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -45,15 +50,6 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
         window.statusBarColor = ContextCompat.getColor(this, R.color.background)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val posts = listOf("", "", "")
-
-        var adapter = HomeAdapter(this, posts)
-        adapter.setOnCommentClickListener(this)
-        recyclerView.adapter = adapter
 
         val homeIcon = findViewById<ImageView>(R.id.home_icon)
         val timeTableIcon = findViewById<ImageView>(R.id.time_table_icon)
@@ -215,15 +211,5 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
             signUpDialog.show()
         }
         dialog.show()
-    }
-
-    override fun onCommentClick(position: Int) {
-        Toast.makeText(this,"test",Toast.LENGTH_LONG).show()
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_top_comment, R.anim.slide_out_down_comment)
-        fragmentTransaction.replace(R.id.fragment_container, CommentFragment())
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
     }
 }
