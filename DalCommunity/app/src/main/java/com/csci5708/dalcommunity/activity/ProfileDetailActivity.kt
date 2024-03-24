@@ -4,9 +4,12 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.Gravity
@@ -36,8 +39,12 @@ import com.csci5708.dalcommunity.activity.PetitionActivity.Companion.REQUEST_IMA
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.auth.userProfileChangeRequest
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.storage.storage
+import java.io.ByteArrayOutputStream
 
 class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var profileImageView: ImageView
@@ -45,11 +52,19 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
     private val interestsArray = arrayOf("None", "Sports", "Hiking", "Programming", "Arts")
 
-    private var profileName: String = "John Doe"
+    private lateinit var profileDetailName: TextView
 
-    private var profileEmail: String = "jdoe@example.com"
+    private lateinit var profileDetailEmail: TextView
 
-    private var profileDescription: String = "Hi! I am John Doe."
+    private lateinit var profileDetailDescription: TextView
+
+    private lateinit var profileName: String
+
+    private lateinit var profileEmail: String
+
+    private lateinit var profileDescription: String
+
+    private var profileImageUri: String = ""
 
     private var firstInterestSelected: String = "None"
 
@@ -57,7 +72,11 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
     private var thirdInterestSelected: String = "None"
 
-    private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private var isProfileImageSet = false
+
+    private var storage = Firebase.storage
+
+    private var storageRef = Firebase.storage.reference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,12 +94,17 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        setupInterestSpinners()
-
+        profileDetailName = findViewById(R.id.profile_detail_name_input)
+        profileDetailEmail = findViewById(R.id.profile_detail_email_input)
+        profileDetailDescription = findViewById(R.id.profile_detail_description_input)
         profileImageView = findViewById(R.id.profile_detail_image)
+
+        setupProfileDetails()
+
         imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 profileImageView.setImageURI(uri)
+                isProfileImageSet = true
             }
         }
 
@@ -129,31 +153,106 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
         val saveButton: Button = findViewById(R.id.profile_detail_save_button)
         saveButton.setOnClickListener {
-            val nameTv: TextView = findViewById(R.id.profile_detail_name_input)
-            val emailTv: TextView = findViewById(R.id.profile_detail_email_input)
-            val descriptionTv: TextView = findViewById(R.id.profile_detail_description_input)
+            if (isProfileImageSet) {
+                profileImageView.isDrawingCacheEnabled = true
+                profileImageView.buildDrawingCache()
+                val profileBitmap = (profileImageView.drawable as BitmapDrawable).bitmap
+                val baos = ByteArrayOutputStream()
+                profileBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+                val data = baos.toByteArray()
+                val profileImageRef =
+                    storageRef.child("profile_image/" + Firebase.auth.currentUser?.email.toString() + ".jpg")
+                val uploadTask = profileImageRef.putBytes(data)
+                uploadTask.continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                    profileImageRef.downloadUrl
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        profileImageUri = profileImageRef.downloadUrl.toString()
+                        val userProfileUpdates = userProfileChangeRequest {
+                            photoUri = Uri.parse(profileImageUri)
+                        }
+                        Firebase.auth.currentUser?.updateProfile(userProfileUpdates)
+                    } else {
+                        Toast.makeText(this, "Failed to upload profile image!", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }.addOnSuccessListener { uri ->
+                    profileImageUri = uri.toString()
+                    FireStoreSingleton.updateDataField("users", Firebase.auth.currentUser?.email.toString(), "photoUri", profileImageUri) {
+                        if (!it) {
+                            Toast.makeText(this, "Failed to update profile image URI", Toast.LENGTH_LONG).show()
+                        }
+                    }
+                }
+            }
 
             val userDetail = User(
-                nameTv.text.toString(),
-                emailTv.text.toString(),
-                descriptionTv.text.toString(),
+                profileDetailName.text.toString(),
+                profileDetailEmail.text.toString(),
+                profileDetailDescription.text.toString(),
                 firstInterestSelected,
                 secondInterestSelected,
-                thirdInterestSelected
+                thirdInterestSelected,
+                profileImageUri
             )
 
-            val userDetailUpdateOnSuccess: (DocumentReference) -> Unit = { doc: DocumentReference ->
-                Toast.makeText(this, doc.id, Toast.LENGTH_SHORT).show()
+            val userDetailUpdateOnSuccess: (Boolean) -> Unit = { b: Boolean ->
+                if (b)
+                    Toast.makeText(this, "Successfully updated!", Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(this, "Update failed! Please try again.", Toast.LENGTH_SHORT)
+                        .show()
             }
-            val userDetailUpdateOnFailure =
-                { e: Exception -> Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show() }
-            FireStoreSingleton.addData(
+            FireStoreSingleton.updateData(
                 "users",
+                Firebase.auth.currentUser?.email.toString(),
                 userDetail,
-                userDetailUpdateOnSuccess,
-                userDetailUpdateOnFailure
+                userDetailUpdateOnSuccess
             )
         }
+    }
+
+    private fun setupProfileDetails() {
+        FireStoreSingleton.getData(
+            "users",
+            Firebase.auth.currentUser?.email.toString(),
+            { d: DocumentSnapshot -> getUserDataOnSuccess(d) },
+            { getUserDataOnFailure() }
+        )
+    }
+
+    private fun getUserDataOnFailure() {
+        Toast.makeText(this, "Error fetching user details!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getUserDataOnSuccess(doc: DocumentSnapshot) {
+        val userDetails = doc.data
+        profileDetailName.text = userDetails?.get("name").toString()
+        profileDetailEmail.text = userDetails?.get("email").toString()
+        profileDetailDescription.text = userDetails?.get("description").toString()
+        firstInterestSelected = userDetails?.get("firstInterest").toString()
+        secondInterestSelected = userDetails?.get("secondInterest").toString()
+        thirdInterestSelected = userDetails?.get("thirdInterest").toString()
+        profileName = userDetails?.get("name").toString()
+        profileEmail = userDetails?.get("email").toString()
+        profileDescription = userDetails?.get("description").toString()
+        profileImageUri = userDetails?.get("photoUri").toString()
+
+        /* Get the profile image */
+        if (profileImageUri.isNotEmpty()) {
+            val profileImageRef = storage.getReferenceFromUrl(profileImageUri)
+            profileImageRef.getBytes(1024 * 1024).addOnSuccessListener { bytes ->
+                val profileBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                profileImageView.setImageBitmap(profileBitmap)
+            }
+        }
+
+        setupInterestSpinners()
     }
 
     /**
@@ -212,6 +311,7 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
         if (requestCode == REQUEST_IMAGE_CAPTURE) {
             val profileImage: Bitmap = data?.extras?.get("data") as Bitmap
+            isProfileImageSet = true
             profileImageView.setImageBitmap(profileImage)
         }
     }

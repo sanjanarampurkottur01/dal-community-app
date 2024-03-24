@@ -6,5 +6,6 @@ data class User(
     val description: String,
     val firstInterest: String,
     val secondInterest: String,
-    val thirdInterest: String
+    val thirdInterest: String,
+    val photoUri: String
 )

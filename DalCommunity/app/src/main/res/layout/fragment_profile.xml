@@ -42,7 +42,6 @@
             android:layout_height="20dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="24dp"
-            android:text="John Doe"
             android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/profile_page_image"
             app:layout_constraintTop_toTopOf="@+id/profile_name_background" />
@@ -53,7 +52,6 @@
             android:layout_height="18dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="6dp"
-            android:text="johndoe@example.com"
             android:textColor="@color/white"
             app:layout_constraintStart_toEndOf="@+id/profile_page_image"
             app:layout_constraintTop_toBottomOf="@+id/profile_page_name" />
