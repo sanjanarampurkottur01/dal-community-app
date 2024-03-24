@@ -15,28 +15,26 @@
         android:paddingEnd="6dp"
         >
 
-    <TextView
-        android:id="@+id/greetings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/greetings"
-        android:textColor="@color/text_color"
-        android:textStyle="bold"
-        android:textSize="26sp"
-        />
+<!--    <TextView-->
+<!--        android:id="@+id/greetings"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/greetings"-->
+<!--        android:textColor="@color/text_color"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textSize="26sp"-->
+<!--        />-->
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/greetings"
-        />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recyclerView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        />-->
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/fragment_container"
-        android:layout_marginTop="16dp"
         />
 
     </RelativeLayout>

@@ -21,7 +21,7 @@ class HomeAdapter(private val context: Context, private val posts: List<String>)
 
     override fun getItemCount(): Int {
 //        return posts.size
-        return 5 // For now, use the line above for the long run
+        return 0 // For now, use the line above for the long run
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

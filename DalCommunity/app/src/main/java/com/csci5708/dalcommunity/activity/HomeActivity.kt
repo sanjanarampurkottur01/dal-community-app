@@ -8,10 +8,12 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.adapter.HomeAdapter
+import com.csci5708.dalcommunity.fragment.LostListFragment
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
@@ -26,15 +28,15 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
         window.statusBarColor = ContextCompat.getColor(this, R.color.background)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val posts = listOf("", "", "")
-
-        var adapter = HomeAdapter(this, posts)
-        adapter.setOnCommentClickListener(this)
-        recyclerView.adapter = adapter
+//        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+//
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//
+//        val posts = listOf("", "", "")
+//
+//        var adapter = HomeAdapter(this, posts)
+//        adapter.setOnCommentClickListener(this)
+//        recyclerView.adapter = adapter
 
         val homeIcon = findViewById<ImageView>(R.id.home_icon)
         val timeTableIcon = findViewById<ImageView>(R.id.time_table_icon)
@@ -73,6 +75,11 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
+
+            var transaction =supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, LostListFragment())
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
     }
 
