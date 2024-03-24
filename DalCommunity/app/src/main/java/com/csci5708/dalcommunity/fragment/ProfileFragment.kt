@@ -3,6 +3,7 @@ package com.csci5708.dalcommunity.fragment
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.storage.storage
 
 /**
  * A simple [Fragment] subclass.
@@ -32,6 +34,8 @@ class ProfileFragment : Fragment() {
     private var isUserSignedIn: Boolean = false
     private lateinit var profilePageName: TextView
     private lateinit var profilePageEmail: TextView
+    private lateinit var profilePageImage: ImageView
+    private var storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,7 @@ class ProfileFragment : Fragment() {
 
         profilePageName = view.findViewById(R.id.profile_page_name)
         profilePageEmail = view.findViewById(R.id.profile_page_email)
+        profilePageImage = view.findViewById(R.id.profile_page_image)
 
         val profileEditButton: ImageView = view.findViewById(R.id.profile_page_edit_button)
         profileEditButton.setOnClickListener {
@@ -117,11 +122,18 @@ class ProfileFragment : Fragment() {
 
     private fun getUserDataOnSuccess(doc: DocumentSnapshot) {
         val userDetails = doc.data
-        setUserNameAndEmail(userDetails?.get("name").toString(), userDetails?.get("email").toString())
+        setUserDetails(userDetails?.get("name").toString(), userDetails?.get("email").toString(), userDetails?.get("photoUri").toString())
     }
 
-    private fun setUserNameAndEmail(username: String, email: String) {
+    private fun setUserDetails(username: String, email: String, profileImageUri: String) {
         profilePageName.text = username
         profilePageEmail.text = email
+        if (profileImageUri.isNotEmpty()) {
+            val profileImageRef = storage.getReferenceFromUrl(profileImageUri)
+            profileImageRef.getBytes(1024 * 1024).addOnSuccessListener { bytes ->
+                val profileBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                profilePageImage.setImageBitmap(profileBitmap)
+            }
+        }
     }
 }
