@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background"
+    android:padding="5dp"
+    android:layout_marginTop="40dp"
+    android:layout_marginBottom="40dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/preview_petition_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="Create Your Own Petition"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/preview_petition_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_below="@id/preview_petition_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="Petition Description"/>
+
+        <ImageView
+            android:id="@+id/preview_petition_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@id/preview_petition_desc"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@color/black"/>
+
+        <TextView
+            android:id="@+id/communityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_below="@id/preview_petition_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:textStyle="bold | italic"
+            android:text="Please select a community group"/>
+        <Spinner
+            android:id="@+id/linkGroup"
+            android:layout_width="300dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/communityTitle"
+            android:layout_marginTop="6dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:hint="Select Group"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/publishBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Publish"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:textSize="18dp"
+            android:layout_below="@+id/linkGroup"
+            android:background="@drawable/btnbackground"
+            android:textColor="@color/white"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/discardBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Discard"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:textSize="18dp"
+            android:layout_below="@+id/publishBtn"
+            android:background="@drawable/cancelbtnbackground"
+            android:textColor="@color/white"
+            android:layout_marginBottom="50dp"
+            />
+
+
+    </RelativeLayout>
+</ScrollView>
