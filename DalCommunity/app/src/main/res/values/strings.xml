@@ -5,7 +5,6 @@
     <string name="sample_text_post">Sample Text Post: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</string>
     <string name="greetings">Greetings!</string>
     <string name="petitionHeader">Create Petition</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="community_title">Community Channels</string>
     <string name="community_tab_title1">Chats</string>
@@ -17,4 +16,16 @@
     <string name="community_join_rules_hint">Enter Community Rules</string>
     <string name="community_join_save">Save</string>
     <string name="community_join_close">Close</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="not_a_user_yet">Not a user yet?</string>
+    <string name="sign_up">Sign Up!</string>
+    <string name="profile_detail_name_placeholder">Name</string>
+    <string name="profile_detail_description_placeholder">Description</string>
+    <string name="profile_detail_email_placeholder">Email</string>
+    <string name="profile_detail_save_changes_button">Save Changes</string>
+    <string name="profile_page_log_out_button_text">Log out</string>
+    <string name="enter_new_password_again">Enter New Password Again</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="change_password">Change Password</string>
 </resources>
