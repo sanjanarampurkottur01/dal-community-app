@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/community_join_name_hint"
+        android:layout_marginVertical="5dp"
+        android:inputType="text"
+        android:padding="12dp"
+        android:id="@+id/communityCreateNameEt"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:hint="@string/community_join_desc_hint"
+        android:layout_marginVertical="5dp"
+        android:inputType="textMultiLine"
+        android:lines="2"
+        android:padding="12dp"
+        android:id="@+id/communityCreateDescEt"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:hint="@string/community_join_rules_hint"
+        android:layout_marginVertical="5dp"
+        android:inputType="textMultiLine"
+        android:lines="2"
+        android:padding="12dp"
+        android:id="@+id/communityCreateRuleEt"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/community_join_save"
+            android:background="@drawable/btnbackground"
+            android:textColor="@color/white"
+            android:id="@+id/communitySaveBt"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/community_join_close"
+            android:background="@drawable/btnbackground"
+            android:textColor="@color/white"
+            android:id="@+id/communityCloseBt"/>
+
+    </LinearLayout>
+
+</LinearLayout>
