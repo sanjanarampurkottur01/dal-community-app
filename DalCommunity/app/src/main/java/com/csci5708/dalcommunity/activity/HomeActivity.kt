@@ -41,6 +41,7 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
         val timeTableIcon = findViewById<ImageView>(R.id.time_table_icon)
         val settingsIcon = findViewById<ImageView>(R.id.settings_icon)
         val userIcon = findViewById<ImageView>(R.id.user_icon)
+        val petitionIcon = findViewById<ImageView>(R.id.petition_icon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
         BottomSheetBehavior.from(bottomSheet).apply {
@@ -53,13 +54,16 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user_outline)
+            petitionIcon.setImageResource(R.drawable.petition_outline)
         }
+
 
         timeTableIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table)
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user_outline)
+            petitionIcon.setImageResource(R.drawable.petition_outline)
         }
 
         settingsIcon.setOnClickListener{
@@ -67,14 +71,16 @@ class HomeActivity : AppCompatActivity(), HomeAdapter.onCommentClickListener {
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
             settingsIcon.setImageResource(R.drawable.settings)
             userIcon.setImageResource(R.drawable.user_outline)
+            petitionIcon.setImageResource(R.drawable.petition_outline)
         }
 
-        userIcon.setOnClickListener{
+        petitionIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
-            val profileActivityIntent = Intent(this, ProfileActivity::class.java)
+            petitionIcon.setImageResource(R.drawable.petition_filled)
+            val profileActivityIntent = Intent(this, PetitionActivity::class.java)
             startActivity(profileActivityIntent)
         }
     }
