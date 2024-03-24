@@ -90,6 +90,16 @@ class HomeActivity : AppCompatActivity() {
             petitionIcon.setImageResource(R.drawable.petition_outline)
         }
 
+        userIcon.setOnClickListener{
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user)
+            petitionIcon.setImageResource(R.drawable.petition_outline)
+            val profileActivityIntent = Intent(this, ProfileActivity::class.java)
+            startActivity(profileActivityIntent)
+        }
+
         petitionIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
@@ -247,15 +257,5 @@ class HomeActivity : AppCompatActivity() {
             userDetails,
             onComplete
         )
-    }
-
-    override fun onCommentClick(position: Int) {
-        Toast.makeText(this,"test",Toast.LENGTH_LONG).show()
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(R.anim.slide_in_top_comment, R.anim.slide_out_down_comment)
-        fragmentTransaction.replace(R.id.fragment_container, CommentFragment())
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
     }
 }
