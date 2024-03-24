@@ -1,6 +1,7 @@
 package com.csci5708.dalcommunity.firestore
 
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 object FireStoreSingleton {
@@ -51,5 +52,29 @@ object FireStoreSingleton {
             .addOnFailureListener { e ->
                 onFailure(e)
             }
+    }
+    fun get(collection: String, field: String, value: Any, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
+        fireStoreInstance.collection(collection)
+            .whereEqualTo(field, value)
+            .get()
+            .addOnSuccessListener { documents ->
+                onSuccess(documents.documents)
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+    fun getAllDocumentsOfCollection(collection: String, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
+        fireStoreInstance.collection(collection)
+            .get()
+            .addOnSuccessListener { documents ->
+                onSuccess(documents.documents)
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+    fun getFireStoreInstanceSingleton(): FirebaseFirestore{
+        return fireStoreInstance
     }
 }
