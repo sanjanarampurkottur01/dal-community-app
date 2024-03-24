@@ -8,40 +8,14 @@
     android:background="@color/background"
     tools:context="com.csci5708.dalcommunity.activity.HomeActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="6dp"
-        android:paddingEnd="6dp"
-        >
-
-    <TextView
-        android:id="@+id/greetings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/greetings"
-        android:textColor="@color/text_color"
-        android:textStyle="bold"
-        android:textSize="26sp"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/greetings"
-        />
-
     <FrameLayout
+        android:id="@+id/home_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_container"
-        android:layout_marginTop="16dp"
-        />
-
-    </RelativeLayout>
+        android:layout_alignBottom="@id/bottom_sheet_container" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/bottom_sheet_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
