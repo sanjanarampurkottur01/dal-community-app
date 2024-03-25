@@ -12,54 +12,43 @@ object FCMTokenManager {
     private val db = FirebaseFirestore.getInstance()
     private val firebaseMessaging = FirebaseMessaging.getInstance()
 
-    fun updateOrStoreFCMToken(context: Context, userEmail: String, userPassword: String) {
-        if (userEmail.isNotEmpty() && userPassword.isNotEmpty()) {
-            auth.signInWithEmailAndPassword(userEmail, userPassword)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val currentUser = auth.currentUser
-                        firebaseMessaging.token.addOnCompleteListener { tokenTask ->
-                            if (!tokenTask.isSuccessful) {
-                                return@addOnCompleteListener
-                            }
-                            val fcmToken = tokenTask.result
-                            currentUser?.email?.let { userId ->
-                                val userDocRef = db.collection("users").document(userId)
-                                userDocRef.get().addOnCompleteListener { docTask ->
-                                    if (docTask.isSuccessful) {
-                                        val document: DocumentSnapshot? = docTask.result
-                                        if (document != null && document.exists()) {
-                                            userDocRef.update("fcmToken", fcmToken)
-                                                .addOnSuccessListener {
-                                                    showToast(context, "FCM token updated successfully")
-                                                }
-                                                .addOnFailureListener { e ->
-                                                    showToast(context, "Error updating FCM token: $e")
-                                                }
-                                        } else {
-                                            val userData = hashMapOf(
-                                                "fcmToken" to fcmToken
-                                            )
-                                            userDocRef.set(userData)
-                                                .addOnSuccessListener {
-                                                    showToast(context, "FCM token stored successfully")
-                                                }
-                                                .addOnFailureListener { e ->
-                                                    showToast(context, "Error storing FCM token: $e")
-                                                }
-                                        }
-                                    } else {
-                                        showToast(context, "Error getting document: ${docTask.exception}")
-                                    }
+    fun updateOrStoreFCMToken(context: Context) {
+        val currentUser = auth.currentUser
+        firebaseMessaging.token.addOnCompleteListener { tokenTask ->
+            if (!tokenTask.isSuccessful) {
+                return@addOnCompleteListener
+            }
+            val fcmToken = tokenTask.result
+            currentUser?.email?.let { userId ->
+                val userDocRef = db.collection("users").document(userId)
+                userDocRef.get().addOnCompleteListener { docTask ->
+                    if (docTask.isSuccessful) {
+                        val document: DocumentSnapshot? = docTask.result
+                        if (document != null && document.exists()) {
+                            userDocRef.update("fcmToken", fcmToken)
+                                .addOnSuccessListener {
+//                                    showToast(context, "FCM token updated successfully")
                                 }
-                            }
+                                .addOnFailureListener { e ->
+//                                    showToast(context, "Error updating FCM token: $e")
+                                }
+                        } else {
+                            val userData = hashMapOf(
+                                "fcmToken" to fcmToken
+                            )
+                            userDocRef.set(userData)
+                                .addOnSuccessListener {
+//                                    showToast(context, "FCM token stored successfully")
+                                }
+                                .addOnFailureListener { e ->
+//                                    showToast(context, "Error storing FCM token: $e")
+                                }
                         }
                     } else {
-                        showToast(context, "Authentication failed!")
+                        showToast(context, "Error getting user: ${docTask.exception}")
                     }
                 }
-        } else {
-            showToast(context, "Please do not leave fields empty.")
+            }
         }
     }
 

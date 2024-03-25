@@ -60,6 +60,7 @@ class HomeActivity : AppCompatActivity() {
             .replace(R.id.home_fragment_container, TimelineFragment())
             .commit()
 
+        FCMTokenManager.updateOrStoreFCMToken(this)
         val window: Window = this.window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -198,7 +199,7 @@ class HomeActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(userEmail.text.toString(), password.text.toString())
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            FCMTokenManager.updateOrStoreFCMToken(this, userEmail.text.toString(), password.text.toString())
+                            FCMTokenManager.updateOrStoreFCMToken(this)
 
                             Toast.makeText(
                                 baseContext,

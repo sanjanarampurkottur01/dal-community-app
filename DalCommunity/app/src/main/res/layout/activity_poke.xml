@@ -40,13 +40,13 @@
         android:layout_below="@+id/poke_instruction"
         android:background="@drawable/rounded_corner"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
         />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_users"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="?attr/actionBarSize"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_below="@+id/search_view"
