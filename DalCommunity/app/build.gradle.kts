@@ -7,6 +7,9 @@ plugins {
 android {
     namespace = "com.example.dalcommunity"
     compileSdk = 34
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 
     defaultConfig {
         applicationId = "com.example.dalcommunity"
@@ -50,4 +53,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation("com.google.auth:google-auth-library-oauth2-http:1.1.0")
+    implementation("com.google.api-client:google-api-client:1.32.1")
+    implementation ("com.google.firebase:firebase-messaging:22.0.0")
 }

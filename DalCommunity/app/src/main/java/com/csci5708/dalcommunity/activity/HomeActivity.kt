@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.HomeAdapter
+import com.csci5708.dalcommunity.firestore.FCMTokenManager
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.example.dalcommunity.R
@@ -136,6 +137,7 @@ class HomeActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(userEmail.text.toString(), password.text.toString())
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
+                            FCMTokenManager.updateOrStoreFCMToken(this, userEmail.text.toString(), password.text.toString())
                             Toast.makeText(
                                 baseContext,
                                 "Welcome!",
