@@ -20,8 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.HomeAdapter
 import com.csci5708.dalcommunity.firestore.FCMTokenManager
+import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
+import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.Firebase
@@ -92,6 +94,16 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+        }
+
+        userIcon.setOnClickListener{
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user)
+            petitionIcon.setImageResource(R.drawable.petition_outline)
+            val profileActivityIntent = Intent(this, ProfileActivity::class.java)
+            startActivity(profileActivityIntent)
         }
 
         petitionIcon.setOnClickListener{
@@ -190,6 +202,8 @@ class HomeActivity : AppCompatActivity() {
                                     "User Creation Successful.",
                                     Toast.LENGTH_SHORT,
                                 ).show()
+                                /* Create a document with user ID = emailID in users collection in Firestore */
+                                createUserEntryInFirestore()
                                 auth.signInWithEmailAndPassword(
                                     userEmailSignUp.text.toString(),
                                     passwordSignUp.text.toString()
@@ -235,5 +249,31 @@ class HomeActivity : AppCompatActivity() {
             signUpDialog.show()
         }
         dialog.show()
+    }
+
+    private fun createUserEntryInFirestore() {
+        val currentUser = Firebase.auth.currentUser!!
+        val userDetails = User(
+            "",
+            currentUser.email!!,
+            "",
+            "",
+            "",
+            "",
+            ""
+        )
+        val onComplete = { b: Boolean ->
+            if (b) {
+                Toast.makeText(this, "User created in Firestore!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Failed to create user in Firestore!", Toast.LENGTH_LONG).show()
+            }
+        }
+        FireStoreSingleton.addData(
+            "users",
+            userDetails.email,
+            userDetails,
+            onComplete
+        )
     }
 }

@@ -15,4 +15,7 @@
     <string name="profile_detail_email_placeholder">Email</string>
     <string name="profile_detail_save_changes_button">Save Changes</string>
     <string name="profile_page_log_out_button_text">Log out</string>
+    <string name="enter_new_password_again">Enter New Password Again</string>
+    <string name="enter_new_password">Enter New Password</string>
+    <string name="change_password">Change Password</string>
 </resources>
