@@ -1,10 +1,19 @@
 package com.csci5708.dalcommunity.activity
 
 import android.app.Dialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.Contacts
+import android.provider.Settings
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -14,7 +23,10 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,6 +48,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        askToEnableNotificationsIfNeeded(this)
 
         val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
         if (!sharedPreferences.getBoolean(IS_SIGNED_IN, false)) {
@@ -127,6 +140,42 @@ class HomeActivity : AppCompatActivity() {
             startActivity(profileActivityIntent)
         }
     }
+    private fun checkNotificationEnabled(context: Context) {
+        val alertDialogBuilder = AlertDialog.Builder(context)
+        alertDialogBuilder.apply {
+            setTitle("Enable Notifications")
+            setMessage("To receive notifications, please enable them in your device settings.")
+            setPositiveButton("Settings") { _, _ ->
+                // User clicked Settings button, open app notification settings
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                context.startActivity(intent)
+            }
+            setNegativeButton("Cancel") { dialog, _ ->
+                // User clicked Cancel button, dismiss dialog
+                dialog.dismiss()
+            }
+        }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
+    }
+
+    private fun askToEnableNotificationsIfNeeded(context: Context) {
+        val notificationManager = NotificationManagerCompat.from(context)
+
+        if (!areNotificationsEnabled(notificationManager)) {
+            checkNotificationEnabled(context)
+        }
+    }
+    private fun areNotificationsEnabled(notificationManager: NotificationManagerCompat) = when {
+        notificationManager.areNotificationsEnabled().not() -> false
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+            notificationManager.notificationChannels.firstOrNull { channel ->
+                channel.importance == NotificationManager.IMPORTANCE_NONE
+            } == null
+        }
+        else -> true
+    }
 
     private fun showLoginDialog() {
         val auth = Firebase.auth
@@ -150,6 +199,7 @@ class HomeActivity : AppCompatActivity() {
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             FCMTokenManager.updateOrStoreFCMToken(this, userEmail.text.toString(), password.text.toString())
+
                             Toast.makeText(
                                 baseContext,
                                 "Welcome!",

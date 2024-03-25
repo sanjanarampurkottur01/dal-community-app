@@ -8,7 +8,24 @@ android {
     namespace = "com.example.dalcommunity"
     compileSdk = 34
     packagingOptions {
-        resources.excludes.add("META-INF/*")
+        resources.excludes.add("META-INF/DEPENDENCIES")
+        //exclude 'META-INF/DEPENDENCIES'
+        resources.excludes.add("META-INF/LICENSE")
+        //exclude 'META-INF/LICENSE'
+        resources.excludes.add("META-INF/LICENSE.txt")
+        //exclude 'META-INF/LICENSE.txt'
+        resources.excludes.add("META-INF/license.txt")
+        //exclude 'META-INF/license.txt'
+        resources.excludes.add("META-INF/NOTICE")
+        //exclude 'META-INF/NOTICE'
+        resources.excludes.add("META-INF/NOTICE.txt")
+        //exclude 'META-INF/NOTICE.txt'
+        resources.excludes.add("META-INF/notice.txt")
+        //exclude 'META-INF/notice.txt'
+        resources.excludes.add("META-INF/ASL2.0")
+        //exclude 'META-INF/ASL2.0'
+        resources.excludes.add("META-INF/*.kotlin_module")
+        exclude("META-INF/*.kotlin_module")
     }
 
     defaultConfig {
@@ -49,11 +66,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-auth:22.3.1")
-    // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
-
-    // Add the dependency for the Cloud Storage library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-storage")
 
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")

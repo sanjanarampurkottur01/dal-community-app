@@ -23,7 +23,7 @@ object FCMTokenManager {
                                 return@addOnCompleteListener
                             }
                             val fcmToken = tokenTask.result
-                            currentUser?.uid?.let { userId ->
+                            currentUser?.email?.let { userId ->
                                 val userDocRef = db.collection("users").document(userId)
                                 userDocRef.get().addOnCompleteListener { docTask ->
                                     if (docTask.isSuccessful) {

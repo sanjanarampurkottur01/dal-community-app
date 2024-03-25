@@ -1,29 +1,41 @@
 package com.csci5708.dalcommunity.firestore
 
+import android.content.Context
+import androidx.core.app.NotificationCompat
+import com.example.dalcommunity.R
 import com.google.auth.oauth2.ServiceAccountCredentials
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import java.io.FileInputStream
 import java.io.IOException
 
 object FCMNotificationSender {
 
-    fun sendNotification(targetToken: String, title: String, message: String) {
+    fun sendNotification(targetToken: String, title: String, message: String, context: Context, accessToken: String, priority: String) {
         val client = OkHttpClient()
-        val json = JSONObject()
-        val body = JSONObject()
 
         try {
-            body.put("title", title)
-            body.put("body", message)
-
-            json.put("message", JSONObject().apply {
-                put("token", targetToken)
-                put("notification", body)
-            })
+            val json = JSONObject().apply {
+                put("message", JSONObject().apply {
+                    put("token", targetToken)
+                    put("notification", JSONObject().apply {
+                        put("title", title)
+                        put("body", message)
+//                        put("android", JSONObject().apply {
+//                            put("visibility", NotificationCompat.VISIBILITY_PUBLIC)
+//                        })
+                    })
+                    put("data", JSONObject().apply {
+                        put("title", title)
+                        put("message", message)
+                    })
+//                    put("android", JSONObject().apply {
+//                        put("priority", priority) // Set priority here
+//                    })
+                })
+            }
 
             val mediaType = "application/json; charset=utf-8".toMediaType()
             val requestBody = json.toString().toRequestBody(mediaType)
@@ -31,7 +43,7 @@ object FCMNotificationSender {
             val request = Request.Builder()
                 .url("https://fcm.googleapis.com/v1/projects/dal-community-01/messages:send")
                 .post(requestBody)
-                .addHeader("Authorization", "Bearer ${getAccessToken()}")
+                .addHeader("Authorization", "Bearer $accessToken")
                 .addHeader("Content-Type", "application/json")
                 .build()
 
@@ -44,13 +56,13 @@ object FCMNotificationSender {
         }
     }
 
-    private fun getAccessToken(): String {
+
+    fun getAccessToken(context: Context): String {
         try {
-            val serviceAccountKeyFile = "./app/google-services.json"
-//            val credentials = GoogleCredentials.fromStream(FileInputStream(serviceAccountKeyFile))
-//                .createScoped("https://www.googleapis.com/auth/firebase.messaging")
+            val RAW_RESOURCE_ID = R.raw.dalcommunitysecret // Replace with your raw resource ID
+            val inputStream = context.resources.openRawResource(RAW_RESOURCE_ID)
             val credentials = ServiceAccountCredentials
-                .fromStream(FileInputStream(serviceAccountKeyFile))
+                .fromStream(inputStream)
                 .createScoped("https://www.googleapis.com/auth/firebase.messaging")
             return credentials.refreshAccessToken().tokenValue
         } catch (e: Exception) {

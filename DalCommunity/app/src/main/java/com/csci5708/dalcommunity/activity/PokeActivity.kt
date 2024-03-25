@@ -1,10 +1,19 @@
 package com.csci5708.dalcommunity.activity
 
+import android.content.ContentValues.TAG
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
+import android.util.Log
+import android.view.LayoutInflater
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +25,7 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
     private lateinit var usersAdapter: UsersAdapter
@@ -58,43 +68,78 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
     }
 
     private fun showUserInfoDialog(userName: String, userEmail: String) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.poke_dialog, null)
         val alertDialogBuilder = AlertDialog.Builder(this)
-        alertDialogBuilder.setTitle("User Information")
-        alertDialogBuilder.setMessage("Name: $userName\nID: $userEmail")
-        alertDialogBuilder.setPositiveButton("Send Notification") { dialog, _ ->
-            dialog.dismiss()
-
-            // Fetch FCM token from Firestore
-            val db = FirebaseFirestore.getInstance()
-            val userDocRef = db.collection("users").document(userEmail)
-            userDocRef.get()
-                .addOnSuccessListener { document ->
-                    if (document != null && document.exists()) {
-                        val fcmToken = document.getString("fcmToken")
-                        if (!fcmToken.isNullOrEmpty()) {
-                            FCMNotificationSender.sendNotification(
-                                targetToken = fcmToken,
-                                title = "Notification Title",
-                                message = "Notification Message"
-                            )
-                            // Send notification using FCMManager or FCMTokenManager
-                            // Example: FCMTokenManager.sendNotification(fcmToken, "Title", "Message")
-                            // Replace with the appropriate function call from your FCM manager
-                            // FCMTokenManager.sendNotification(fcmToken, "Title", "Message")
-                            // Replace "Title" and "Message" with your actual notification title and message
-                        } else {
-                            showToast("FCM token not found for user.")
-                        }
-                    } else {
-                        showToast("User document not found.")
-                    }
-                }
-                .addOnFailureListener { e ->
-                    showToast("Error fetching user document: $e")
-                }
-        }
+            .setView(dialogView)
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
+        val pokeToUserMessage = dialogView.findViewById<EditText>(R.id.pokeToUserMessage)
+        val selectedUserToPoke = dialogView.findViewById<TextView>(R.id.selectedUserToPoke)
+        val pokeNowBtn = dialogView.findViewById<AppCompatButton>(R.id.pokeNowBtn)
+        selectedUserToPoke.text = "You are Poking To $userName"
+
+        pokeNowBtn.setOnClickListener {
+            val message = pokeToUserMessage.text.toString()
+            if (message.isNotEmpty()) {
+                onPokeClicked(message, userEmail)
+                alertDialog.dismiss()
+            } else {
+                showToast("Please fill the message.")
+            }
+        }
+    }
+
+    private fun onPokeClicked(message: String, userEmail: String){
+        val db = FirebaseFirestore.getInstance()
+        val userDocRef = db.collection("users").document(userEmail)
+        var accessToken = ""
+        val SDK_INT = Build.VERSION.SDK_INT
+        if (SDK_INT > 8) {
+            val policy = ThreadPolicy.Builder()
+                .permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+            accessToken = FCMNotificationSender.getAccessToken(this)
+        }
+        userDocRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val fcmToken = document.getString("fcmToken")
+                    val auth = Firebase.auth
+                    val currentUser = auth.currentUser
+                    if (!fcmToken.isNullOrEmpty() && currentUser != null) {
+                        db.collection("users").document(currentUser.email.toString())
+                            .get()
+                            .addOnSuccessListener { document ->
+                                if (document != null) {
+                                    val userName = document.getString("name")
+                                    val displayName = userName ?: "Anonymous"
+                                    val title = "$displayName Poked You"
+                                    val priority = "high" // or "normal"
+                                    FCMNotificationSender.sendNotification(
+                                        targetToken = fcmToken,
+                                        title = title,
+                                        message = message,
+                                        context = this,
+                                        accessToken = accessToken,
+                                        priority
+                                    )
+                                } else {
+                                    Log.d(TAG, "No such document")
+                                }
+                            }
+                            .addOnFailureListener { exception ->
+                                Log.d(TAG, "get failed with ", exception)
+                            }
+                    } else {
+                        showToast("FCM token not found for user.")
+                    }
+                } else {
+                    showToast("User document not found.")
+                }
+            }
+            .addOnFailureListener { e ->
+                showToast("Error fetching user document: $e")
+            }
     }
 
     private fun fetchAllUsers(usersAdapter: UsersAdapter) {
@@ -107,9 +152,9 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
                     val name = document.getString("name") ?: "Unknown"
                     val id = document.id
                     val email = document.getString("email") ?: "unknown"
-                    users.add(Pair(name, id))
                     if (currentUser != null) {
                         if(currentUser.email != email){
+                            users.add(Pair(name, email))
                         }
                     }
                 }

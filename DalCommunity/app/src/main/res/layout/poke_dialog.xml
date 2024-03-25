@@ -2,14 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.csci5708.dalcommunity.fragment.CreatePetitionFragment"
-    android:background="@color/background">
+    tools:context="com.csci5708.dalcommunity.activity.PokeActivity"
+    android:background="@drawable/rounded_corner">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
-        android:background="@color/background">
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -20,15 +15,15 @@
             >
 
             <TextView
-                android:id="@+id/petitionHeader"
+                android:id="@+id/pokeSlogan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="50dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
-                android:text="Create Your Own Petition"
+                android:text="Let's Poke Them!"
                 android:textColor="@color/black"
                 android:textSize="30dp"
                 android:textStyle="bold"
@@ -37,8 +32,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Raise your voice, ignite change!"
-                android:layout_below="@+id/petitionHeader"
+                android:text="Unique way to invite friends to attend class!"
+                android:layout_below="@+id/pokeSlogan"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/sloganID"
                 android:textColor="@color/black"
@@ -46,38 +41,29 @@
                 android:textAlignment="center"
                 android:textStyle="italic"
                 />
-
+            <TextView
+                android:id="@+id/selectedUserToPoke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You are Poking To ABC!"
+                android:layout_below="@+id/sloganID"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:layout_marginTop="18dp"
+                />
             <EditText
                 android:id="@+id/pokeToUserMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/sloganID"
-                android:layout_centerHorizontal="true"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/rounded_corner"
-                android:drawablePadding="20dp"
-                android:hint="Petition Title"
-                android:padding="20dp"
-                android:textColor="@color/black"
-                android:textColorHint="@color/text_hint"
-                android:maxLines="1"
-                android:inputType="text"
-                />
-
-            <EditText
-                android:id="@+id/petitionDesc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/pokeToUserMessage"
+                android:layout_below="@id/selectedUserToPoke"
                 android:background="@drawable/rounded_corner"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="56dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:hint="Add Petition"
+                android:hint="Write your message here"
                 android:padding="20dp"
                 android:textColorHint="@color/text_hint"
                 android:textColor="@color/black"
@@ -87,31 +73,22 @@
                 android:maxLines="10"
                 />
 
-            <ImageView
-                android:id="@+id/petitionImage"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_margin="16dp"
-                android:layout_below="@+id/petitionDesc"
-                android:clickable="true"
-                android:src="@drawable/upload_placeholder"/>
-
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/previewBtn"
+                android:id="@+id/pokeNowBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Preview"
+                android:text="Poke Now"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:padding="16dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:textSize="18dp"
-                android:layout_below="@+id/petitionImage"
+                android:layout_below="@+id/pokeToUserMessage"
                 android:background="@drawable/btnbackground"
                 android:textColor="@color/white"
+                android:layout_marginBottom="100dp"
                 />
 
         </RelativeLayout>
-    </ScrollView>
 </FrameLayout>
