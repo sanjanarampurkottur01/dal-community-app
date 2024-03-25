@@ -1,13 +1,24 @@
 package com.csci5708.dalcommunity.fragment
 
+import android.content.ContentValues
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.csci5708.dalcommunity.activity.PetitionActivity
 import com.example.dalcommunity.Place
 import com.example.dalcommunity.R
 import com.example.dalcommunity.UserMap
@@ -15,12 +26,22 @@ import com.example.dalcommunity.UserMap
 class LostListFragment: Fragment() {
     private lateinit var locButton: Button;
     private lateinit var userMap: UserMap
+    private lateinit var imageView: ImageView
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private var imageUri: Uri? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_lost_listing, container, false)
+
+        imageView = view.findViewById(R.id.lostImage);
+        imageView.setOnClickListener {
+            showOptions()
+        }
+
         locButton = view.findViewById(R.id.locbutton)
         locButton.setOnClickListener {
              userMap = UserMap(
@@ -58,5 +79,54 @@ class LostListFragment: Fragment() {
             // Handle the result. For example, you could update UI or initiate some action based on 'result'.
         }
         return view;
+    }
+
+    private fun showOptions() {
+        val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Choose an option")
+        builder.setItems(options) { dialog, which ->
+            when (which) {
+                0 -> dispatchTakePictureIntent()
+                1 -> dispatchPickImageIntent()
+                // Optionally handle Cancel here
+            }
+        }
+        builder.show()
+    }
+
+    private fun dispatchTakePictureIntent() {
+        imageUri = createImageUri()
+        imageUri?.let { uri ->
+            takePictureLauncher.launch(uri)
+        }
+    }
+
+    private fun dispatchPickImageIntent() {
+        pickImageLauncher.launch("image/*")
+    }
+
+    private fun createImageUri(): Uri? {
+        val contentResolver = requireActivity().contentResolver
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis().toString() + "_new_image.jpg")
+        }
+        return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
+            if (isSuccess) {
+                imageUri?.let { uri ->
+                    imageView.setImageURI(uri)
+                }
+            }
+        }
+
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                imageView.setImageURI(uri)
+            }
+        }
     }
 }

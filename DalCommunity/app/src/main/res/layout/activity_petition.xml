@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_marginBottom="10dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -83,10 +83,13 @@
             android:id="@+id/petitionImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_margin="16dp"
             android:layout_below="@+id/petitionDesc"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
-            android:src="@drawable/upload_frame"/>
+            android:src="@drawable/upload_frame" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/previewBtn"
