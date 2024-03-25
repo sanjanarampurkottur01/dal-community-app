@@ -33,8 +33,6 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -62,7 +60,7 @@ class CreatePetitionFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_create_petition, container, false)
 
         // Find EditTexts
-        petitionTitleEditText = view.findViewById(R.id.petitionTitle)
+        petitionTitleEditText = view.findViewById(R.id.pokeToUserMessage)
         petitionDescEditText = view.findViewById(R.id.petitionDesc)
 
         val auth = Firebase.auth

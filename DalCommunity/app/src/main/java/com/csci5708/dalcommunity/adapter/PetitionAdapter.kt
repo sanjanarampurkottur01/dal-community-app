@@ -18,7 +18,7 @@ class PetitionAdapter(
     }
 
     inner class PetitionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleTextView: TextView = itemView.findViewById(R.id.petitionTitle)
+        val titleTextView: TextView = itemView.findViewById(R.id.pokeToUserMessage)
         val signedTextView: TextView = itemView.findViewById(R.id.textViewSigned)
 
         init {

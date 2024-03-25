@@ -114,7 +114,4 @@ object FireStoreSingleton {
                 onFailure(exception)
             }
     }
-    fun getFireStoreInstanceSingleton(): FirebaseFirestore{
-        return fireStoreInstance
-    }
 }
