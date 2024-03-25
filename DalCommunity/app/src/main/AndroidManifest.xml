@@ -40,10 +40,28 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
         <activity
-            android:name="com.csci5708.dalcommunity.activity.PreviewPetitionActivity"
+            android:name="com.csci5708.dalcommunity.activity.TempActivity"
             android:exported="false" />
         <activity
+            android:name="com.csci5708.dalcommunity.activity.UserPostsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.AccountSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.ProfileDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.ProfileActivity"
+            android:exported="true" />
+        <activity
             android:name="com.csci5708.dalcommunity.activity.PetitionActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.CreatePostActivity"
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"
