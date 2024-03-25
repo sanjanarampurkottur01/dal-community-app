@@ -114,7 +114,7 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
                                     val userName = document.getString("name")
                                     val displayName = userName ?: "Anonymous"
                                     val title = "$displayName Poked You"
-                                    val priority = "high" // or "normal"
+                                    val priority = "high"
                                     FCMNotificationSender.sendNotification(
                                         targetToken = fcmToken,
                                         title = title,
