@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,14 +29,20 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.csci5708.dalcommunity.firestore.FCMNotificationSender
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
 import java.util.Date
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.runBlocking
+
 
 class CreatePetitionFragment : Fragment() {
 
@@ -255,6 +262,7 @@ class CreatePetitionFragment : Fragment() {
         val petitionTitle = petitionTitleEditText?.text.toString()
         val petitionDesc = petitionDescEditText?.text.toString()
         val communityGroup = communityGroupSpinner.selectedItem.toString()
+
         if (currentUser != null) {
             if (currentUser.email.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "User not found", Toast.LENGTH_SHORT).show()
@@ -266,11 +274,17 @@ class CreatePetitionFragment : Fragment() {
             { documents ->
                 if (documents.isNotEmpty()) {
                     val communityGroupId = documents[0].id
+                    var fcmTokens:  List<String>;
+                    runBlocking {
+                        fcmTokens = fetchAllUsersEmail(communityGroupId)
+                    }
+
+                    Log.d("userEmail", fcmTokens.toString())
                     val petitionData = hashMapOf(
                         "title" to petitionTitle,
                         "description" to petitionDesc,
-                        "creation_date" to Timestamp.now(), // Adding creation date
-                        "number_signed" to 0, // Default number of signed
+                        "creation_date" to Timestamp.now(),
+                        "number_signed" to 0,
                         "community" to communityGroupId,
                         "user" to (currentUser?.email ?: ""),
                         "imgUrl" to imgUrlForFireStore,
@@ -279,6 +293,18 @@ class CreatePetitionFragment : Fragment() {
                     FireStoreSingleton.addData("petitions", petitionData) { success ->
                         if (success) {
                             Toast.makeText(requireContext(), "Petition published successfully!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(),
+                                "Notifying all users of $communityGroup", Toast.LENGTH_SHORT).show()
+                            var accessToken = FCMNotificationSender.getAccessToken(requireContext())
+                            FCMNotificationSender.sendNotificationToMultipleUsers(
+                                targetTokens = fcmTokens,
+                                title = petitionTitle,
+                                message = "$communityGroup has recently published a Petition",
+                                context = requireContext(),
+                                accessToken = accessToken,
+                                "high"
+                            )
+
                         } else {
                             Toast.makeText(requireContext(), "Failed to publish petition", Toast.LENGTH_SHORT).show()
                         }
@@ -291,5 +317,33 @@ class CreatePetitionFragment : Fragment() {
                 Toast.makeText(requireContext(), "Failed to retrieve community group: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
         )
+    }
+
+    private suspend fun fetchAllUsersEmail(communityGroupId: String): List<String> = coroutineScope {
+        val db = FirebaseFirestore.getInstance()
+        val fcmTokens = mutableListOf<String>()
+        try {
+            val communityGroupRef = db.collection("community-groups").document(communityGroupId)
+            val usersSnapshot = communityGroupRef.collection("users").get().await()
+            val userEmails = usersSnapshot.documents.mapNotNull { it.id } // Extract email IDs
+
+            // Fetch all user documents at once
+            val usersQuery = db.collection("users").whereIn("email", userEmails)
+            val usersQuerySnapshot = usersQuery.get().await()
+
+            // Map email to FCM token
+            val emailToFCMMap = usersQuerySnapshot.documents.associateBy({ it.id }, { it.getString("fcmToken") })
+
+            // Populate fcmTokens list
+            for (email in userEmails) {
+                val fcmToken = emailToFCMMap[email]
+                if (!fcmToken.isNullOrBlank()) {
+                    fcmTokens.add(fcmToken)
+                }
+            }
+        } catch (e: Exception) {
+            println("Error fetching users' FCM tokens: ${e.message}")
+        }
+        return@coroutineScope fcmTokens
     }
 }

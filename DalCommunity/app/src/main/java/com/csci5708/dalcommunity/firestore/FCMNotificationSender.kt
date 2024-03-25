@@ -55,6 +55,43 @@ object FCMNotificationSender {
             e.printStackTrace()
         }
     }
+    fun sendNotificationToMultipleUsers(targetTokens: List<String>, title: String, message: String, context: Context, accessToken: String, priority: String) {
+        val client = OkHttpClient()
+        try {
+            for (targetToken in targetTokens) {
+                val json = JSONObject().apply {
+                    put("message", JSONObject().apply {
+                        put("token", targetToken)
+                        put("notification", JSONObject().apply {
+                            put("title", title)
+                            put("body", message)
+                        })
+                        put("data", JSONObject().apply {
+                            put("title", title)
+                            put("message", message)
+                        })
+                    })
+                }
+
+                val mediaType = "application/json; charset=utf-8".toMediaType()
+                val requestBody = json.toString().toRequestBody(mediaType)
+
+                val request = Request.Builder()
+                    .url("https://fcm.googleapis.com/v1/projects/dal-community-01/messages:send")
+                    .post(requestBody)
+                    .addHeader("Authorization", "Bearer $accessToken")
+                    .addHeader("Content-Type", "application/json")
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    println(response.body!!.string())
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 
     fun getAccessToken(context: Context): String {
