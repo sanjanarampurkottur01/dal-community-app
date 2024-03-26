@@ -1,21 +1,23 @@
+// GetLocationActivity.kt
 package com.csci5708.dalcommunity.activity
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.csci5708.dalcommunity.constants.AppConstants.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.dalcommunity.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
 class GetLocationActivity : AppCompatActivity() {
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1001
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +54,10 @@ class GetLocationActivity : AppCompatActivity() {
                     // Permission granted, start accessing location
                     getLocation()
                 } else {
-                    // Permission denied, handle accordingly (e.g., show a message)
-                    // You might want to inform the user why location access is needed
+                    Toast.makeText(this,
+                        "Location permission denied. Please grant permission to access your location.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -73,8 +77,11 @@ class GetLocationActivity : AppCompatActivity() {
                         val latitude = it.latitude
                         val longitude = it.longitude
 
-                        Log.e("TAG", latitude.toString())
-                        Log.e("TAG", longitude.toString())
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("latitude", latitude)
+                        resultIntent.putExtra("longitude", longitude)
+                        setResult(Activity.RESULT_OK, resultIntent)
+                        finish()
                     }
                 }
         }
