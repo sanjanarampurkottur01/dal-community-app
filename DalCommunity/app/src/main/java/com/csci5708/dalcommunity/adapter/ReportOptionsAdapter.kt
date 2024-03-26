@@ -11,7 +11,6 @@ import com.example.dalcommunity.R
 class ReportOptionsAdapter(private val context: Context, private val reportReasons: Array<String>) :
     RecyclerView.Adapter<ReportOptionsAdapter.ViewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.report_reason_item, parent, false)
 
@@ -32,6 +31,10 @@ class ReportOptionsAdapter(private val context: Context, private val reportReaso
 
         init {
             reportTitle = itemView.findViewById(R.id.reason_title)
+
+            itemView.setOnClickListener {
+
+            }
         }
     }
 }
