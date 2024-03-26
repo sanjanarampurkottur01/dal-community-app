@@ -12,7 +12,9 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -295,7 +297,14 @@ class CreatePetitionFragment : Fragment() {
                             Toast.makeText(requireContext(), "Petition published successfully!", Toast.LENGTH_SHORT).show()
                             Toast.makeText(requireContext(),
                                 "Notifying all users of $communityGroup", Toast.LENGTH_SHORT).show()
-                            var accessToken = FCMNotificationSender.getAccessToken(requireContext())
+                            var accessToken = ""
+                            val SDK_INT = Build.VERSION.SDK_INT
+                            if (SDK_INT > 8) {
+                                val policy = StrictMode.ThreadPolicy.Builder()
+                                    .permitAll().build()
+                                StrictMode.setThreadPolicy(policy)
+                                accessToken = FCMNotificationSender.getAccessToken(requireContext())
+                            }
                             FCMNotificationSender.sendNotificationToMultipleUsers(
                                 targetTokens = fcmTokens,
                                 title = petitionTitle,
