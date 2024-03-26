@@ -8,5 +8,8 @@
     <color name="text_color">#5151C6</color>
     <color name="text_hint">#759F93</color>
     <color name="dark_gray">#455A54</color>
+    <color name="dark_background">#41418C</color>
+    <color name="input_text_background">#F3F5F7</color>
+    <color name="input_text_placeholder">#BDBDBD</color>
 
 </resources>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="30dp"
+    android:background="@drawable/dialog_background_grounded_bottom"
+    android:layout_centerInParent="true"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingTop="50dp"
+        android:paddingBottom="50dp"
+        android:background="@drawable/dialog_background"
+        >
+
+    <TextView
+        android:id="@+id/loginString"
+        android:text="@string/login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="@color/text_color"
+        android:layout_marginTop="10dp"
+        />
+
+    <EditText
+        android:id="@+id/editTextUsername"
+        android:layout_margin="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/loginString"
+        android:hint="@string/username"
+        android:inputType="text"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/text_color"
+        android:padding="12dp"/>
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/editTextUsername"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:textColor="@color/text_color"
+        android:textColorHint="@color/text_color"
+        android:padding="12dp"/>
+
+        <LinearLayout
+            android:id="@+id/buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_below="@id/editTextPassword"
+            >
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonLogin"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:paddingStart="50dp"
+                android:layout_weight="1"
+                android:elevation="5dp"
+                android:paddingEnd="50dp"
+                android:textColor="@color/text_color"
+                android:background="@drawable/button_background"
+                android:text="@string/login" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/notAUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttons"
+            android:text="@string/not_a_user_yet"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/text_color"
+            />
+
+        <TextView
+            android:id="@+id/signUpTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buttons"
+            android:text="@string/sign_up"
+            android:layout_toEndOf="@id/notAUser"
+            android:textColor="@color/text_color"
+            android:textStyle="bold"
+            android:layout_marginStart="3dp"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>
