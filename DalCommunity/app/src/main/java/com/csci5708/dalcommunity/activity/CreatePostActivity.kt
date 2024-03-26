@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.Button
-import android.widget.GridView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.dalcommunity.R
@@ -14,7 +12,7 @@ class CreatePostActivity : AppCompatActivity() {
 
     private lateinit var btnToChooseFromGallery: ImageView
     private lateinit var btnToClickPicture: ImageView
-    private lateinit var gridView: GridView
+    private lateinit var btnToGetLocation: ImageView
 
     private val REQUEST_IMAGE_CAPTURE = 1
 
@@ -24,7 +22,7 @@ class CreatePostActivity : AppCompatActivity() {
 
         btnToChooseFromGallery = findViewById(R.id.image_gallery_icon)
         btnToClickPicture = findViewById(R.id.image_camera_icon)
-       // gridView = findViewById(R.id.gridView)
+        btnToGetLocation = findViewById(R.id.image_location_icon)
 
         btnToChooseFromGallery.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -34,6 +32,11 @@ class CreatePostActivity : AppCompatActivity() {
         btnToClickPicture.setOnClickListener {
             val takePictureIntent = Intent("android.media.action.IMAGE_CAPTURE")
             startActivity(takePictureIntent)
+        }
+
+        btnToGetLocation.setOnClickListener {
+            val getLocationIntent = Intent(this, GetLocationActivity::class.java)
+            startActivity(getLocationIntent)
         }
     }
 
