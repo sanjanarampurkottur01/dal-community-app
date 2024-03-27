@@ -46,6 +46,11 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
         recyclerView.adapter = usersAdapter
         val searchView: SearchView = findViewById(R.id.search_view)
         searchView.queryHint = "Search by name"
+        val editText: EditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+        editText.setTextColor(ContextCompat.getColor(this, R.color.text_color))
+        editText.setHintTextColor(ContextCompat.getColor(this, R.color.text_hint))
+
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 filterUsers(query, usersAdapter)
