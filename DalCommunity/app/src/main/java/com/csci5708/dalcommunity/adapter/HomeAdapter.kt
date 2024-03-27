@@ -96,7 +96,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             saveIcon = itemView.findViewById(R.id.save)
             commentIcon = itemView.findViewById(R.id.comment)
             reportIcon = itemView.findViewById(R.id.report)
-            locationTag = itemView.findViewById(R.id.report)
+            locationTag = itemView.findViewById(R.id.location_post)
 
             postCaption = itemView.findViewById(R.id.text_post)
             postTime = itemView.findViewById(R.id.data_time)
@@ -129,6 +129,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
 
         fun bind(context: Context, post: ImagePost) {
+            locationTag.text = "${post.latLocation}, ${post.longLocation}"
             Log.e("TEST", "IMAGE")
         }
     }
@@ -218,7 +219,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             saveIcon = itemView.findViewById(R.id.save)
             commentIcon = itemView.findViewById(R.id.comment)
             reportIcon = itemView.findViewById(R.id.report)
-            locationTag = itemView.findViewById(R.id.report)
+            locationTag = itemView.findViewById(R.id.location_post)
 
             postCaption = itemView.findViewById(R.id.text_post)
             postTime = itemView.findViewById(R.id.data_time)
@@ -251,6 +252,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
 
         fun bind(context: Context, post: TextPost) {
+            locationTag.text = "${post.latLocation}, ${post.longLocation}"
             Log.e("TEST", "TEXT")
         }
     }
