@@ -45,6 +45,9 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
+import java.io.ByteArrayOutputStream
 
 
 /**
@@ -63,6 +66,7 @@ class CreatePetitionFragment : Fragment() {
     }
     private lateinit var communityGroupSpinner: Spinner
     private var isImageInPetition: Boolean =  false
+    var imgUrlForFireStore = ""
 
 
     /**
@@ -128,9 +132,12 @@ class CreatePetitionFragment : Fragment() {
         val imageView = dialogView.findViewById<ImageView>(R.id.preview_petition_image)
 
         if (imageUri != null) {
-            imageView.setImageURI(imageUri)
-            imageView.visibility = View.VISIBLE
-            isImageInPetition = true
+            val bitmap = getBitmapFromUri(imageUri)
+            bitmap?.let {
+                imageView.setImageBitmap(bitmap)
+                imageView.visibility = View.VISIBLE
+                isImageInPetition = true
+            }
         } else {
             imageView.visibility = View.GONE
         }
@@ -139,12 +146,7 @@ class CreatePetitionFragment : Fragment() {
         fetchCommunityGroups()
         titleTextView.text = petitionTitle
         descTextView.text = petitionDesc
-        imageUri?.let { uri ->
-            val bitmap = getBitmapFromUri(uri)
-            bitmap?.let {
-                imageView.setImageBitmap(bitmap)
-            }
-        }
+
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
@@ -164,18 +166,62 @@ class CreatePetitionFragment : Fragment() {
                 deleteImage(imageUri)
             }
         }
+
         val publishButton = dialog.findViewById<Button>(R.id.publishBtn)
         publishButton.setOnClickListener {
-            publishPetition(isImageInPetition, imageView)
-            petitionTitleEditText?.setText("")
-            petitionDescEditText?.setText("")
-            petitionImage.setImageResource(R.drawable.upload_placeholder)
-            dialog.dismiss()
-            if (imageUri != null) {
-                deleteImage(imageUri)
+            val bitmap = (imageView.drawable as? BitmapDrawable)?.bitmap
+            if (bitmap != null) {
+                uploadImageToFirebaseStorage(bitmap)
+            } else {
+                // No image selected, proceed with publishing without an image
+                publishPetition(false, imageView)
+                petitionTitleEditText?.setText("")
+                petitionDescEditText?.setText("")
+                petitionImage.setImageResource(R.drawable.upload_placeholder)
+                dialog.dismiss()
+                if (imageUri != null) {
+                    deleteImage(imageUri)
+                }
             }
         }
         dialog.show()
+    }
+
+    /**
+     * Uploads a bitmap image to Firebase Storage.
+     *
+     * @param bitmap The bitmap image to upload.
+     */
+    private fun uploadImageToFirebaseStorage(bitmap: Bitmap) {
+        val storageReference = com.google.firebase.Firebase.storage.reference
+
+        val dateFormat = SimpleDateFormat("yyyyMMdd_HHmmss")
+        val timestamp: String = dateFormat.format(Date())
+        val imageName = "petition_image_$timestamp.png"
+
+        val imageRef = storageReference.child("petition_images/$imageName")
+
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+        val imageData = baos.toByteArray()
+
+        val uploadTask = imageRef.putBytes(imageData)
+        uploadTask.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val imageUrl = uri.toString()
+                    Log.d("UploadImage", "Image uploaded successfully. URL: $imageUrl")
+                    imgUrlForFireStore = imageUrl
+                    publishPetition(true, ImageView(context))
+                }.addOnFailureListener { exception ->
+                    Log.e("UploadImage", "Failed to retrieve image download URL: ${exception.message}")
+                    Toast.makeText(context, "Failed to upload image. Please try again.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Log.e("UploadImage", "Image upload failed: ${task.exception?.message}")
+                Toast.makeText(context, "Failed to upload image. Please try again.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     /**
@@ -337,7 +383,7 @@ class CreatePetitionFragment : Fragment() {
                 return
             }
         }
-        var imgUrlForFireStore = "" //TODO: upload image to imgBBor firestore storePetitionImage(imageView)
+//        imgUrlForFireStore = "" //TODO: upload image to firestore, get the Url and store it in this variable, create a function to upload the image which is being displayed in the preview dialog box
         FireStoreSingleton.get("community-groups", "name", communityGroup,
             { documents ->
                 if (documents.isNotEmpty()) {
