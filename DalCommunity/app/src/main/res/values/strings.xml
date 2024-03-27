@@ -18,4 +18,11 @@
     <string name="enter_new_password_again">Enter New Password Again</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="schedule">Your Schedule</string>
+    <string name="_1">1</string>
+    <string name="may">May</string>
+    <string name="mon">Mon</string>
+    <string name="mobile_computing">Mobile Computing</string>
+    <string name="_14_30_pm">14:30 pm</string>
+    <string name="_11_30_am">11:30 am</string>
 </resources>

@@ -1,9 +1,9 @@
 package com.csci5708.dalcommunity.activity
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.Window
@@ -16,6 +16,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.HomeAdapter
@@ -23,6 +25,7 @@ import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.csci5708.dalcommunity.model.User
+import com.csci5708.dalcommunity.fragment.TimeTableFragment
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.Firebase
@@ -80,6 +83,12 @@ class HomeActivity : AppCompatActivity() {
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
+            val manager: FragmentManager = supportFragmentManager
+            val transaction: FragmentTransaction = manager.beginTransaction()
+            transaction.replace(R.id.home_fragment_container, TimeTableFragment(), "TIME_TABLE_FRAGMENT")
+            transaction.addToBackStack(null)
+            transaction.commit()
+            findViewById<FrameLayout>(R.id.home_fragment_container).bringToFront()
         }
 
         settingsIcon.setOnClickListener{
@@ -109,6 +118,10 @@ class HomeActivity : AppCompatActivity() {
             val profileActivityIntent = Intent(this, PetitionActivity::class.java)
             startActivity(profileActivityIntent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     private fun showLoginDialog() {

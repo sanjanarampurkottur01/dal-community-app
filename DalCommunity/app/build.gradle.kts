@@ -46,6 +46,8 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-firestore:24.10.3")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("com.airbnb.android:lottie:6.4.0")
+    implementation ("nl.joery.timerangepicker:timerangepicker:1.0.0")
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
 
