@@ -16,9 +16,19 @@ import com.example.dalcommunity.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
+/**
+ * Activity to request and retrieve user's location.
+ */
 class GetLocationActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    /**
+     * Called when the activity is starting.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down
+     * then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     * Note: Otherwise, it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_location_permission)
@@ -42,6 +52,14 @@ class GetLocationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Callback for the result from requesting permissions.
+     *
+     * @param requestCode The request code passed in requestPermissions(android.app.Activity, String[], int).
+     * @param permissions The requested permissions.
+     * @param grantResults The grant results for the corresponding permissions which is either PERMISSION_GRANTED or PERMISSION_DENIED.
+     */
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -63,6 +81,9 @@ class GetLocationActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Retrieves the current location of the device.
+     */
     private fun getLocation() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -72,7 +93,7 @@ class GetLocationActivity : AppCompatActivity() {
             // Get last known location
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
-                    // Got last known location. In some rare situations this can be null.
+                    // Obtained the last known location, can be null as well
                     location?.let {
                         val latitude = it.latitude
                         val longitude = it.longitude

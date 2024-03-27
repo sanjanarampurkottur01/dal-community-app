@@ -63,11 +63,11 @@ class CommentFragment : Fragment() {
         // Add TextWatcher to listen for text changes
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                // Not needed
+                // To establish default behaviour
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
+                // To establish default behaviour
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -80,10 +80,17 @@ class CommentFragment : Fragment() {
             }
         })
     }
+    /**
+     * Called when the fragment resumes.
+     * Responsible for animating the fragment.
+     */
     override fun onResume() {
         super.onResume()
         animateFragment()
     }
+    /**
+     * Animates the fragment by translating it from bottom to top.
+     */
     private fun animateFragment() {
         view?.let {
             ObjectAnimator.ofFloat(it, "translationY", it.height.toFloat(), 0f).apply {
