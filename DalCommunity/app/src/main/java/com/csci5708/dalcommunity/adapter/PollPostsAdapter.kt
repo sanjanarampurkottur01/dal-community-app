@@ -33,7 +33,7 @@ class PollPostsAdapter(val context: Context, var pollPosts: ArrayList<PollPost>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        view = LayoutInflater.from(context).inflate(R.layout.poll_posts_layout, parent, false)
+        view = LayoutInflater.from(context).inflate(R.layout.item_poll_posts_layout, parent, false)
         return ViewHolder(view)
     }
 

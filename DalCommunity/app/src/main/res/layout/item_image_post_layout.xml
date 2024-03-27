@@ -62,13 +62,23 @@
                 android:layout_marginBottom="4dp"
                 />
 
+            <ImageView
+                android:id="@+id/image_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher_round"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:layout_below="@id/seperator" />
+
             <TextView
                 android:id="@+id/text_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/sample_text_post"
                 android:textSize="13sp"
-                android:layout_below="@id/seperator"
+                android:layout_below="@id/image_post"
                 android:textStyle="normal"
                 />
 
@@ -101,6 +111,14 @@
                     android:src="@drawable/send_outline"
                     android:layout_toEndOf="@id/comment"
                     android:layout_marginStart="16dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/flag_icon"
+                    android:layout_toStartOf="@id/save"
                     />
 
                 <ImageView
