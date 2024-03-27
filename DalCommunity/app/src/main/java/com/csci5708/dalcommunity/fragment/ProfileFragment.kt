@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.csci5708.dalcommunity.activity.AccountSettingsActivity
 import com.csci5708.dalcommunity.activity.HomeActivity
+import com.csci5708.dalcommunity.activity.LoginSignUpActivity
 import com.csci5708.dalcommunity.activity.ProfileDetailActivity
 import com.csci5708.dalcommunity.activity.UserPostsActivity
 import com.csci5708.dalcommunity.constants.AppConstants
@@ -107,7 +108,7 @@ class ProfileFragment : Fragment() {
                             .putBoolean(AppConstants.SP_IS_SIGNED_IN_KEY, false)
                             .apply()
                     }
-                    val intent = Intent(activity, HomeActivity::class.java)
+                    val intent = Intent(activity, LoginSignUpActivity::class.java)
                     activity?.startActivity(intent)
                 }
             }
