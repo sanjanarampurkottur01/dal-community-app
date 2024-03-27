@@ -25,7 +25,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(context);
+        val inflater = LayoutInflater.from(context)
         return when (viewType) {
             0 -> {
                 val view = inflater.inflate(R.layout.item_text_post_layout, parent, false)
@@ -129,6 +129,9 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
 
         fun bind(context: Context, post: ImagePost) {
+            postCaption.text = post.caption
+            postTime.text = post.time
+            userName.text = post.userName
             locationTag.text = "${post.latLocation}, ${post.longLocation}"
             Log.e("TEST", "IMAGE")
         }
@@ -190,6 +193,8 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
 
         fun bind(context: Context, post: PollPost) {
+            postTime.text = post.time
+            userName.text = post.userName
             post.calculatePercentages()
             pollAdapter = PollAdapter(context, post)
             pollQuestion.text = post.pollQuestion
@@ -252,6 +257,9 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
 
         fun bind(context: Context, post: TextPost) {
+            postCaption.text = post.caption
+            postTime.text = post.time
+            userName.text = post.userName
             locationTag.text = "${post.latLocation}, ${post.longLocation}"
             Log.e("TEST", "TEXT")
         }

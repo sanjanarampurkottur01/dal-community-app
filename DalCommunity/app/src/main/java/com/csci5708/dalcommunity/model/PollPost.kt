@@ -8,6 +8,8 @@ class PollPost : Post {
     override var type: Int = 2
     lateinit var pollQuestion: String
     lateinit var pollValuesList: List<PollValue>
+    lateinit var userName: String
+    lateinit var time: String
     var isUserVoteComplete: Boolean = false
 
     constructor() : super() {
