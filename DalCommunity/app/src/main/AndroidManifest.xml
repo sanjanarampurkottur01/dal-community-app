@@ -27,9 +27,6 @@
             android:name="com.csci5708.dalcommunity.activity.GetLocationActivity"
             android:exported="false" />
         <activity
-            android:name="com.csci5708.dalcommunity.activity.LocationUpdate"
-            android:exported="false" />
-        <activity
             android:name="com.csci5708.dalcommunity.activity.PokeActivity"
             android:exported="false" />
         <activity
