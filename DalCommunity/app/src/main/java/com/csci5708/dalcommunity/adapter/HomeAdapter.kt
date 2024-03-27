@@ -15,15 +15,35 @@ import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.TextPost
 import com.example.dalcommunity.R
 
+/**
+ * Adapter for the home timeline RecyclerView.
+ *
+ * @property context The context of the activity or fragment.
+ * @property posts The list of posts to be displayed.
+ * @constructor Initializes the HomeAdapter with the provided context and list of posts.
+ */
 class HomeAdapter(private val context: Context, private val posts: List<Post>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private var imageInItemClickListener: OnImageInItemClickListener? = null
 
+    /**
+     * Gets the view type of the item at the given position in the RecyclerView.
+     *
+     * @param position The position of the item in the RecyclerView.
+     * @return An integer representing the type of the view.
+     */
     override fun getItemViewType(position: Int): Int {
         return posts[position].type
     }
 
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
+     *
+     * @param parent The ViewGroup into which the new View will be added after it is bound to an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context)
         return when (viewType) {
@@ -43,10 +63,21 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     *
+     * @return The total number of items in this adapter.
+     */
     override fun getItemCount(): Int {
         return posts.size
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     *
+     * @param holder The ViewHolder which should be updated to represent the contents of the item at the given position.
+     * @param position The position of the item within the adapter's data set.
+     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currPost = posts[position]
 
@@ -66,15 +97,40 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
     }
 
+    /**
+     * Sets the listener for image item click events.
+     *
+     * @param listener The listener to be set.
+     */
     fun setOnImageInItemClickListener(listener: OnImageInItemClickListener) {
         imageInItemClickListener = listener
     }
 
+    /**
+     * Interface definition for a callback to be invoked when an image item is clicked.
+     */
     interface OnImageInItemClickListener {
+        /**
+         * Called when a comment icon is clicked.
+         *
+         * @param position The position of the item in the RecyclerView.
+         */
         fun onCommentClick(position: Int)
+        /**
+         * Called when a report icon is clicked.
+         *
+         * @param position The position of the item in the RecyclerView.
+         */
         fun onReportClick(position: Int)
     }
 
+    /**
+     * ViewHolder for image posts.
+     *
+     * @property itemView The view corresponding to the item layout.
+     * @property imageInItemClickListener The listener for image item click events.
+     * @constructor Initializes the ImageViewHolder with the given itemView and listener.
+     */
     class ImageViewHolder(itemView: View, private val imageInItemClickListener: OnImageInItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
         private var likeIcon: ImageView
@@ -137,6 +193,13 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
     }
 
+    /**
+     * ViewHolder for poll posts.
+     *
+     * @property itemView The view corresponding to the item layout.
+     * @property imageInItemClickListener The listener for image item click events.
+     * @constructor Initializes the PollViewHolder with the given itemView and listener.
+     */
     class PollViewHolder(itemView: View, private val imageInItemClickListener: OnImageInItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
         private var likeIcon: ImageView
@@ -203,22 +266,46 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         }
     }
 
+    /**
+     * ViewHolder for text posts.
+     *
+     * @property itemView The view corresponding to the item layout.
+     * @property imageInItemClickListener The listener for image item click events.
+     * @constructor Initializes the TextViewHolder with the given itemView and listener.
+     */
     class TextViewHolder(itemView: View, private val imageInItemClickListener: OnImageInItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
+        // ImageView for liking the post
         private var likeIcon: ImageView
+        // ImageView for saving the post
         private var saveIcon: ImageView
+        // ImageView for commenting on the post
         private var commentIcon: ImageView
+        // ImageView for reporting the post
         private var reportIcon: ImageView
+        // TextView for displaying the location tag
         private var locationTag: TextView
 
+        // TextView for displaying the post caption
         private var postCaption: TextView
+        // TextView for displaying the post time
         private var postTime: TextView
+        // TextView for displaying the username
         private var userName: TextView
+        // ImageView for displaying the user's profile image
         private var userImage: ImageView
 
+        // Indicates whether the post is liked
         private var liked: Boolean = false
+        // Indicates whether the post is saved
         private var saved: Boolean = false
 
+        /**
+         * Initializes the ImageViewHolder with the given itemView and listener.
+         *
+         * @param itemView The view corresponding to the item layout.
+         * @param imageInItemClickListener The listener for image item click events.
+         */
         init {
             likeIcon = itemView.findViewById(R.id.like)
             saveIcon = itemView.findViewById(R.id.save)
