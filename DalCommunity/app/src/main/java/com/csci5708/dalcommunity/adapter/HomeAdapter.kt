@@ -33,7 +33,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             }
             1 -> {
                 val view = inflater.inflate(R.layout.item_image_post_layout, parent, false)
-                PostViewHolder(view, imageInItemClickListener!!)
+                ImageViewHolder(view, imageInItemClickListener!!)
             }
             2 -> {
                 val view = inflater.inflate(R.layout.item_poll_posts_layout, parent, false)
@@ -51,7 +51,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         val currPost = posts[position]
 
         when (holder) {
-            is PostViewHolder ->
+            is ImageViewHolder ->
                 if (currPost is ImagePost) {
                     holder.bind(context, currPost)
                 }
@@ -75,12 +75,17 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         fun onReportClick(position: Int)
     }
 
-    class PostViewHolder(itemView: View, private val imageInItemClickListener: OnImageInItemClickListener) :
+    class ImageViewHolder(itemView: View, private val imageInItemClickListener: OnImageInItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
         private var likeIcon: ImageView
         private var saveIcon: ImageView
         private var commentIcon: ImageView
         private var reportIcon: ImageView
+
+        private var postCaption: TextView
+        private var postTime: TextView
+        private var userName: TextView
+        private var userImage: ImageView
 
         private var liked: Boolean = false
         private var saved: Boolean = false
@@ -90,6 +95,11 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             saveIcon = itemView.findViewById(R.id.save)
             commentIcon = itemView.findViewById(R.id.comment)
             reportIcon = itemView.findViewById(R.id.report)
+
+            postCaption = itemView.findViewById(R.id.text_post)
+            postTime = itemView.findViewById(R.id.data_time)
+            userName = itemView.findViewById(R.id.user)
+            userImage = itemView.findViewById(R.id.user_icon)
 
             likeIcon.setOnClickListener {
                 liked = !liked
@@ -103,16 +113,14 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
 
             commentIcon.setOnClickListener {
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION)
-                {
+                if (position != RecyclerView.NO_POSITION) {
                     imageInItemClickListener.onCommentClick(position)
                 }
             }
 
             reportIcon.setOnClickListener {
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION)
-                {
+                if (position != RecyclerView.NO_POSITION) {
                     imageInItemClickListener.onReportClick(position)
                 }
             }
@@ -130,6 +138,11 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         private var commentIcon: ImageView
         private var reportIcon: ImageView
 
+        private var postCaption: TextView
+        private var postTime: TextView
+        private var userName: TextView
+        private var userImage: ImageView
+
         private var liked: Boolean = false
         private var saved: Boolean = false
         private val pollRecyclerView: RecyclerView
@@ -141,6 +154,11 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             saveIcon = itemView.findViewById(R.id.save)
             commentIcon = itemView.findViewById(R.id.comment)
             reportIcon = itemView.findViewById(R.id.report)
+
+            postCaption = itemView.findViewById(R.id.text_post)
+            postTime = itemView.findViewById(R.id.data_time)
+            userName = itemView.findViewById(R.id.user)
+            userImage = itemView.findViewById(R.id.user_icon)
 
             pollRecyclerView = itemView.findViewById(R.id.poll_recycler_view)
             pollQuestion = itemView.findViewById(R.id.poll_question_text)
@@ -186,6 +204,11 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         private var commentIcon: ImageView
         private var reportIcon: ImageView
 
+        private var postCaption: TextView
+        private var postTime: TextView
+        private var userName: TextView
+        private var userImage: ImageView
+
         private var liked: Boolean = false
         private var saved: Boolean = false
 
@@ -194,6 +217,11 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             saveIcon = itemView.findViewById(R.id.save)
             commentIcon = itemView.findViewById(R.id.comment)
             reportIcon = itemView.findViewById(R.id.report)
+
+            postCaption = itemView.findViewById(R.id.text_post)
+            postTime = itemView.findViewById(R.id.data_time)
+            userName = itemView.findViewById(R.id.user)
+            userImage = itemView.findViewById(R.id.user_icon)
 
             likeIcon.setOnClickListener {
                 liked = !liked
