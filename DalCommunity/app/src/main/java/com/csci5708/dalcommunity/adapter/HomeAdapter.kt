@@ -138,7 +138,6 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         private var commentIcon: ImageView
         private var reportIcon: ImageView
 
-        private var postCaption: TextView
         private var postTime: TextView
         private var userName: TextView
         private var userImage: ImageView
@@ -155,7 +154,6 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             commentIcon = itemView.findViewById(R.id.comment)
             reportIcon = itemView.findViewById(R.id.report)
 
-            postCaption = itemView.findViewById(R.id.text_post)
             postTime = itemView.findViewById(R.id.data_time)
             userName = itemView.findViewById(R.id.user)
             userImage = itemView.findViewById(R.id.user_icon)
