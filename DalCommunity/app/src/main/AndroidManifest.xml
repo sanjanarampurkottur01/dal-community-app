@@ -30,6 +30,9 @@
             android:name="com.csci5708.dalcommunity.activity.LocationUpdate"
             android:exported="false" />
         <activity
+            android:name="com.csci5708.dalcommunity.activity.LoginSignUpActivity"
+            android:exported="false" />
+        <activity
             android:name="com.csci5708.dalcommunity.activity.PokeActivity"
             android:exported="false" />
         <activity
@@ -58,6 +61,7 @@
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
