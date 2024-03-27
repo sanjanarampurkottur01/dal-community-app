@@ -2,6 +2,7 @@ package com.csci5708.dalcommunity.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.activity.CreatePostActivity
 import com.csci5708.dalcommunity.adapter.HomeAdapter
+import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.ImagePost
 import com.csci5708.dalcommunity.model.PollPost
 import com.csci5708.dalcommunity.model.PollValue
+import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.TextPost
 import com.example.dalcommunity.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -67,27 +70,29 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
-        val posts = listOf(
-            TextPost("", "", 0, "", listOf("", ""), 1.1, 1.1),
-            ImagePost("", "", 1, "", "", listOf("", ""), 1.1, 1.1),
-            ImagePost("", "", 1, "", "", listOf("", ""), 1.1, 1.1),
-            PollPost("", "", 2,
-                "What is 2+2?",
-                arrayListOf(
-                    PollValue("4", 75, false),
-                    PollValue("6", 20, false),
-                    PollValue("2", 2, false),
-                    PollValue("0", 3, true)
-                ),
-                false
-            ),
-            TextPost("", "", 0, "", listOf("", ""), 1.1, 1.1),
-            TextPost("", "", 0, "", listOf("", ""), 1.1, 1.1)
-        )
+        val posts = mutableListOf<Post>()
 
-        val adapter = HomeAdapter(requireContext(), posts)
-        adapter.setOnImageInItemClickListener(this)
-        recyclerView.adapter = adapter
+        FireStoreSingleton.getAllDocumentsOfCollection("Post", {
+                documents ->
+            for (document in documents) {
+                if (document.get("type") == 0) {
+                    val post = document.toObject(TextPost::class.java)
+                    posts.add(post!!)
+                } else if (document.get("type") == 1) {
+                    val post = document.toObject(ImagePost::class.java)
+                    posts.add(post!!)
+                } else {
+                    val post = document.toObject(PollPost::class.java)
+                    posts.add(post!!)
+                }
+            }
+            Log.e("TAG", posts[0].type.toString())
+            val adapter = HomeAdapter(requireContext(), posts)
+            adapter.setOnImageInItemClickListener(this)
+            recyclerView.adapter = adapter
+        }, {
+            Log.e("TAG", it.toString())
+        })
 
         addPostButton.setOnClickListener {
             val intent = Intent(activity, CreatePostActivity::class.java)
