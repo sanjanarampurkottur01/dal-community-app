@@ -84,7 +84,7 @@ class CreatePostActivity : AppCompatActivity() {
             val longitude = data?.getDoubleExtra("longitude", 0.0)
 
             Log.e("RETVAL", latitude.toString())
-            Log.e("RETVAL", latitude.toString())
+            Log.e("RETVAL", longitude.toString())
         }
     }
 }
