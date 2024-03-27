@@ -37,6 +37,7 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.io.FileNotFoundException
@@ -46,6 +47,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
 
 
+/**
+ * Fragment responsible for creating petitions.
+ */
 class CreatePetitionFragment : Fragment() {
 
     private var petitionTitleEditText: EditText? = null
@@ -61,7 +65,14 @@ class CreatePetitionFragment : Fragment() {
     private var isImageInPetition: Boolean =  false
 
 
-
+    /**
+     * Called to create the fragment's view hierarchy.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Return the View for the fragment's UI, or null.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,11 +104,19 @@ class CreatePetitionFragment : Fragment() {
         }
         return view
     }
+    /**
+     * Checks if any of the input fields (petition title or description) have been edited.
+     *
+     * @return true if any field has been edited, false otherwise.
+     */
     private fun isFieldsEdited(): Boolean {
         val petitionTitle = petitionTitleEditText?.text.toString().trim()
         val petitionDesc = petitionDescEditText?.text.toString().trim()
         return petitionTitle.isNotEmpty() || petitionDesc.isNotEmpty()
     }
+    /**
+     * Displays a preview dialog showing the petition title, description, and optionally the image.
+     */
     private fun showPreviewDialog() {
         val petitionTitle = petitionTitleEditText?.text.toString()
         val petitionDesc = petitionDescEditText?.text.toString()
@@ -110,10 +129,10 @@ class CreatePetitionFragment : Fragment() {
 
         if (imageUri != null) {
             imageView.setImageURI(imageUri)
-            imageView.visibility = View.VISIBLE // Show the ImageView
+            imageView.visibility = View.VISIBLE
             isImageInPetition = true
         } else {
-            imageView.visibility = View.GONE // Hide the ImageView
+            imageView.visibility = View.GONE
         }
 
         communityGroupSpinner = dialogView.findViewById(R.id.linkGroup)
@@ -131,7 +150,7 @@ class CreatePetitionFragment : Fragment() {
         dialog.setCancelable(true)
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // Adjust 0.9 to your desired percentage
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
         val layoutParams = WindowManager.LayoutParams()
         layoutParams.copyFrom(dialog.window?.attributes)
         layoutParams.width = width
@@ -150,6 +169,7 @@ class CreatePetitionFragment : Fragment() {
             publishPetition(isImageInPetition, imageView)
             petitionTitleEditText?.setText("")
             petitionDescEditText?.setText("")
+            petitionImage.setImageResource(R.drawable.upload_placeholder)
             dialog.dismiss()
             if (imageUri != null) {
                 deleteImage(imageUri)
@@ -158,6 +178,12 @@ class CreatePetitionFragment : Fragment() {
         dialog.show()
     }
 
+    /**
+     * Retrieves a Bitmap from the given URI.
+     *
+     * @param uri The URI of the image.
+     * @return The Bitmap if successful, or null if the URI is invalid or the image cannot be decoded.
+     */
     private fun getBitmapFromUri(uri: Uri): Bitmap? {
         return try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
@@ -167,17 +193,31 @@ class CreatePetitionFragment : Fragment() {
             null
         }
     }
+
+    /**
+     * Deletes the image associated with the given URI from the device's content resolver.
+     *
+     * @param imageUri The URI of the image to be deleted.
+     */
     private fun deleteImage(imageUri: Uri) {
         requireActivity().contentResolver.delete(imageUri, null, null)
     }
 
+    /**
+     * Saves the user ID to SharedPreferences.
+     *
+     * @param userId The user ID to be saved.
+     */
     private fun saveUserId(userId: String) {
         val sharedPreferences: SharedPreferences = requireContext().getSharedPreferences(PREF_NAME, MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.putString(KEY_USER_ID, userId)
         editor.apply()
     }
-
+    /**
+     * Displays a dialog with options for taking a photo or choosing from the gallery.
+     * Initiates corresponding actions based on user selection.
+     */
     private fun showOptions() {
         val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
         val builder = AlertDialog.Builder(requireContext())
@@ -191,16 +231,30 @@ class CreatePetitionFragment : Fragment() {
         builder.show()
     }
 
+    /**
+     * Dispatches an intent to capture an image using the device's camera.
+     */
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
     }
 
+    /**
+     * Dispatches an intent to pick an image from the device's gallery.
+     */
     private fun dispatchPickImageIntent() {
         val pickPhotoIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(pickPhotoIntent, REQUEST_IMAGE_PICK)
     }
 
+    /**
+     * Handles the result of activities launched for capturing or picking images.
+     * If the result is successful, it updates the petition image view accordingly.
+     *
+     * @param requestCode The request code passed to startActivityForResult().
+     * @param resultCode The result code returned by the child activity.
+     * @param data An Intent that carries the result data.
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == RESULT_OK) {
@@ -216,7 +270,11 @@ class CreatePetitionFragment : Fragment() {
             }
         }
     }
-
+    /**
+     * Saves the image displayed in the petition image view to the device's external content provider.
+     *
+     * @return The URI of the saved image if successful, null otherwise.
+     */
     private fun saveImageToContentProvider(): Uri? {
         val drawable = petitionImage.drawable
         if (drawable !is BitmapDrawable) {
@@ -239,7 +297,9 @@ class CreatePetitionFragment : Fragment() {
         }
         return contentUri
     }
-
+    /**
+     * Fetches all community groups from the Firestore database and populates the community group spinner with their names.
+     */
     private fun fetchCommunityGroups() {
         FireStoreSingleton.getAllDocumentsOfCollection("community-groups",
             { documents ->
@@ -258,6 +318,12 @@ class CreatePetitionFragment : Fragment() {
         )
     }
 
+    /**
+     * Publishes a petition with the provided details to the Firestore database and notifies all users of the associated community group.
+     *
+     * @param isImageInPetition Boolean indicating whether an image is included in the petition.
+     * @param imageView The ImageView containing the image for the petition.
+     */
     private fun publishPetition(isImageInPetition: Boolean, imageView: ImageView) {
         val auth = Firebase.auth
         val currentUser = auth.currentUser
@@ -313,7 +379,6 @@ class CreatePetitionFragment : Fragment() {
                                 accessToken = accessToken,
                                 "high"
                             )
-
                         } else {
                             Toast.makeText(requireContext(), "Failed to publish petition", Toast.LENGTH_SHORT).show()
                         }
@@ -325,25 +390,27 @@ class CreatePetitionFragment : Fragment() {
             { exception ->
                 Toast.makeText(requireContext(), "Failed to retrieve community group: ${exception.message}", Toast.LENGTH_SHORT).show()
             }
+
         )
+
+        imageView.setImageResource(R.drawable.upload_placeholder)
     }
 
+    /**
+     * Fetches Firebase Cloud Messaging (FCM) tokens for all users associated with a community group.
+     *
+     * @param communityGroupId The ID of the community group.
+     * @return A list of FCM tokens associated with users in the community group.
+     */
     private suspend fun fetchAllUsersEmail(communityGroupId: String): List<String> = coroutineScope {
         val db = FirebaseFirestore.getInstance()
         val fcmTokens = mutableListOf<String>()
         try {
             val communityGroupRef = db.collection("community-groups").document(communityGroupId)
-            val usersSnapshot = communityGroupRef.collection("users").get().await()
-            val userEmails = usersSnapshot.documents.mapNotNull { it.id } // Extract email IDs
-
-            // Fetch all user documents at once
+            var userEmails: MutableList<String> = getAllEmails(communityGroupRef)
             val usersQuery = db.collection("users").whereIn("email", userEmails)
             val usersQuerySnapshot = usersQuery.get().await()
-
-            // Map email to FCM token
             val emailToFCMMap = usersQuerySnapshot.documents.associateBy({ it.id }, { it.getString("fcmToken") })
-
-            // Populate fcmTokens list
             for (email in userEmails) {
                 val fcmToken = emailToFCMMap[email]
                 if (!fcmToken.isNullOrBlank()) {
@@ -354,5 +421,32 @@ class CreatePetitionFragment : Fragment() {
             println("Error fetching users' FCM tokens: ${e.message}")
         }
         return@coroutineScope fcmTokens
+    }
+
+    /**
+     * Retrieves all email addresses associated with users in a community group.
+     *
+     * @param communityGroupRef The reference to the document of the community group.
+     * @return A list of email addresses of users in the community group.
+     */
+    private suspend fun getAllEmails(communityGroupRef: DocumentReference): MutableList<String> {
+        val userEmails = mutableListOf<String>()
+        try {
+            val documentSnapshot = communityGroupRef.get().await()
+            if (documentSnapshot.exists()) {
+                val usersMap = documentSnapshot.data?.get("users") as? Map<String, Any>
+                if (usersMap != null) {
+                    val emails = usersMap.keys.toList()
+                    userEmails.addAll(emails)
+                } else {
+                    println("Users map is null or empty")
+                }
+            } else {
+                println("Document does not exist")
+            }
+        } catch (e: Exception) {
+            println("Error getting document: $e")
+        }
+        return userEmails
     }
 }
