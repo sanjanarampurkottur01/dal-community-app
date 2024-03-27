@@ -37,6 +37,7 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.io.FileNotFoundException
@@ -110,10 +111,10 @@ class CreatePetitionFragment : Fragment() {
 
         if (imageUri != null) {
             imageView.setImageURI(imageUri)
-            imageView.visibility = View.VISIBLE // Show the ImageView
+            imageView.visibility = View.VISIBLE
             isImageInPetition = true
         } else {
-            imageView.visibility = View.GONE // Hide the ImageView
+            imageView.visibility = View.GONE
         }
 
         communityGroupSpinner = dialogView.findViewById(R.id.linkGroup)
@@ -131,7 +132,7 @@ class CreatePetitionFragment : Fragment() {
         dialog.setCancelable(true)
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val width = (resources.displayMetrics.widthPixels * 0.9).toInt() // Adjust 0.9 to your desired percentage
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
         val layoutParams = WindowManager.LayoutParams()
         layoutParams.copyFrom(dialog.window?.attributes)
         layoutParams.width = width
@@ -333,8 +334,7 @@ class CreatePetitionFragment : Fragment() {
         val fcmTokens = mutableListOf<String>()
         try {
             val communityGroupRef = db.collection("community-groups").document(communityGroupId)
-            val usersSnapshot = communityGroupRef.collection("users").get().await()
-            val userEmails = usersSnapshot.documents.mapNotNull { it.id } // Extract email IDs
+            var userEmails: MutableList<String> = getAllEmails(communityGroupRef)
 
             // Fetch all user documents at once
             val usersQuery = db.collection("users").whereIn("email", userEmails)
@@ -354,5 +354,27 @@ class CreatePetitionFragment : Fragment() {
             println("Error fetching users' FCM tokens: ${e.message}")
         }
         return@coroutineScope fcmTokens
+    }
+
+    private suspend fun getAllEmails(communityGroupRef: DocumentReference): MutableList<String> {
+        val userEmails = mutableListOf<String>()
+        try {
+            val documentSnapshot = communityGroupRef.get().await()
+            if (documentSnapshot.exists()) {
+                val usersMap = documentSnapshot.data?.get("users") as? Map<String, Any>
+                if (usersMap != null) {
+                    val emails = usersMap.keys.toList()
+                    userEmails.addAll(emails)
+                } else {
+                    println("Users map is null or empty")
+                }
+            } else {
+                println("Document does not exist")
+            }
+        } catch (e: Exception) {
+            println("Error getting document: $e")
+        }
+
+        return userEmails
     }
 }
