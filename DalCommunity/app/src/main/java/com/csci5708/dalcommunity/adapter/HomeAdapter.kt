@@ -6,51 +6,64 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.csci5708.dalcommunity.model.ImagePost
+import com.csci5708.dalcommunity.model.PollPost
 import com.csci5708.dalcommunity.model.Post
+import com.csci5708.dalcommunity.model.TextPost
 import com.example.dalcommunity.R
 
-class HomeAdapter(private val context: Context, private val posts: List<String>) :
+class HomeAdapter(private val context: Context, private val posts: List<Post>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         private var imageInItemClickListener: OnImageInItemClickListener? = null
 
     override fun getItemViewType(position: Int): Int {
-        val currObject = posts[position]
-
-        // if (currObject.type.equals("post")) {
-        if (currObject == "post") {
-            return 0
-        } else {
-            return 1
-        }
+        return posts[position].type
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(context);
-        return if (viewType == 0) {
-            val view = inflater.inflate(R.layout.home_item, parent, false)
-            PostViewHolder(view, imageInItemClickListener!!)
-        } else {
-            val view = inflater.inflate(R.layout.home_item, parent, false)
-            PollViewHolder(view, imageInItemClickListener!!)
+        return when (viewType) {
+            0 -> {
+                val view = inflater.inflate(R.layout.item_text_post_layout, parent, false)
+                TextViewHolder(view, imageInItemClickListener!!)
+            }
+            1 -> {
+                val view = inflater.inflate(R.layout.item_image_post_layout, parent, false)
+                PostViewHolder(view, imageInItemClickListener!!)
+            }
+            2 -> {
+                val view = inflater.inflate(R.layout.item_poll_posts_layout, parent, false)
+                PollViewHolder(view, imageInItemClickListener!!)
+            }
+            else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
 
     override fun getItemCount(): Int {
-//        return posts.size
-        return 5 // For now, use the line above for the long run
+        return posts.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currPost = posts[position]
 
         when (holder) {
-            is PostViewHolder -> holder.bind(currPost)
-            is PollViewHolder -> holder.bind(currPost)
+            is PostViewHolder ->
+                if (currPost is ImagePost) {
+                    holder.bind(context, currPost)
+                }
+            is PollViewHolder ->
+                if (currPost is PollPost) {
+                    holder.bind(context, currPost)
+                }
+            is TextViewHolder ->
+                if (currPost is TextPost) {
+                    holder.bind(context, currPost)
+                }
         }
-        // Logic to set data from the actual post
-//        val currentItem = posts[position]
     }
 
     fun setOnImageInItemClickListener(listener: OnImageInItemClickListener) {
@@ -105,13 +118,68 @@ class HomeAdapter(private val context: Context, private val posts: List<String>)
             }
         }
 
-//        fun bind(post: Post) {
-        fun bind(post: String) {
-            Log.e("TEST", "POST")
+        fun bind(context: Context, post: ImagePost) {
+            Log.e("TEST", "IMAGE")
         }
     }
 
     class PollViewHolder(itemView: View, private val imageInItemClickListener: OnImageInItemClickListener) :
+        RecyclerView.ViewHolder(itemView) {
+        private var likeIcon: ImageView
+        private var saveIcon: ImageView
+        private var commentIcon: ImageView
+        private var reportIcon: ImageView
+
+        private var liked: Boolean = false
+        private var saved: Boolean = false
+        private val pollRecyclerView: RecyclerView
+        private lateinit var pollAdapter: PollAdapter
+        private val pollQuestion: TextView
+
+        init {
+            likeIcon = itemView.findViewById(R.id.like)
+            saveIcon = itemView.findViewById(R.id.save)
+            commentIcon = itemView.findViewById(R.id.comment)
+            reportIcon = itemView.findViewById(R.id.report)
+
+            pollRecyclerView = itemView.findViewById(R.id.poll_recycler_view)
+            pollQuestion = itemView.findViewById(R.id.poll_question_text)
+
+            likeIcon.setOnClickListener {
+                liked = !liked
+                likeIcon.setImageResource(if (liked) R.drawable.like else R.drawable.like_outline)
+            }
+
+            saveIcon.setOnClickListener {
+                saved = !saved
+                saveIcon.setImageResource(if (saved) R.drawable.save else R.drawable.save_outline)
+            }
+
+            commentIcon.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    imageInItemClickListener.onCommentClick(position)
+                }
+            }
+
+            reportIcon.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    imageInItemClickListener.onReportClick(position)
+                }
+            }
+        }
+
+        fun bind(context: Context, post: PollPost) {
+            post.calculatePercentages()
+            pollAdapter = PollAdapter(context, post)
+            pollQuestion.text = post.pollQuestion
+            pollRecyclerView.layoutManager = LinearLayoutManager(context)
+            pollRecyclerView.adapter = pollAdapter
+        }
+    }
+
+    class TextViewHolder(itemView: View, private val imageInItemClickListener: OnImageInItemClickListener) :
         RecyclerView.ViewHolder(itemView) {
         private var likeIcon: ImageView
         private var saveIcon: ImageView
@@ -139,24 +207,21 @@ class HomeAdapter(private val context: Context, private val posts: List<String>)
 
             commentIcon.setOnClickListener {
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION)
-                {
+                if (position != RecyclerView.NO_POSITION) {
                     imageInItemClickListener.onCommentClick(position)
                 }
             }
 
             reportIcon.setOnClickListener {
                 val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION)
-                {
+                if (position != RecyclerView.NO_POSITION) {
                     imageInItemClickListener.onReportClick(position)
                 }
             }
         }
 
-//        fun bind(post: Post) {
-        fun bind(post: String) {
-            Log.e("TEST", "POLL")
+        fun bind(context: Context, post: TextPost) {
+            Log.e("TEST", "TEXT")
         }
     }
 }

@@ -2,7 +2,14 @@ package com.csci5708.dalcommunity.model
 
 import kotlin.math.roundToInt
 
-class PollPost(val pollQuestion: String, val pollValuesList: List<PollValue>, var isUserVoteComplete: Boolean = false) {
+class PollPost(
+    override var postId: String,
+    override var userId: String,
+    override val type: Int = 2,
+    val pollQuestion: String,
+    val pollValuesList: List<PollValue>,
+    var isUserVoteComplete: Boolean = false): Post() {
+
     val pollValuesSize: Int = pollValuesList.size
 
     init {

@@ -9,9 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.csci5708.dalcommunity.model.Post
+import com.csci5708.dalcommunity.model.SavedPost
 import com.example.dalcommunity.R
 
-class SavedGroupListAdapter(private val dataset: ArrayList<Post>, private val context: Context) :
+class SavedGroupListAdapter(private val dataset: ArrayList<SavedPost>, private val context: Context) :
     RecyclerView.Adapter<SavedGroupListAdapter.ViewHolder>(){
 
     private var itemClickListener: OnItemClickListener? = null
@@ -50,9 +51,9 @@ class SavedGroupListAdapter(private val dataset: ArrayList<Post>, private val co
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val post = dataset[position]
 
-        viewHolder.titleView.text = post.title
-        if (post.image.isNotEmpty()) {
-            Glide.with(context).load(post.image).into(viewHolder.cardImage)
+        viewHolder.titleView.text = post.groupTitle
+        if (post.imageUrl.isNotEmpty()) {
+            Glide.with(context).load(post.imageUrl).into(viewHolder.cardImage)
         } else {
             viewHolder.cardImage.setImageDrawable(null)
         }

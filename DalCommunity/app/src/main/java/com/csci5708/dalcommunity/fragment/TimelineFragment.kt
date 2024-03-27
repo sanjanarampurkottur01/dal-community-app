@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.activity.CreatePostActivity
 import com.csci5708.dalcommunity.adapter.HomeAdapter
+import com.csci5708.dalcommunity.model.ImagePost
+import com.csci5708.dalcommunity.model.PollPost
+import com.csci5708.dalcommunity.model.PollValue
+import com.csci5708.dalcommunity.model.TextPost
 import com.example.dalcommunity.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -25,7 +29,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [TimelineFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener, FragmentManager.OnBackStackChangedListener {
+class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, FragmentManager.OnBackStackChangedListener {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -63,10 +67,26 @@ class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener, Fragmen
 
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
-        val posts = listOf("", "", "")
+        val posts = listOf(
+            TextPost("", "", 0, "", listOf("", ""), 1.1, 1.1),
+            ImagePost("", "", 1, "", "", listOf("", ""), 1.1, 1.1),
+            ImagePost("", "", 1, "", "", listOf("", ""), 1.1, 1.1),
+            PollPost("", "", 2,
+                "What is 2+2?",
+                arrayListOf(
+                    PollValue("4", 75, false),
+                    PollValue("6", 20, false),
+                    PollValue("2", 2, false),
+                    PollValue("0", 3, true)
+                ),
+                false
+            ),
+            TextPost("", "", 0, "", listOf("", ""), 1.1, 1.1),
+            TextPost("", "", 0, "", listOf("", ""), 1.1, 1.1)
+        )
 
-        var adapter = HomeAdapter(requireContext(), posts)
-        adapter.setOnCommentClickListener(this)
+        val adapter = HomeAdapter(requireContext(), posts)
+        adapter.setOnImageInItemClickListener(this)
         recyclerView.adapter = adapter
 
         addPostButton.setOnClickListener {
@@ -105,6 +125,17 @@ class TimelineFragment : Fragment(), HomeAdapter.onCommentClickListener, Fragmen
         val fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.setCustomAnimations(R.anim.slide_in_top_comment, R.anim.slide_out_down_comment)
         fragmentTransaction?.replace(R.id.fragment_container, CommentFragment())
+        fragmentTransaction?.addToBackStack(null)
+        fragmentTransaction?.commit()
+    }
+
+    override fun onReportClick(position: Int) {
+        view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.INVISIBLE
+        Toast.makeText(activity,"Report Clicked",Toast.LENGTH_LONG).show()
+        val fragmentManager = activity?.supportFragmentManager
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        fragmentTransaction?.setCustomAnimations(R.anim.slide_in_top_comment, R.anim.slide_out_down_comment)
+        fragmentTransaction?.replace(R.id.fragment_container, ReportFragment())
         fragmentTransaction?.addToBackStack(null)
         fragmentTransaction?.commit()
     }
