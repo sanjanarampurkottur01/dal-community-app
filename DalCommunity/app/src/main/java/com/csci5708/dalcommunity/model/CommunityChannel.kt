@@ -1,3 +1,20 @@
 package com.csci5708.dalcommunity.model
 
-data class CommunityChannel(val communityId:String, val communityName:String,val admin:String,val lastMessage:String,val lastMessageBy:String)
+data class CommunityChannel(
+    val id:String,
+    val name: String,
+    val rules: String,
+    val desc: String,
+    val lastMessage: String,
+    val lastMessageSenderEmail: String,
+    val lastMessageSenderName: String,
+    val lastMessageTime: Long,
+    val messages: List<ChatMessage>,
+    val users: HashMap<String,String>
+//    val users: Any // Map of user email to User object
+)
+
+data class ComunityUser(
+    val displayName: String,
+    val email: String
+)

@@ -2,18 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Community Name"
-        android:textStyle="bold"
-        android:textColor="@color/text_color"
-        android:padding="15dp"
-        android:id="@+id/chatHeadingTv"
-        android:background="@color/background"
-        android:textSize="20sp"/>
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="@color/white"
+        android:backgroundTint="@color/text_color"
+        app:title="Your Toolbar Title" />
+
+
 
     <View
         android:layout_width="match_parent"
@@ -31,10 +32,7 @@
         android:paddingHorizontal="15dp"
         />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/text_color"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,13 +46,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="10dp"
+            android:background="@drawable/bg_send_message"
             android:hint="Type your message here" />
 
         <ImageButton
             android:id="@+id/sendMessageButton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/send_outline"
+            android:layout_marginLeft="5dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/send_round"
             android:layout_gravity="center_vertical"
             android:text="Send" />
 

@@ -9,13 +9,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <EditText
+<!--        <EditText-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="10dp"-->
+<!--            android:drawableLeft="@drawable/search_outline"-->
+<!--            android:hint="@string/community_search_hint"-->
+<!--            android:id="@+id/communitySearchEt"/>-->
+
+        <SearchView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:drawableLeft="@drawable/search_outline"
-            android:hint="@string/community_search_hint"
-            android:id="@+id/communitySearchEt"/>
+            android:queryHint="@string/community_search_hint"
+            android:iconifiedByDefault="false"
+            android:id="@+id/communitySearchView"/>
+
 
         <ListView
             android:layout_width="match_parent"
