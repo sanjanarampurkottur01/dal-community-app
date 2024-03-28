@@ -17,6 +17,7 @@ import com.csci5708.dalcommunity.model.PollValue
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class CreatePollPostActivity : AppCompatActivity() {
 
@@ -58,8 +59,7 @@ class CreatePollPostActivity : AppCompatActivity() {
                     pollValues.add(
                         PollValue(
                             pollOption1Tv.text.toString(),
-                            0,
-                            false
+                            0
                         )
                     )
                 }
@@ -68,8 +68,7 @@ class CreatePollPostActivity : AppCompatActivity() {
                     pollValues.add(
                         PollValue(
                             pollOption2Tv.text.toString(),
-                            0,
-                            false
+                            0
                         )
                     )
                 }
@@ -78,8 +77,7 @@ class CreatePollPostActivity : AppCompatActivity() {
                     pollValues.add(
                         PollValue(
                             pollOption3Tv.text.toString(),
-                            0,
-                            false
+                            0
                         )
                     )
                 }
@@ -88,25 +86,25 @@ class CreatePollPostActivity : AppCompatActivity() {
                     pollValues.add(
                         PollValue(
                             pollOption4Tv.text.toString(),
-                            0,
-                            false
+                            0
                         )
                     )
                 }
 
                 if (pollValues.size >= 2) {
-                    val pollPost: PollPost = PollPost(
-                        "",
+                    val pollPost = PollPost(
+                        FirebaseFirestore.getInstance().collection("post").document().id,
                         Firebase.auth.currentUser?.email.toString(),
-                        2,
                         pollQuestion,
                         pollValues,
                         false,
-                        Firebase.auth.currentUser?.displayName.toString()
+                        Firebase.auth.currentUser?.displayName.toString(),
+                        HashMap()
                     )
 
                     FireStoreSingleton.addData(
                         "post",
+                        pollPost.postId,
                         pollPost
                     ) { b: Boolean -> uploadPollPostOnComplete(b) }
                 } else {

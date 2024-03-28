@@ -1,5 +1,11 @@
 package com.csci5708.dalcommunity.model
 
+import android.content.Context
+import android.widget.Toast
+import com.csci5708.dalcommunity.firestore.FireStoreSingleton
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.Exclude
 import java.util.Calendar
 import kotlin.math.roundToInt
 
@@ -11,7 +17,9 @@ class PollPost : Post {
     lateinit var pollValuesList: List<PollValue>
     lateinit var userName: String
     lateinit var time: String
+    @Exclude
     var isUserVoteComplete: Boolean = false
+    var userToVoteMap: HashMap<String, String> = HashMap()
 
     constructor() : super() {
         // Default constructor required for Firebase deserialization
@@ -20,35 +28,56 @@ class PollPost : Post {
     constructor(
         postId: String,
         userId: String,
-        type: Int,
         pollQuestion: String,
         pollValuesList: List<PollValue>,
         isUserVoteComplete: Boolean,
-        userName: String
+        userName: String,
+        userToVoteMap: HashMap<String, String>
     ) : super() {
         this.postId = postId
         this.userId = userId
-        this.type = type
         this.pollQuestion = pollQuestion
         this.pollValuesList = pollValuesList
         this.isUserVoteComplete = isUserVoteComplete
         this.time = Calendar.getInstance().time.toString()
         this.userName = userName
-        calculatePercentages()
+        this.userToVoteMap = userToVoteMap
+        refreshPollData()
     }
 
     val pollValuesSize: Int
         get() = pollValuesList.size
 
-    fun updateVote(position: Int) {
+    fun updateVote(position: Int, context: Context) {
         pollValuesList[position].votes += 1
         isUserVoteComplete = true
-        calculatePercentages()
+        userToVoteMap[Firebase.auth.currentUser?.email.toString()] = pollValuesList[position].title
+
+        // Set all the isSelected to false before uploading to Firestore
+        for (pv in pollValuesList) {
+            pv.isSelected = false
+        }
+        FireStoreSingleton.updateData("post", postId, this) {
+            Toast.makeText(context, "update successful", Toast.LENGTH_SHORT).show()
+        }
+
+        refreshPollData()
     }
 
-    fun calculatePercentages() {
+    fun refreshPollData() {
         val totalVotes = pollValuesList.sumOf { it.votes }
         var percent: Float
+
+        if (userToVoteMap.containsKey(Firebase.auth.currentUser?.email.toString())) {
+            val selectedOption = userToVoteMap[Firebase.auth.currentUser?.email.toString()]
+            for (pv in pollValuesList) {
+                if (pv.title == selectedOption) {
+                    pv.isSelected = true
+                }
+            }
+            isUserVoteComplete = true
+        } else
+            isUserVoteComplete = false
 
         if (totalVotes != 0) {
             for (pollVal in pollValuesList) {
@@ -57,5 +86,12 @@ class PollPost : Post {
                 pollVal.percentage = "${pollVal.progress}%"
             }
         }
+    }
+
+    fun getVotedOptionPosition(): Int {
+        if (isUserVoteComplete) {
+            return 1
+        }
+        return -1
     }
 }

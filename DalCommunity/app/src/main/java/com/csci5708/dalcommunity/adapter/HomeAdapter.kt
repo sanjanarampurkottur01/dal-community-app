@@ -265,7 +265,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         fun bind(context: Context, post: PollPost) {
             postTime.text = post.time
             userName.text = post.userName
-            post.calculatePercentages()
+            post.refreshPollData()
             pollAdapter = PollAdapter(context, post)
             pollQuestion.text = post.pollQuestion
             pollRecyclerView.layoutManager = LinearLayoutManager(context)
