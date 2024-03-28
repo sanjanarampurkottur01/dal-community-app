@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <TextView
+        android:id="@+id/report_post_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Report"
+        android:textColor="@color/text_color"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    
+    <View
+        android:id="@+id/view_title_subtitle_separator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/separator_color"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/report_post_title" />
+    
+    <TextView
+        android:id="@+id/report_subtitle_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Why are you reporting this post?"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_title_subtitle_separator" />
+    
+    <TextView
+        android:id="@+id/report_subtitle_answer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="What made you report this post - select any of the reasons from the below list of reasons or specify a different reason using 'Other'."
+        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/report_subtitle_question" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/report_subtitle_answer"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/report_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/report_reason_item"/>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

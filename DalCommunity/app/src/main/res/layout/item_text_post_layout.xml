@@ -21,8 +21,9 @@
 
             <ImageView
                 android:id="@+id/user_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="4dp"
                 android:src="@drawable/user_profile_outline"
                 />
 
@@ -36,6 +37,19 @@
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_color"
+                android:layout_toEndOf="@id/user_icon"
+                />
+
+            <TextView
+                android:id="@+id/location_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textSize="11sp"
+                android:layout_marginStart="8dp"
+                android:layout_below="@id/user"
+                android:textStyle="italic"
+                android:textAlignment="viewStart"
                 android:layout_toEndOf="@id/user_icon"
                 />
 
@@ -57,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/black"
-                android:layout_below="@id/user"
+                android:layout_below="@id/location_post"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 />
@@ -101,6 +115,14 @@
                     android:src="@drawable/send_outline"
                     android:layout_toEndOf="@id/comment"
                     android:layout_marginStart="16dp"
+                    />
+
+                <ImageView
+                    android:id="@+id/report"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/flag_icon"
+                    android:layout_toStartOf="@id/save"
                     />
 
                 <ImageView

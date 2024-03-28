@@ -48,7 +48,7 @@
                 />
 
             <EditText
-                android:id="@+id/petitionTitle"
+                android:id="@+id/pokeToUserMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/sloganID"
@@ -71,7 +71,7 @@
                 android:id="@+id/petitionDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/petitionTitle"
+                android:layout_below="@id/pokeToUserMessage"
                 android:background="@drawable/rounded_corner"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"

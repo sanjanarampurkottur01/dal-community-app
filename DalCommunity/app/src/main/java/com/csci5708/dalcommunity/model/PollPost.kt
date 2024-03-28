@@ -2,12 +2,39 @@ package com.csci5708.dalcommunity.model
 
 import kotlin.math.roundToInt
 
-class PollPost(val pollQuestion: String, val pollValuesList: List<PollValue>, var isUserVoteComplete: Boolean = false) {
-    val pollValuesSize: Int = pollValuesList.size
+class PollPost : Post {
+    override lateinit var postId: String
+    override lateinit var userId: String
+    override var type: Int = 2
+    lateinit var pollQuestion: String
+    lateinit var pollValuesList: List<PollValue>
+    lateinit var userName: String
+    lateinit var time: String
+    var isUserVoteComplete: Boolean = false
 
-    init {
+    constructor() : super() {
+        // Default constructor required for Firebase deserialization
+    }
+
+    constructor(
+        postId: String,
+        userId: String,
+        type: Int,
+        pollQuestion: String,
+        pollValuesList: List<PollValue>,
+        isUserVoteComplete: Boolean
+    ) : super() {
+        this.postId = postId
+        this.userId = userId
+        this.type = type
+        this.pollQuestion = pollQuestion
+        this.pollValuesList = pollValuesList
+        this.isUserVoteComplete = isUserVoteComplete
         calculatePercentages()
     }
+
+    val pollValuesSize: Int
+        get() = pollValuesList.size
 
     fun updateVote(position: Int) {
         pollValuesList[position].votes += 1

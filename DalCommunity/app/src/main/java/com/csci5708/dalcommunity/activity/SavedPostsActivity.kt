@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.model.Post
 import com.example.dalcommunity.R
 import com.csci5708.dalcommunity.adapter.SavedGroupListAdapter
+import com.csci5708.dalcommunity.model.ImagePost
+import com.csci5708.dalcommunity.model.SavedPost
 
 class SavedPostsActivity : AppCompatActivity(), SavedGroupListAdapter.OnItemClickListener {
     private lateinit var savedPostList: RecyclerView
@@ -17,11 +19,11 @@ class SavedPostsActivity : AppCompatActivity(), SavedGroupListAdapter.OnItemClic
         setContentView(R.layout.activity_saved_posts)
 
         savedPostList = findViewById(R.id.saved_groups)
-        val postData = ArrayList<Post>()
+        val postData = ArrayList<SavedPost>()
 
         for(i in 0..10) {
             // TODO: Change the URL once firebase has images
-            postData.add(Post("https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png", "Post Title"))
+            postData.add(SavedPost("Title", "https://cdn.dribbble.com/users/476251/screenshots/2619255/attachments/523315/placeholder.png"))
         }
 
         val cardAdapter = SavedGroupListAdapter(postData, this)
