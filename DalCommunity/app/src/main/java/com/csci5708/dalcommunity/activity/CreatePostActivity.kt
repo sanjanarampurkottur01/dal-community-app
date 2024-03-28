@@ -9,7 +9,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Button
@@ -26,13 +25,11 @@ import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.TextPost
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.Date
 import java.util.Locale
 
@@ -44,6 +41,7 @@ class CreatePostActivity : AppCompatActivity() {
     private lateinit var btnToChooseFromGallery: ImageView
     private lateinit var btnToClickPicture: ImageView
     private lateinit var btnToGetLocation: ImageView
+    private lateinit var btnToCreatePollPost: ImageView
     private lateinit var postCaption: EditText
     private lateinit var postBtn: Button
     private lateinit var locationTextView: TextView
@@ -72,6 +70,7 @@ class CreatePostActivity : AppCompatActivity() {
         btnToChooseFromGallery = findViewById(R.id.image_gallery_icon)
         btnToClickPicture = findViewById(R.id.image_camera_icon)
         btnToGetLocation = findViewById(R.id.image_location_icon)
+        btnToCreatePollPost = findViewById(R.id.image_poll_icon)
         postCaption = findViewById(R.id.post_content_edit_text)
         imageView = findViewById(R.id.image_preview)
         postBtn = findViewById(R.id.post_button)
@@ -106,6 +105,12 @@ class CreatePostActivity : AppCompatActivity() {
                 startGetLocationActivity()
             }
         }
+
+        btnToCreatePollPost.setOnClickListener {
+            val createPollPostIntent = Intent(this, CreatePollPostActivity::class.java)
+            startActivity(createPollPostIntent)
+        }
+
 
         postBtn.setOnClickListener {
             val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
