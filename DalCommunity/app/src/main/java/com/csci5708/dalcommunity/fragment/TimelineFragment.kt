@@ -43,6 +43,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
 
         // Make FloatingActionButton visible when fragment is resumed
         view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.VISIBLE
+        setupRecyclerView()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,35 +73,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
         activity?.supportFragmentManager?.addOnBackStackChangedListener(this)
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_timeline, container, false)
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         val addPostButton = view.findViewById<FloatingActionButton>(R.id.create_post_fab)
-
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-
-        val posts = mutableListOf<Post>()
-
-        // Retrieve posts from Firestore
-        FireStoreSingleton.getAllDocumentsOfCollection("post", {
-                documents ->
-            for (document in documents) {
-                if (document.get("type") == 0) {
-                    val post = document.toObject(TextPost::class.java)
-                    posts.add(post!!)
-                } else if (document.get("type") == 1) {
-                    val post = document.toObject(ImagePost::class.java)
-                    posts.add(post!!)
-                } else {
-                    val post = document.toObject(PollPost::class.java)
-                    posts.add(post!!)
-                }
-            }
-            Log.e("TAG", posts[0].type.toString())
-            val adapter = HomeAdapter(requireContext(), posts)
-            adapter.setOnImageInItemClickListener(this)
-            recyclerView.adapter = adapter
-        }, {
-            Log.e("TAG", it.toString())
-        })
 
         // Handle click event for add post button
         addPostButton.setOnClickListener {
@@ -110,6 +83,36 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
 
         // Inflate the layout for this fragment
         return view
+    }
+
+    private fun setupRecyclerView() {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView?.layoutManager = LinearLayoutManager(activity)
+        val posts = mutableListOf<Post>()
+        // Retrieve posts from Firestore
+        FireStoreSingleton.getAllDocumentsOfCollection("post", { documents ->
+            for (document in documents) {
+                when (document.get("type")) {
+                    0L -> {
+                        val post = document.toObject(TextPost::class.java)
+                        posts.add(post as TextPost)
+                    }
+                    1L -> {
+                        val post = document.toObject(ImagePost::class.java)
+                        posts.add(post as ImagePost)
+                    }
+                    2L -> {
+                        val post = document.toObject(PollPost::class.java)
+                        posts.add(post as PollPost)
+                    }
+                }
+            }
+            val adapter = HomeAdapter(requireContext(), posts)
+            adapter.setOnImageInItemClickListener(this)
+            recyclerView?.adapter = adapter
+        }, {
+            Log.e("TAG", it.toString())
+        })
     }
 
     companion object {

@@ -9,11 +9,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Registry
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.module.AppGlideModule
 import com.csci5708.dalcommunity.model.ImagePost
 import com.csci5708.dalcommunity.model.PollPost
 import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.TextPost
 import com.example.dalcommunity.R
+import com.google.firebase.storage.FirebaseStorage
 
 /**
  * Adapter for the home timeline RecyclerView.
@@ -49,6 +55,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         return when (viewType) {
             0 -> {
                 val view = inflater.inflate(R.layout.item_text_post_layout, parent, false)
+                Log.e("TEST", "HERE")
                 TextViewHolder(view, imageInItemClickListener!!)
             }
             1 -> {
@@ -143,6 +150,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         private var userName: TextView
         private var userImage: ImageView
         private var locationTag: TextView
+        private var postImage: ImageView
 
         private var liked: Boolean = false
         private var saved: Boolean = false
@@ -158,6 +166,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postTime = itemView.findViewById(R.id.data_time)
             userName = itemView.findViewById(R.id.user)
             userImage = itemView.findViewById(R.id.user_icon)
+            postImage = itemView.findViewById(R.id.image_post)
 
             likeIcon.setOnClickListener {
                 liked = !liked
@@ -189,7 +198,20 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postTime.text = post.time
             userName.text = post.userName
             locationTag.text = "${post.latLocation}, ${post.longLocation}"
-            Log.e("TEST", "IMAGE")
+
+            val storage = FirebaseStorage.getInstance()
+            val storageRef = storage.reference
+            val image = storageRef.child("/post-images/${post.postId}.jpg")
+
+            image.downloadUrl.addOnSuccessListener { uri ->
+                val imageUrl = uri.toString()
+                Glide.with(context)
+                    .load(imageUrl) // Use the imageUrl directly
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache the image
+                    .into(postImage)
+            }.addOnFailureListener { exception ->
+                // Handle any errors
+            }
         }
     }
 
@@ -258,7 +280,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         fun bind(context: Context, post: PollPost) {
             postTime.text = post.time
             userName.text = post.userName
-            post.calculatePercentages()
+            post.refreshPollData()
             pollAdapter = PollAdapter(context, post)
             pollQuestion.text = post.pollQuestion
             pollRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -348,7 +370,6 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postTime.text = post.time
             userName.text = post.userName
             locationTag.text = "${post.latLocation}, ${post.longLocation}"
-            Log.e("TEST", "TEXT")
         }
     }
 }
