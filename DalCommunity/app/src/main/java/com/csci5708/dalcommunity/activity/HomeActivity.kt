@@ -50,13 +50,6 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         askToEnableNotificationsIfNeeded(this)
 
-        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
-        if (!sharedPreferences.getBoolean(IS_SIGNED_IN, false)) {
-            val intent = Intent(this, LoginSignUpActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction()
             .replace(R.id.home_fragment_container, TimelineFragment())
