@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="By Sign Up, you agreeing to \n to our Terms and Conditions"
+                android:text="By Sign Up, you are agreeing to \n to our Terms and Conditions"
                 android:layout_below="@+id/signUpTextID"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/disclaimerID"
@@ -155,7 +155,7 @@
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sign up for free!"
+                android:text="Sign up!"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="16dp"
                 android:backgroundTint="@color/white"
