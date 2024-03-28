@@ -8,10 +8,18 @@ import com.csci5708.dalcommunity.fragment.CommunityFragments.CommunityListFragme
 
 
 class CommunityFragmentAdapter(val fa:FragmentActivity): FragmentStateAdapter(fa) {
+    
+    // Returns the number of items in the list.
     override fun getItemCount(): Int {
         return 2;
     }
 
+    /**
+     * Creates a new instance of a Fragment based on the given position.
+     *
+     * @param position the position of the fragment to be created.
+     * @return a new instance of a Fragment.
+     */
     override fun createFragment(position: Int): Fragment {
         return when (position){
             0 -> CommunityChatFragment()

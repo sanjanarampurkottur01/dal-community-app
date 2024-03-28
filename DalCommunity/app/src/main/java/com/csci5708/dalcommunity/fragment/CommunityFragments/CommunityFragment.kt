@@ -1,6 +1,8 @@
 package com.csci5708.dalcommunity.fragment.CommunityFragments
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,19 +18,20 @@ import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.csci5708.dalcommunity.adapter.CommunityFragmentAdapter
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
-import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.model.ChatMessage
-import com.csci5708.dalcommunity.model.CommunityChannel
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class CommunityFragment : Fragment() {
 
+    private var userName:String=""
+    private lateinit var sharedPreferences: SharedPreferences
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -42,6 +45,15 @@ class CommunityFragment : Fragment() {
         val tabLayout:TabLayout=view.findViewById(R.id.communityTabLayout)
         val createCommunityBt:ImageButton=view.findViewById(R.id.addCommunityBt)
 
+        //fetching user data
+        FireStoreSingleton.getData(
+            "users",
+            Firebase.auth.currentUser?.email.toString(),
+            { d: DocumentSnapshot -> getUserDataOnSuccess(d) },
+            { e -> getUserDataOnFailure() }
+        )
+
+        //creating community
         createCommunityBt.setOnClickListener {
             val dialog = BottomSheetDialog(requireContext())
 
@@ -53,6 +65,10 @@ class CommunityFragment : Fragment() {
 
             val saveBtn = dialogview.findViewById<Button>(R.id.communitySaveBt)
             val closeBtn = dialogview.findViewById<Button>(R.id.communityCloseBt)
+
+            Log.i("UserDetails","Current email: ${Firebase.auth.currentUser?.email}")
+
+
 
             saveBtn.setOnClickListener {
                 val cname=nameEditText.text.toString()
@@ -88,6 +104,37 @@ class CommunityFragment : Fragment() {
         return view
     }
 
+    /**
+     * Displays a toast message indicating failure to get user data.
+     *
+     * @param activity the activity in which the toast is displayed
+     */
+    private fun getUserDataOnFailure() {
+        Toast.makeText(activity, "Failed to get user data", Toast.LENGTH_LONG).show()
+    }
+
+    /**
+     * Retrieves user data from the provided DocumentSnapshot and stores it in shared preferences.
+     *
+     * @param doc The DocumentSnapshot containing the user data.
+     */
+    private fun getUserDataOnSuccess(doc: DocumentSnapshot) {
+        val userDetails = doc.data
+        userName=userDetails?.get("name").toString()
+        sharedPreferences = requireContext().getSharedPreferences("CommunityUserData", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("CommunityUserName", userName)
+        editor.apply()
+    }
+
+
+    /**
+     * Creates a community in Firestore.
+     *
+     * @param  communityName        the name of the community
+     * @param  communityRules       the rules of the community
+     * @param  communityDesc        the description of the community
+     */
     private fun  createCommunityInFirestore(communityName:String,communityRules:String,communityDesc:String){
         val firestore = FirebaseFirestore.getInstance()
         val groupsRef = firestore.collection("community_groups")
@@ -104,14 +151,14 @@ class CommunityFragment : Fragment() {
             "lastMessageSenderName" to "",
             "lastMessageTime" to System.currentTimeMillis(),
             "messages" to emptyList<ChatMessage>(),
-            "users" to hashMapOf(currentUser.email!! to "name")
+            "users" to hashMapOf(currentUser.email!! to userName)
         )
 
         val onComplete = { b: Boolean ->
             if (b) {
-                Toast.makeText(requireContext(), "Community Channel created in Firestore!", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Community Channel Created!", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(requireContext(), "Failed to create Community Channel in Firestore!", Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Failed to create Community Channel!", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -122,6 +169,9 @@ class CommunityFragment : Fragment() {
             onComplete
         )
     }
+
+
+
 
 
 

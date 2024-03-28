@@ -17,7 +17,6 @@ import com.csci5708.dalcommunity.activity.CommunityChatActivity
 import com.csci5708.dalcommunity.adapter.CommunityChatsAdapter
 import com.csci5708.dalcommunity.model.ChatMessage
 import com.csci5708.dalcommunity.model.CommunityChannel
-import com.csci5708.dalcommunity.model.ComunityUser
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -41,15 +40,15 @@ class CommunityChatFragment : Fragment() {
         adapter=CommunityChatsAdapter(emptyList(),requireContext())
         chatsListView.adapter= adapter
 
+        // fetching groups
         fetchGroups(adapter) { groups->
             communityChannels=groups.sortedByDescending { it.lastMessageTime }
-            Log.i("CommunityList","List Updated")
         }
 
+        // swiping to refresh
         swipeRefreshLayout.setOnRefreshListener {
             fetchGroups(adapter) { groups->
                 communityChannels=groups.sortedByDescending { it.lastMessageTime }
-                Log.i("CommunityList","List in refreshed and Updated")
             }
             swipeRefreshLayout.isRefreshing = false
         }
@@ -64,11 +63,16 @@ class CommunityChatFragment : Fragment() {
         return view
     }
 
+    /**
+     * Fetches the community groups from Firestore and updates the provided adapter with the fetched groups.
+     *
+     * @param adapter The adapter to update with the fetched groups.
+     * @param onComplete The callback function to be called when the groups have been fetched and processed.
+     *                   The callback function takes a list of [CommunityChannel] as a parameter.
+     */
     fun fetchGroups(adapter: CommunityChatsAdapter, onComplete: (List<CommunityChannel>) -> Unit) {
         val firestore = FirebaseFirestore.getInstance()
         val currentUser = Firebase.auth.currentUser!!
-
-//        Log.i("CommunityList","function called")
 
         val groupsRef = firestore.collection("community-groups")
 
@@ -106,7 +110,6 @@ class CommunityChatFragment : Fragment() {
                     }
 
                     processedGroupCount--
-//                    Log.i("CommunityList", "Processed remaining: $processedGroupCount")
                     if (processedGroupCount == 0) {
                         onComplete(groupList)
                         adapter.updateCommunities(groupList)

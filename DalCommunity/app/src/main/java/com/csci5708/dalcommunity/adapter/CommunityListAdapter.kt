@@ -21,18 +21,44 @@ class CommunityListAdapter (private var communities:List<CommunityChannel>, priv
     BaseAdapter() {
 
     private var filteredList = communities.toMutableList()
+    private var userName:String=""
+
+    /**
+     * Returns the number of items in the list.
+     *
+     * @return the number of items in the list
+     */
     override fun getCount(): Int {
         return filteredList.size
     }
 
+    /**
+     * Returns the item at the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @return the item at the specified position
+     */
     override fun getItem(position: Int): CommunityChannel {
         return filteredList[position]
     }
-
+    /** 
+     * Returns the ID of the item at the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @return the ID of the item at the specified position
+     */
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
+    /**
+     * Retrieves a view for the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @param convertView the view to be reused if possible, or null if not
+     * @param parent the parent ViewGroup that the view will be attached to
+     * @return the View to be displayed at the specified position
+     */
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.community_list_item, parent, false)
@@ -58,7 +84,11 @@ class CommunityListAdapter (private var communities:List<CommunityChannel>, priv
         return view
     }
 
-
+    /**
+     * Filters the list of communities based on the given query.
+     *
+     * @param query The query to filter the list of communities by.
+     */
     fun filter(query: String) {
         filteredList.clear()
         if (query.isEmpty()) {
@@ -68,11 +98,15 @@ class CommunityListAdapter (private var communities:List<CommunityChannel>, priv
                 it.name.lowercase().contains(query.lowercase())
             })
         }
-        Log.i("SEARCHING","original this list: $communities")
-        Log.i("SEARCHING","Setting this list: $filteredList")
         notifyDataSetChanged()
     }
 
+    /**
+     * Returns the initials of a given community name.
+     *
+     * @param communityName The name of the community.
+     * @return The initials of the community name.
+     */
     private fun getinitials(communityName:String):String{
         val names=communityName.split(" ")
 
@@ -87,26 +121,40 @@ class CommunityListAdapter (private var communities:List<CommunityChannel>, priv
         }
     }
 
+    /**
+     * Updates the list of communities with the provided new communities.
+     *
+     * @param newCommunities The new list of communities to update with.
+     */
     fun updateCommunities(newCommunities: List<CommunityChannel>) {
         filteredList.clear()
         this.communities=newCommunities
         filteredList.addAll(newCommunities.sortedBy { it.name })
         notifyDataSetChanged()
-        Log.i("CommunityList","Join List Updated 2")
-        Log.i("CommunityList",newCommunities.toString())
     }
 
-    fun joinCommunity(groupId: String,  onComplete: (success: Boolean) -> Unit) {
+    // Updates the user's name with the given userName.
+    fun updateUserName(userName:String){
+        this.userName=userName
+    }
+
+    /**
+     * Joins a community group by updating the group's user list with the current user's information.
+     *
+     * @param groupId The ID of the group to join.
+     * @param onComplete A callback function that will be called with a boolean indicating whether the join operation was successful or not.
+     */
+    private fun joinCommunity(groupId: String, onComplete: (success: Boolean) -> Unit) {
         val firestore = FirebaseFirestore.getInstance()
         val groupRef = firestore.collection("community-groups").document(groupId)
         val currentUser = Firebase.auth.currentUser!!
 
         firestore.runTransaction { transaction ->
             val documentSnapshot = transaction.get(groupRef)
-            var currentMembers = documentSnapshot.get("users") as? HashMap<String,String> ?:  emptyMap<String,String>()// Handle potential missing field
+            var currentMembers = documentSnapshot.get("users") as? HashMap<String,String> ?:  emptyMap<String,String>()
 
             val newMembers = HashMap<String, String>(currentMembers) // Create copy
-            newMembers.put(currentUser.email!!, currentUser.email!!)
+            newMembers[currentUser.email!!] = userName
 
 
             val updateMap = hashMapOf<String, Any>(
@@ -117,7 +165,7 @@ class CommunityListAdapter (private var communities:List<CommunityChannel>, priv
             true // Return true to commit the transaction
         }.addOnSuccessListener {
             onComplete(true) // Indicate success
-            Log.d("Firestore", "Message added successfully to group: $groupId")
+
         }.addOnFailureListener { exception ->
             onComplete(false) // Indicate failure
             Log.e("Firestore", "Error adding message to group: $groupId", exception)

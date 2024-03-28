@@ -64,6 +64,7 @@
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.CommunityChatActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"

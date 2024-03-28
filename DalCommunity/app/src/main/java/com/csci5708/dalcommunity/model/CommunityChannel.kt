@@ -11,10 +11,4 @@ data class CommunityChannel(
     val lastMessageTime: Long,
     val messages: List<ChatMessage>,
     val users: HashMap<String,String>
-//    val users: Any // Map of user email to User object
-)
-
-data class ComunityUser(
-    val displayName: String,
-    val email: String
 )

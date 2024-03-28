@@ -14,23 +14,19 @@
         android:backgroundTint="@color/text_color"
         app:title="Your Toolbar Title" />
 
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10dp"
+            android:paddingTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:paddingHorizontal="15dp"
+            />
 
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/text_color"/>
-
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
-        android:paddingVertical="5dp"
-        android:paddingHorizontal="15dp"
-        />
 
 
 
@@ -39,6 +35,7 @@
         android:layout_height="wrap_content"
         android:background="@color/background"
         android:padding="15dp"
+        android:elevation="10dp"
         android:orientation="horizontal">
 
         <com.google.android.material.textfield.TextInputEditText

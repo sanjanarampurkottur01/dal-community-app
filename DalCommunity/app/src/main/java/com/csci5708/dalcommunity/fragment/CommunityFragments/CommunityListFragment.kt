@@ -12,18 +12,21 @@ import android.widget.SearchView
 import android.widget.Toast
 import com.csci5708.dalcommunity.adapter.CommunityChatsAdapter
 import com.csci5708.dalcommunity.adapter.CommunityListAdapter
+import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.ChatMessage
 import com.csci5708.dalcommunity.model.CommunityChannel
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class CommunityListFragment : Fragment() {
 
-    var communityChannels= emptyList<CommunityChannel>()
-
+    private var communityChannels= emptyList<CommunityChannel>()
+    private var userName:String=""
+    private var adapter: CommunityListAdapter? =null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
@@ -35,34 +38,66 @@ class CommunityListFragment : Fragment() {
 
         val searchBar = view.findViewById<SearchView>(R.id.communitySearchView)
         val communityListView=view.findViewById<ListView>(R.id.communityListLv)
-        val adapter=CommunityListAdapter(communityChannels,requireContext())
+        adapter=CommunityListAdapter(communityChannels,requireContext())
         communityListView.adapter=adapter
 
+        // fetching user data
+        FireStoreSingleton.getData(
+            "users",
+            Firebase.auth.currentUser?.email.toString(),
+            { d: DocumentSnapshot -> getUserDataOnSuccess(d) },
+            { e -> getUserDataOnFailure() }
+        )
+
+        // searching by channel name
         searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Log.i("SEARCHING","Text: $newText")
-                adapter.filter(newText)
+                adapter!!.filter(newText)
                 return true
             }
         })
 
-        fetchGroups(adapter) { groups->
+        fetchGroups(adapter!!) { groups->
             communityChannels=groups.sortedByDescending { it.name }
-            Log.i("JoinCommunityList","List Updated")
         }
 
         return view
     }
 
+    /**
+     * Retrieves user data in case of failure.
+     *
+     * @param  paramName    No parameters are required for this function.
+     * @return         	   No return value.
+     */
+    private fun getUserDataOnFailure() {
+        Toast.makeText(activity, "Failed to get user data", Toast.LENGTH_LONG).show()
+    }
+
+    /**
+     * Retrieves user data from a successful document snapshot and updates the user name in the adapter.
+     *
+     * @param doc The successful document snapshot containing user data.
+     */
+    private fun getUserDataOnSuccess(doc: DocumentSnapshot) {
+        val userDetails = doc.data
+        userName=userDetails?.get("name").toString()
+        adapter?.updateUserName(userName)
+    }
+
+    /**
+     * Fetches the community groups from the Firestore database and updates the provided adapter with the fetched data.
+     *
+     * @param adapter The adapter to update with the fetched community groups.
+     * @param onComplete The callback function to be called when the fetching is complete. It takes a list of [CommunityChannel] as a parameter.
+     */
     fun fetchGroups(adapter: CommunityListAdapter, onComplete: (List<CommunityChannel>) -> Unit) {
         val firestore = FirebaseFirestore.getInstance()
         val currentUser = Firebase.auth.currentUser!!
-
-        Log.i("JoinCommunityList","function called")
 
         val groupsRef = firestore.collection("community-groups")
 
@@ -100,7 +135,6 @@ class CommunityListFragment : Fragment() {
                     }
 
                     processedGroupCount--
-                    Log.i("JoinCommunityList", "Processed remaining: $processedGroupCount")
                     if (processedGroupCount == 0) {
                         onComplete(groupList)
                         adapter.updateCommunities(groupList)

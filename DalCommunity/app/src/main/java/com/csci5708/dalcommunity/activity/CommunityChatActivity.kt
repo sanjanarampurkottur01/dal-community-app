@@ -1,7 +1,11 @@
 package com.csci5708.dalcommunity.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -9,7 +13,9 @@ import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.csci5708.dalcommunity.adapter.ChatMessageAdapter
+import com.csci5708.dalcommunity.firestore.FCMNotificationSender
 import com.csci5708.dalcommunity.model.ChatMessage
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
@@ -18,7 +24,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class CommunityChatActivity : AppCompatActivity() {
 
+    private val userEmails = mutableListOf<String>()
+    private var fcmTokens = mutableListOf<String>()
+    private lateinit var sharedPreferences: SharedPreferences
 
+
+    /**
+     * onCreate is called when the activity is created
+     * @param savedInstanceState  The saved state of the activity
+     */
     @SuppressLint("WrongViewCast", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,20 +56,18 @@ class CommunityChatActivity : AppCompatActivity() {
 
 
         val currentUser = Firebase.auth.currentUser!!
-//        val communityTv = findViewById<TextView>(R.id.chatHeadingTv)
         val listView = findViewById<ListView>(R.id.listView)
         val messageEditText = findViewById<EditText>(R.id.messageEditText)
         val sendButton = findViewById<ImageButton>(R.id.sendMessageButton)
 
 
-
-//        communityTv.text=groupName
         val adapter=ChatMessageAdapter(listOf(),this)
         listView.adapter=adapter
+        listView.isStackFromBottom=true
 
 
         if (groupId != null) {
-            fetchChats(adapter,groupId){
+            fetchChats(adapter,listView,groupId){
                 Log.i("MessageList","Message List Updated")
             }
         }
@@ -65,7 +77,14 @@ class CommunityChatActivity : AppCompatActivity() {
                 if (groupId != null) {
                     val currMessage=messageEditText.text.toString()
                     messageEditText.setText("")
-                    sendMessage(groupId,ChatMessage(currMessage.trim(),currentUser.email!!,currentUser.email!!,System.currentTimeMillis())){
+                    if (groupName != null) {
+
+                        sharedPreferences = this.getSharedPreferences("CommunityUserData", Context.MODE_PRIVATE)
+                        val userName = sharedPreferences.getString("CommunityUserName", "User1") ?: "User2"
+                        Log.i("UserDetails","Value from sharedPreference: $userName")
+                        sendMessage(groupId,groupName,ChatMessage(currMessage.trim(),userName,currentUser.email!!,System.currentTimeMillis())){
+
+                        }
                     }
                 }
 
@@ -76,16 +95,34 @@ class CommunityChatActivity : AppCompatActivity() {
         }
     }
 
-    fun sendMessage(groupId: String, message: ChatMessage, onComplete: (success: Boolean) -> Unit) {
+     /**
+     * Sends a chat message to a community group.
+     *
+     * @param groupId The ID of the community group to send the message to.
+     * @param groupname The name of the community group.
+     * @param message The chat message to send.
+     * @param onComplete A callback function that will be called when the message is sent or an error occurs. It takes a boolean parameter indicating whether the message was sent successfully or not.
+     */
+
+    fun sendMessage(groupId: String,groupname:String, message: ChatMessage, onComplete: (success: Boolean) -> Unit) {
         val firestore = FirebaseFirestore.getInstance()
         val messagesRef = firestore.collection("community-groups").document(groupId)
 
         firestore.runTransaction { transaction ->
             val documentSnapshot = transaction.get(messagesRef)
-            val currentMessages = documentSnapshot.get("messages") as? List<*> ?: emptyList<HashMap<String, Any>>() // Handle potential missing field
+            val currentMessages = documentSnapshot.get("messages") as? List<*> ?: emptyList<HashMap<String, Any>>()
+            val usersData = documentSnapshot.get("users") as? HashMap<String, String>
+
+            val userEmails = mutableListOf<String>()
+            val emails = usersData?.keys?.toList()
+            if (emails != null) {
+                userEmails.addAll(emails)
+            }
+
+
 
             val updatedMessages = mutableListOf<HashMap<String, Any>>()
-            updatedMessages.addAll(currentMessages.map { it as HashMap<String, Any> }) // Convert to mutable list
+            updatedMessages.addAll(currentMessages.map { it as HashMap<String, Any> })
 
             val messageMap:HashMap<String, Any> = hashMapOf(
                 "message" to message.message,
@@ -104,17 +141,40 @@ class CommunityChatActivity : AppCompatActivity() {
             )
             transaction.update(messagesRef, updateMap)
 
+            var accessToken = ""
+            val SDK_INT = Build.VERSION.SDK_INT
+            if (SDK_INT > 8) {
+                val policy = StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build()
+                StrictMode.setThreadPolicy(policy)
+                accessToken = FCMNotificationSender.getAccessToken(this)
+            }
+            FCMNotificationSender.sendNotificationToMultipleUsers(
+                targetTokens = fcmTokens,
+                title = "New message in $groupname",
+                message = "${message.sentByName} has sent new message!",
+                context = this,
+                accessToken = accessToken,
+                "high"
+            )
+
             true // Return true to commit the transaction
         }.addOnSuccessListener {
             onComplete(true) // Indicate success
-            Log.d("Firestore", "Message added successfully to group: $groupId")
         }.addOnFailureListener { exception ->
             onComplete(false) // Indicate failure
-            Log.e("Firestore", "Error adding message to group: $groupId", exception)
         }
     }
 
-    fun fetchChats(adapter: ChatMessageAdapter, groupId: String, onComplete: (List<ChatMessage>) -> Unit) {
+    /**
+    * Fetches chat messages from Firestore and updates the UI with the new messages.
+    *
+    * @param adapter The adapter used to display chat messages in the UI.
+    * @param listView The ListView widget used to display the chat messages.
+    * @param groupId The ID of the community group to fetch chat messages from.
+    * @param onComplete A callback function that will be invoked with the fetched chat messages.
+    */
+    fun fetchChats(adapter: ChatMessageAdapter,listView: ListView, groupId: String, onComplete: (List<ChatMessage>) -> Unit) {
         val firestore = FirebaseFirestore.getInstance()
         val currentUser = Firebase.auth.currentUser!!
 
@@ -130,6 +190,28 @@ class CommunityChatActivity : AppCompatActivity() {
             if (documentSnapshot != null && documentSnapshot.exists()) {
                 val newMessagesData = documentSnapshot.get("messages") as? List<*>
 
+                if(fcmTokens.isEmpty()){
+                    val usersMap = documentSnapshot.data?.get("users") as? Map<String, Any>
+                    if (usersMap != null) {
+                        val emails = usersMap.keys.toList()
+                        userEmails.clear()
+                        userEmails.addAll(emails)
+                    }
+                    val usersQuery = firestore.collection("users").whereIn("email", userEmails).whereNotEqualTo("email", currentUser.email)
+
+                    usersQuery.get().addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val documents = task.result.documents
+                            fcmTokens = documents
+                                .mapNotNull { it.getString("fcmToken") }
+                                .distinct().toMutableList()
+                        } else {
+                            Log.w("TAG", "Error getting documents:", task.exception)
+                        }
+                    }
+                }
+
+
                 if (newMessagesData != null) {
                     val newMessages = mutableListOf<ChatMessage>()
                     for (messageMap in newMessagesData) {
@@ -142,21 +224,15 @@ class CommunityChatActivity : AppCompatActivity() {
                         newMessages.add(messageObj)
                     }
 
-
-                    // Update your adapter with the new messages
                     onComplete(newMessages)
                     adapter.updateMessages(newMessages)
+                    listView.smoothScrollToPosition(newMessages.size-1)
                 }
             }
         }
 
     }
 
-    override fun onBackPressed() {
-        // Handle back button press here
-        // You can finish the activity, show a dialog, etc.
-        super.onBackPressed() // Call super to navigate back to parent (optional)
-    }
 }
 
 

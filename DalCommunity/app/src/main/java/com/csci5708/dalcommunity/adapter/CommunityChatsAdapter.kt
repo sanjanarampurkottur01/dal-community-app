@@ -1,11 +1,9 @@
 package com.csci5708.dalcommunity.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.csci5708.dalcommunity.model.CommunityChannel
@@ -13,18 +11,44 @@ import com.example.dalcommunity.R
 
 class CommunityChatsAdapter(private var communities:List<CommunityChannel>, private var context: Context) :
     BaseAdapter() {
+
+    /*  
+     * Returns the number of items in the list.
+     *
+     * @return the number of items in the list
+     */
     override fun getCount(): Int {
         return communities.size
     }
 
+    /**
+     * Returns the item at the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @return the item at the specified position
+     */
     override fun getItem(position: Int): Any {
         return communities[position]
     }
 
+    /**
+     * Returns the ID of the item at the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @return the ID of the item at the specified position
+     */
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
+    /**
+     * Retrieves a view for the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @param convertView the view to be reused if possible, or null if not
+     * @param parent the parent ViewGroup that the view will be attached to
+     * @return the View to be displayed at the specified position
+     */
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.community_chat_item, parent, false)
@@ -47,7 +71,12 @@ class CommunityChatsAdapter(private var communities:List<CommunityChannel>, priv
 
         return view
     }
-
+     /**
+     * Returns the initials of the given community name.
+     *
+     * @param  communityName  the name of the community
+     * @return the initials of the community name
+     */
     private fun getinitials(communityName:String):String{
         val names=communityName.split(" ")
 
@@ -61,11 +90,13 @@ class CommunityChatsAdapter(private var communities:List<CommunityChannel>, priv
             }
         }
     }
-
+    /**
+     * Updates the list of communities with the given new communities.
+     *
+     * @param newCommunities The new list of communities to be updated.
+     */
     fun updateCommunities(newCommunities: List<CommunityChannel>) {
         this.communities = newCommunities.sortedByDescending { it.lastMessageTime }
         notifyDataSetChanged()
-        Log.i("CommunityList","List Updated 2")
-        Log.i("CommunityList",newCommunities.toString())
     }
 }

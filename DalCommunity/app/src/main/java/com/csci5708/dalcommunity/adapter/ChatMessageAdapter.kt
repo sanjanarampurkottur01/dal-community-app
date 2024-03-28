@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.csci5708.dalcommunity.model.ChatMessage
@@ -18,19 +17,44 @@ import java.util.Locale
 
 class ChatMessageAdapter(private var chats:List<ChatMessage>, private var context: Context):
     BaseAdapter(){
-
+    
+    /**
+     * Returns the number of items in the list.
+     *
+     * @return the number of items in the list
+     */
     override fun getCount(): Int {
         return chats.size
     }
 
+    /**
+     * Returns the item at the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @return the item at the specified position
+     */
     override fun getItem(position: Int): ChatMessage {
         return chats[position]
     }
 
+    /**
+     * Returns the ID of the item at the specified position in the list.
+     *
+     * @param position the position of the item in the list
+     * @return the ID of the item at the specified position
+     */
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
+     /**
+     * Returns a View that displays a chat message.
+     *
+     * @param position The position of the item in the list.
+     * @param convertView The recycled View to populate.
+     * @param parent The parent ViewGroup that the View will be attached to.
+     * @return The View that displays the chat message.
+     */
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var convertView = convertView
         val messageObj = getItem(position)
@@ -57,6 +81,12 @@ class ChatMessageAdapter(private var chats:List<ChatMessage>, private var contex
         return convertView
     }
 
+    /**
+     * Converts a timestamp string to a formatted date and time string.
+     *
+     * @param timestampString The timestamp string to be converted.
+     * @return The formatted date and time string.
+     */
     fun timestampToDateTime(timestampString: String): String {
         try {
             val timestamp = timestampString.toLong()
@@ -69,6 +99,11 @@ class ChatMessageAdapter(private var chats:List<ChatMessage>, private var contex
         return ""
     }
 
+    /**
+     * Updates the messages in the chat.
+     *
+     * @param newMessage the new list of chat messages to be updated
+     */
     fun updateMessages(newMessage: List<ChatMessage>){
         this.chats=newMessage
         notifyDataSetChanged()
