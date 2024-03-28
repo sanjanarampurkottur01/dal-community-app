@@ -83,18 +83,17 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
         FireStoreSingleton.getAllDocumentsOfCollection("post", {
                 documents ->
             for (document in documents) {
-                if (document.get("type") == 0) {
+                if (document.get("type") == 0L) {
                     val post = document.toObject(TextPost::class.java)
-                    posts.add(post!!)
-                } else if (document.get("type") == 1) {
+                    posts.add(post as TextPost)
+                } else if (document.get("type") == 1L) {
                     val post = document.toObject(ImagePost::class.java)
-                    posts.add(post!!)
-                } else {
+                    posts.add(post as ImagePost)
+                } else if (document.get("type") == 2L) {
                     val post = document.toObject(PollPost::class.java)
-                    posts.add(post!!)
+                    posts.add(post as PollPost)
                 }
             }
-            Log.e("TAG", posts[0].type.toString())
             val adapter = HomeAdapter(requireContext(), posts)
             adapter.setOnImageInItemClickListener(this)
             recyclerView.adapter = adapter
