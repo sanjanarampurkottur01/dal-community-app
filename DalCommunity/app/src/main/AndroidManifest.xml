@@ -5,6 +5,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,6 +24,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.SavedPostGroupsActivity"
+            android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.GetLocationActivity"
             android:exported="false" />

@@ -8,11 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.csci5708.dalcommunity.model.Post
-import com.csci5708.dalcommunity.model.SavedPost
+import com.csci5708.dalcommunity.model.SavedPostGroup
 import com.example.dalcommunity.R
 
-class SavedGroupListAdapter(private val dataset: ArrayList<SavedPost>, private val context: Context) :
+class SavedGroupListAdapter(private val dataset: ArrayList<SavedPostGroup>, private val context: Context) :
     RecyclerView.Adapter<SavedGroupListAdapter.ViewHolder>(){
 
     private var itemClickListener: OnItemClickListener? = null
