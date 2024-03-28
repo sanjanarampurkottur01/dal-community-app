@@ -17,6 +17,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.dalcommunity.R
 
+/**
+ * Activity for creating a new post.
+ */
 class CreatePostActivity : AppCompatActivity() {
 
     private lateinit var btnToChooseFromGallery: ImageView
@@ -27,6 +30,14 @@ class CreatePostActivity : AppCompatActivity() {
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_GET_LOCATION = 2
+
+    /**
+     * Called when the activity is starting.
+     * Initializes UI elements and sets up event listeners.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down
+     * then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,11 +80,24 @@ class CreatePostActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Starts the GetLocationActivity to obtain user's location.
+     */
     private fun startGetLocationActivity() {
         val getLocationIntent = Intent(this, GetLocationActivity::class.java)
         startActivityForResult(getLocationIntent, REQUEST_GET_LOCATION)
     }
 
+    /**
+     * Callback method to be invoked when an activity that launched exits, giving the requestCode it started with,
+     * the resultCode it returned, and any additional data from it.
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(), allowing you
+     * to identify who this result came from.
+     * @param resultCode The integer result code returned by the child activity through its setResult().
+     * @param data An Intent, which can return result data to the caller (various data can be attached to Intent
+     * "extras").
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {

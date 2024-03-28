@@ -34,16 +34,21 @@ private const val ARG_PARAM2 = "param2"
  */
 class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, FragmentManager.OnBackStackChangedListener {
 
+    // Fragment initialization parameters
     private var param1: String? = null
     private var param2: String? = null
 
     override fun onResume() {
         super.onResume()
+
+        // Make FloatingActionButton visible when fragment is resumed
         view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.VISIBLE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Retrieve fragment arguments
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
@@ -63,7 +68,9 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Register back stack listener
         activity?.supportFragmentManager?.addOnBackStackChangedListener(this)
+        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_timeline, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         val addPostButton = view.findViewById<FloatingActionButton>(R.id.create_post_fab)
@@ -72,7 +79,8 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
 
         val posts = mutableListOf<Post>()
 
-        FireStoreSingleton.getAllDocumentsOfCollection("Post", {
+        // Retrieve posts from Firestore
+        FireStoreSingleton.getAllDocumentsOfCollection("post", {
                 documents ->
             for (document in documents) {
                 if (document.get("type") == 0) {
@@ -94,6 +102,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
             Log.e("TAG", it.toString())
         })
 
+        // Handle click event for add post button
         addPostButton.setOnClickListener {
             val intent = Intent(activity, CreatePostActivity::class.java)
             startActivity(intent)
@@ -112,7 +121,6 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
          * @param param2 Parameter 2.
          * @return A new instance of fragment TimelineFragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             TimelineFragment().apply {
@@ -123,6 +131,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
             }
     }
 
+    // Handle click event for comment button
     override fun onCommentClick(position: Int) {
         view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.INVISIBLE
         Toast.makeText(activity,"test", Toast.LENGTH_LONG).show()
@@ -134,6 +143,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
         fragmentTransaction?.commit()
     }
 
+    // Handle click event for report button
     override fun onReportClick(position: Int) {
         view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.INVISIBLE
         Toast.makeText(activity,"Report Clicked",Toast.LENGTH_LONG).show()
@@ -147,6 +157,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // Unregister back stack listener
         activity?.supportFragmentManager?.removeOnBackStackChangedListener(this)
     }
 }
