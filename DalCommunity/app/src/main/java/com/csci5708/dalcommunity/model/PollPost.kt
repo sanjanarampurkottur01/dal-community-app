@@ -1,5 +1,6 @@
 package com.csci5708.dalcommunity.model
 
+import java.util.Calendar
 import kotlin.math.roundToInt
 
 class PollPost : Post {
@@ -22,7 +23,8 @@ class PollPost : Post {
         type: Int,
         pollQuestion: String,
         pollValuesList: List<PollValue>,
-        isUserVoteComplete: Boolean
+        isUserVoteComplete: Boolean,
+        userName: String
     ) : super() {
         this.postId = postId
         this.userId = userId
@@ -30,6 +32,8 @@ class PollPost : Post {
         this.pollQuestion = pollQuestion
         this.pollValuesList = pollValuesList
         this.isUserVoteComplete = isUserVoteComplete
+        this.time = Calendar.getInstance().time.toString()
+        this.userName = userName
         calculatePercentages()
     }
 

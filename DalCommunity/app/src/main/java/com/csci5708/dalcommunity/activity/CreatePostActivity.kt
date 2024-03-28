@@ -28,7 +28,7 @@ class CreatePostActivity : AppCompatActivity() {
     private lateinit var postCaption: EditText
     private lateinit var locationTextView: TextView
     private lateinit var btnToCreatePollPost: ImageView
-    private lateinit var gridView: GridView
+//    private lateinit var gridView: GridView
 
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_GET_LOCATION = 2

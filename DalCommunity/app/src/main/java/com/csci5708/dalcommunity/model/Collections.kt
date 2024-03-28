@@ -11,7 +11,7 @@ class Collections {
                 PollValue("Kotlin", 0, false),
                 PollValue("C", 0, false)
             )
-            val pollPost1 = PollPost("", "" , 2,"Which is the best language?", pollValuesList, false)
+            val pollPost1 = PollPost("", "" , 2,"Which is the best language?", pollValuesList, false, "")
             pollPost1.calculatePercentages()
             pollsList.add(pollPost1)
             pollsList.add(
@@ -23,7 +23,8 @@ class Collections {
                         PollValue("2", 2, false),
                         PollValue("0", 3, true)
                     ),
-                    false
+                    false,
+                    ""
                 )
             )
 
