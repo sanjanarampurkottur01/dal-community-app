@@ -35,6 +35,7 @@ class ReportFragment : Fragment(), ReportOptionsAdapter.OnReportOptionClickListe
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.fragment_container, ReportSuccessFragment())
         fragmentTransaction.addToBackStack(null)
+        fragmentManager.popBackStack()
         fragmentTransaction.commit()
     }
 }

@@ -15,8 +15,4 @@ class ReportSuccessFragment: Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_report_successful, container, false)
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }
