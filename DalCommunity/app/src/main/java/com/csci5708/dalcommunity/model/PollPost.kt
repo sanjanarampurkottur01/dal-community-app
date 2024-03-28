@@ -48,6 +48,11 @@ class PollPost : Post {
     val pollValuesSize: Int
         get() = pollValuesList.size
 
+    /**
+     * Update the vote for a particular option, update Firestore and recalculate all the data (percentages, progress, etc.)
+     *
+     * @param position indicates the position of the poll value item that the user has clicked on
+     */
     fun updateVote(position: Int, context: Context) {
         pollValuesList[position].votes += 1
         isUserVoteComplete = true
@@ -58,16 +63,21 @@ class PollPost : Post {
             pv.isSelected = false
         }
         FireStoreSingleton.updateData("post", postId, this) {
-            Toast.makeText(context, "update successful", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Your vote was recorded.", Toast.LENGTH_SHORT).show()
         }
 
         refreshPollData()
     }
 
+    /**
+     * Refresh all the percentage votes and set values correctly so that it is displayed accurately
+     * in the timeline
+     */
     fun refreshPollData() {
         val totalVotes = pollValuesList.sumOf { it.votes }
         var percent: Float
 
+        // Check if current logged in user has voted on the post
         if (userToVoteMap.containsKey(Firebase.auth.currentUser?.email.toString())) {
             val selectedOption = userToVoteMap[Firebase.auth.currentUser?.email.toString()]
             for (pv in pollValuesList) {

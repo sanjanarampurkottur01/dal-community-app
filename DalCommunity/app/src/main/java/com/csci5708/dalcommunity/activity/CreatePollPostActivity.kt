@@ -91,6 +91,7 @@ class CreatePollPostActivity : AppCompatActivity() {
                     )
                 }
 
+                // Ensure that the user has provided at least 2 options
                 if (pollValues.size >= 2) {
                     val pollPost = PollPost(
                         FirebaseFirestore.getInstance().collection("post").document().id,
@@ -117,6 +118,11 @@ class CreatePollPostActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Function callback for when PollPost has been successfully created in Firestore.
+     *
+     * @param success indicates success or failure of the Firestore upload operation
+     */
     private fun uploadPollPostOnComplete(success: Boolean) {
         if (success) {
             Toast.makeText(this, "Successfully created poll post!", Toast.LENGTH_LONG).show()
