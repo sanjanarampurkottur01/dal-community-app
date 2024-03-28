@@ -1,5 +1,6 @@
 package com.csci5708.dalcommunity.firestore
 
+import com.csci5708.dalcommunity.model.Post
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -104,6 +105,7 @@ object FireStoreSingleton {
                 onFailure(exception)
             }
     }
+
     fun getAllDocumentsOfCollection(collection: String, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
         fireStoreInstance.collection(collection)
             .get()
@@ -111,6 +113,27 @@ object FireStoreSingleton {
                 onSuccess(documents.documents)
             }
             .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
+    fun getSavedPostsForUser(id: String, onSuccess: (DocumentSnapshot) -> Unit, onFailure: (Exception) -> Unit) {
+        fireStoreInstance.collection("savedPosts")
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                // Check if the document exists
+                if (document.exists()) {
+                    // Call onSuccess with the document
+                    onSuccess(document)
+                } else {
+                    // Handle the case when the document doesn't exist
+                    // For example, you can call onFailure with an appropriate exception
+                    onFailure(Exception("Document not found"))
+                }
+            }
+            .addOnFailureListener { exception ->
+                // Handle the failure case
                 onFailure(exception)
             }
     }
