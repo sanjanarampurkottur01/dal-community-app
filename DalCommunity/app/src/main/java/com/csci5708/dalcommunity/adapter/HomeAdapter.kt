@@ -10,11 +10,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Registry
+import com.bumptech.glide.annotation.GlideModule
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.module.AppGlideModule
 import com.csci5708.dalcommunity.model.ImagePost
 import com.csci5708.dalcommunity.model.PollPost
 import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.TextPost
 import com.example.dalcommunity.R
+import com.google.firebase.storage.FirebaseStorage
 
 /**
  * Adapter for the home timeline RecyclerView.
@@ -194,9 +199,19 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             userName.text = post.userName
             locationTag.text = "${post.latLocation}, ${post.longLocation}"
 
-            Glide.with(context)
-                .load(post.imageUrl)
-                .into(postImage)
+            val storage = FirebaseStorage.getInstance()
+            val storageRef = storage.reference
+            val image = storageRef.child("/post-images/${post.postId}.jpg")
+
+            image.downloadUrl.addOnSuccessListener { uri ->
+                val imageUrl = uri.toString()
+                Glide.with(context)
+                    .load(imageUrl) // Use the imageUrl directly
+                    .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache the image
+                    .into(postImage)
+            }.addOnFailureListener { exception ->
+                // Handle any errors
+            }
         }
     }
 
@@ -265,7 +280,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         fun bind(context: Context, post: PollPost) {
             postTime.text = post.time
             userName.text = post.userName
-            post.calculatePercentages()
+            post.refreshPollData()
             pollAdapter = PollAdapter(context, post)
             pollQuestion.text = post.pollQuestion
             pollRecyclerView.layoutManager = LinearLayoutManager(context)
