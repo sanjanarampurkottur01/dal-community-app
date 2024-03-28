@@ -80,7 +80,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener, Fra
         val posts = mutableListOf<Post>()
 
         // Retrieve posts from Firestore
-        FireStoreSingleton.getAllDocumentsOfCollection("Post", {
+        FireStoreSingleton.getAllDocumentsOfCollection("post", {
                 documents ->
             for (document in documents) {
                 if (document.get("type") == 0) {
