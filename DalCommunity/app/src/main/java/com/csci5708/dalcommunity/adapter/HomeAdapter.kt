@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.csci5708.dalcommunity.model.ImagePost
 import com.csci5708.dalcommunity.model.PollPost
 import com.csci5708.dalcommunity.model.Post
@@ -49,6 +50,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         return when (viewType) {
             0 -> {
                 val view = inflater.inflate(R.layout.item_text_post_layout, parent, false)
+                Log.e("TEST", "HERE")
                 TextViewHolder(view, imageInItemClickListener!!)
             }
             1 -> {
@@ -143,6 +145,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
         private var userName: TextView
         private var userImage: ImageView
         private var locationTag: TextView
+        private var postImage: ImageView
 
         private var liked: Boolean = false
         private var saved: Boolean = false
@@ -158,6 +161,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postTime = itemView.findViewById(R.id.data_time)
             userName = itemView.findViewById(R.id.user)
             userImage = itemView.findViewById(R.id.user_icon)
+            postImage = itemView.findViewById(R.id.image_post)
 
             likeIcon.setOnClickListener {
                 liked = !liked
@@ -189,7 +193,10 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postTime.text = post.time
             userName.text = post.userName
             locationTag.text = "${post.latLocation}, ${post.longLocation}"
-            Log.e("TEST", "IMAGE")
+
+            Glide.with(context)
+                .load(post.imageUrl)
+                .into(postImage)
         }
     }
 
@@ -348,7 +355,6 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postTime.text = post.time
             userName.text = post.userName
             locationTag.text = "${post.latLocation}, ${post.longLocation}"
-            Log.e("TEST", "TEXT")
         }
     }
 }
