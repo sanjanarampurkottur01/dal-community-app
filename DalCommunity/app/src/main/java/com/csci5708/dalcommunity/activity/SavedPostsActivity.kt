@@ -14,7 +14,7 @@ class SavedPostsActivity : AppCompatActivity(), SavedGroupListAdapter.OnItemClic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_saved_posts)
+        setContentView(R.layout.activity_saved_post_groups)
 
         savedPostList = findViewById(R.id.saved_groups)
         val postData = ArrayList<SavedPostGroup>()
