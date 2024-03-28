@@ -22,6 +22,7 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.auth.userProfileChangeRequest
 
 class SignUpFragment : Fragment() {
 
@@ -149,6 +150,10 @@ class SignUpFragment : Fragment() {
         )
         val onComplete = { b: Boolean ->
             if (b) {
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = name
+                }
+                Firebase.auth.currentUser?.updateProfile(profileUpdates)
                 Toast.makeText(requireContext(), "User created in Firestore!", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(requireContext(), "Failed to create user in Firestore!", Toast.LENGTH_LONG).show()

@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.csci5708.dalcommunity.activity.AccountSettingsActivity
-import com.csci5708.dalcommunity.activity.HomeActivity
 import com.csci5708.dalcommunity.activity.LoginSignUpActivity
 import com.csci5708.dalcommunity.activity.ProfileDetailActivity
 import com.csci5708.dalcommunity.activity.UserPostsActivity
@@ -27,7 +26,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.storage
 
 /**
- * A simple [Fragment] subclass.
+ * Profile fragment which displays the Profile Page of the current user
  */
 class ProfileFragment : Fragment() {
 
@@ -95,10 +94,8 @@ class ProfileFragment : Fragment() {
             activity?.startActivity(userPostsActivityIntent)
         }
         val profileLogoutButton: Button = view.findViewById(R.id.profile_page_log_out_button)
+        // Logic for logging out the user from the application
         profileLogoutButton.setOnClickListener {
-            // TODO: REMOVE TEMP ACTIVITY BEFORE SUBMISSION
-//            val intent = Intent(activity, TempActivity::class.java)
-//            activity?.startActivity(intent)
             if (sharedPreferences != null) {
                 if (isUserSignedIn) {
                     val currentUser = Firebase.auth.currentUser

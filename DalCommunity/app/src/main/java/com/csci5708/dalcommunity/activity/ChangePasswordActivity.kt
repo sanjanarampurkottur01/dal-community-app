@@ -52,6 +52,9 @@ class ChangePasswordActivity : AppCompatActivity() {
                 ).show()
             } else {
                 val currentUser = Firebase.auth.currentUser
+                /* Update the password of the current user using Firebase.auth.
+                 * After successful update, log out the user start the LoginAndSignUpActivity
+                 */
                 currentUser!!.updatePassword(pass1).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val sharedPreferences =
@@ -63,7 +66,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                                 .putBoolean(AppConstants.SP_IS_SIGNED_IN_KEY, false)
                                 .apply()
                         }
-                        val intent = Intent(this, HomeActivity::class.java)
+                        val intent = Intent(this, LoginSignUpActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
