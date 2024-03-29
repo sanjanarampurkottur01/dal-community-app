@@ -1,6 +1,5 @@
 package com.csci5708.dalcommunity.firestore
 
-import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.SavedPostGroup
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -95,7 +94,14 @@ object FireStoreSingleton {
         fireStoreInstance.collection(collection).document(document).update(fieldName, value)
             .addOnSuccessListener { onComplete(true) }.addOnFailureListener { onComplete(false) }
     }
-    fun get(collection: String, field: String, value: Any, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
+
+    fun get(
+        collection: String,
+        field: String,
+        value: Any,
+        onSuccess: (List<DocumentSnapshot>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         fireStoreInstance.collection(collection)
             .whereEqualTo(field, value)
             .get()
@@ -107,7 +113,11 @@ object FireStoreSingleton {
             }
     }
 
-    fun getAllDocumentsOfCollection(collection: String, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
+    fun getAllDocumentsOfCollection(
+        collection: String,
+        onSuccess: (List<DocumentSnapshot>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         fireStoreInstance.collection(collection)
             .get()
             .addOnSuccessListener { documents ->
@@ -130,7 +140,8 @@ object FireStoreSingleton {
                     data?.forEach { (groupName, groupData) ->
                         if (groupData is Map<*, *>) {
                             val name = groupData["name"] as? String ?: ""
-                            val posts = (groupData["posts"] as? List<*>)?.filterIsInstance<String>()?.toTypedArray()
+                            val posts = (groupData["posts"] as? List<*>)?.filterIsInstance<String>()
+                                ?.toTypedArray()
                                 ?: emptyArray()
                             val savedPostGroup = SavedPostGroup(name, posts)
                             savedPostGroups.add(savedPostGroup)
@@ -145,5 +156,20 @@ object FireStoreSingleton {
             .addOnFailureListener { exception ->
                 onFailure(exception)
             }
+    }
+
+    fun getAllDocumentsOfCollectionWhereEqualTo(
+        collection: String,
+        fieldName: String,
+        value: Any,
+        onSuccess: (List<DocumentSnapshot>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        fireStoreInstance.collection(collection).whereEqualTo(fieldName, value).get()
+            .addOnSuccessListener { documents ->
+                onSuccess(documents.documents)
+            }.addOnFailureListener { exception ->
+            onFailure(exception)
+        }
     }
 }
