@@ -7,15 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.viewpager2.widget.ViewPager2
-import com.csci5708.dalcommunity.adapter.UserPostsAdapter
+import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.example.dalcommunity.R
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.TabView
-import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class UserPostsActivity : AppCompatActivity() {
-    private val tabsArray = arrayOf("Posts", "Comments")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -26,21 +23,20 @@ class UserPostsActivity : AppCompatActivity() {
             insets
         }
 
-        val changePasswdToolbar: Toolbar = findViewById(R.id.user_posts_toolbar)
-        setSupportActionBar(changePasswdToolbar)
+        val userPostsToolbar: Toolbar = findViewById(R.id.user_posts_toolbar)
+        setSupportActionBar(userPostsToolbar)
         supportActionBar?.title = "My Posts"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        val viewPager: ViewPager2 = findViewById(R.id.user_posts_view_pager)
-        val tabLayout: TabLayout = findViewById(R.id.user_posts_tab_layout)
+        val timelineFragment =
+            TimelineFragment.newInstance(Firebase.auth.currentUser?.email.toString())
+        val frTrans = supportFragmentManager.beginTransaction()
 
-        val userPostsAdapter = UserPostsAdapter(supportFragmentManager, lifecycle)
-        viewPager.adapter = userPostsAdapter
-
-        TabLayoutMediator(tabLayout, viewPager) {
-            tab, position -> tab.text = tabsArray[position]
-        }.attach()
+        frTrans.replace(
+            R.id.user_posts_frame,
+            timelineFragment
+        ).commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
