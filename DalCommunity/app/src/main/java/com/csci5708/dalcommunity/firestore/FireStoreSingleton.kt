@@ -2,6 +2,7 @@ package com.csci5708.dalcommunity.firestore
 
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 
 object FireStoreSingleton {
@@ -139,6 +140,24 @@ object FireStoreSingleton {
                 onSuccess(documents.documents)
             }.addOnFailureListener { exception ->
             onFailure(exception)
+        }
+    }
+
+    fun getDataRealTime(
+        collection: String,
+        document: String,
+        listener: EventListener<DocumentSnapshot>,
+        onFailure: (Exception) -> Unit
+    ) {
+        val docRef = fireStoreInstance.collection(collection).document(document)
+        docRef.addSnapshotListener{snapshot, e ->
+            if(e != null) {
+                onFailure(e)
+                return@addSnapshotListener
+            }
+            if(snapshot!=null && snapshot.exists()){
+                listener.onEvent(snapshot, null)
+            }
         }
     }
 }

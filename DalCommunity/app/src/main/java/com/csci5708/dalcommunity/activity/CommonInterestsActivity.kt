@@ -79,7 +79,7 @@ class CommonInterestsActivity : AppCompatActivity() {
                         }
                     }
                 }
-                recyclerView.adapter = CommonInterestsUsersAdapter(users, currentUserInterests)
+                recyclerView.adapter = CommonInterestsUsersAdapter(this, users, currentUserInterests)
             },
             onFailure = { exception ->
                 Toast.makeText(this, "Failed to fetch users: ${exception.message}", Toast.LENGTH_SHORT).show()

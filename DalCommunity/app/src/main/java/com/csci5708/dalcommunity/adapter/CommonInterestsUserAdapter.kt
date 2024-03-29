@@ -1,18 +1,20 @@
 package com.csci5708.dalcommunity.adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.chip.Chip
+import com.csci5708.dalcommunity.activity.ChatActivity
 import com.csci5708.dalcommunity.activity.UserViewHolder
 import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
+import com.google.android.material.chip.Chip
 
-class CommonInterestsUsersAdapter(private val users: List<User>, private val currentUserInterests: List<String>) : RecyclerView.Adapter<UserViewHolder>() {
+class CommonInterestsUsersAdapter(private val context: Context, private val users: List<User>, private val currentUserInterests: List<String>) : RecyclerView.Adapter<UserViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_common_interests_user, parent, false)
@@ -25,7 +27,11 @@ class CommonInterestsUsersAdapter(private val users: List<User>, private val cur
         holder.textViewEmail.text = user.email
         Glide.with(holder.itemView.context).load(user.photoUri).into(holder.imageViewProfile)
 
-        holder.imageViewMessage.setOnClickListener {
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ChatActivity::class.java)
+            intent.putExtra("name", user.name)
+            intent.putExtra("email", user.email)
+            context.startActivity(intent)
         }
 
         addInterestChips(holder.chipContainer, user)
