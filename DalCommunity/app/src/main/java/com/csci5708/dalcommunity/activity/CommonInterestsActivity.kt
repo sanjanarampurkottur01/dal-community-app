@@ -64,14 +64,16 @@ class CommonInterestsActivity : AppCompatActivity() {
                     val userEmail = document.getString("email")
                     if (userEmail != null && userEmail != currentUserEmail) {
                         val userName = document.getString("name") ?: "Unknown"
-                        val userFirstInterest = document.getString("firstInterest") ?: "Unknown"
-                        val userSecondInterest = document.getString("secondInterest") ?: "Unknown"
-                        val userThirdInterest = document.getString("thirdInterest") ?: "Unknown"
+                        val userFirstInterest = document.getString("firstInterest") ?: "None"
+                        val userSecondInterest = document.getString("secondInterest") ?: "None"
+                        val userThirdInterest = document.getString("thirdInterest") ?: "None"
                         val userPhotoUri = document.getString("photoUri") ?: "Unknown"
 
                         val userInterests = listOf(userFirstInterest, userSecondInterest, userThirdInterest)
 
-                        if (userInterests.any { currentUserInterests.contains(it) }) {
+                        if (userInterests.all { it == "None" }) {
+                            continue
+                        } else if (userInterests.any { currentUserInterests.contains(it) && it != "None" }) {
                             val user = User(userName, userEmail, "", userFirstInterest, userSecondInterest, userThirdInterest, userPhotoUri)
                             users.add(user)
                         }

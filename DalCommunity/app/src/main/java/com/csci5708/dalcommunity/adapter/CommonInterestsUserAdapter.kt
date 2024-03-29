@@ -39,7 +39,7 @@ class CommonInterestsUsersAdapter(private val users: List<User>, private val cur
         chipContainer.removeAllViews()
         val interests = listOf(user.firstInterest, user.secondInterest, user.thirdInterest)
         interests.forEach { interest ->
-            if (currentUserInterests.contains(interest)) {
+            if (currentUserInterests.contains(interest) && interest != "None") {
                 val chip = createChip(chipContainer.context, interest)
                 chipContainer.addView(chip)
                 chipContainer.addView(createSpace(chipContainer.context))
