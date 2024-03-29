@@ -40,6 +40,9 @@ class PollAdapter(val context: Context, private var pollPost: PollPost) :
 
     override fun onBindViewHolder(holder: PollAdapter.ViewHolder, position: Int) {
         val pollValue = pollPost.pollValuesList[position]
+        if (pollPost.isUserVoteComplete)
+            previousPosition = pollPost.getVotedOptionPosition()
+        // NOTE: This onTouchListener is required to prevent the user from moving the seek bar
         holder.pollSeekBar.setOnTouchListener { v, event ->
             when (event.action) {
                 else -> {
@@ -55,19 +58,21 @@ class PollAdapter(val context: Context, private var pollPost: PollPost) :
             holder.pollTitle.setOnClickListener {
                 val currentPosition: Int = holder.pollTitle.tag as Int
                 if (previousPosition == -1) {
-                    pollPost.updateVote(currentPosition)
+                    pollPost.updateVote(currentPosition, context)
                     previousPosition = currentPosition
+                    holder.pollSeekBar.progress = pollValue.progress
                     holder.pollSeekBar.progressDrawable =
                         ContextCompat.getDrawable(context, R.drawable.poll_highlighted_drawable)
-                    holder.pollSeekBar.progress = pollValue.progress
                     holder.pollPercentage.text = pollValue.percentage
                     pollValue.isSelected = true
+                    // Need to redraw all the poll options because percentages would have changed
+                    notifyDataSetChanged()
                 }
             }
         } else {
+            holder.pollSeekBar.progress = pollValue.progress
             holder.pollSeekBar.progressDrawable =
                 ContextCompat.getDrawable(context, R.drawable.poll_highlighted_drawable)
-            holder.pollSeekBar.progress = pollValue.progress
         }
     }
 

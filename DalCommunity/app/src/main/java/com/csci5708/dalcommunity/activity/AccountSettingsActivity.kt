@@ -22,6 +22,7 @@ class AccountSettingsActivity : AppCompatActivity() {
             insets
         }
 
+        /* Setting up the toolbar at the top of the screen */
         val accountSettingsToolbar: Toolbar = findViewById(R.id.account_settings_toolbar)
         setSupportActionBar(accountSettingsToolbar)
         supportActionBar?.title = "Account Settings"

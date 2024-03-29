@@ -101,6 +101,7 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
 
         setupProfileDetails()
 
+        // Create an activity to launch the gallery to allow the user to select an image.
         imagePicker = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 profileImageView.setImageURI(uri)
@@ -109,6 +110,8 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         }
 
         val profileImageEditButton: ImageView = findViewById(R.id.profile_detail_image_edit_button)
+        /* Logic for the popup window which allows users to select a profile image either from their
+         * gallery or take a photo using their phone's camera */
         profileImageEditButton.setOnClickListener {
             val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val profileImageEditPopupView =
@@ -120,9 +123,9 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
                 PopupWindow(profileImageEditPopupView, popupWidth, popupHeight, focusable)
             popupWindow.setBackgroundDrawable(ColorDrawable(Color.WHITE))
             val root = window.decorView.rootView as ViewGroup
+
             applyDim(root, 0.5f)
             popupWindow.showAtLocation(it, Gravity.CENTER, 0, 0)
-
             profileImageEditPopupView.setOnTouchListener { v, event ->
                 when (event.action) {
                     MotionEvent.ACTION_UP -> {
@@ -130,6 +133,7 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
                     }
 
                     else -> {
+                        // Clear dim effect and dismiss popup window on other touch events
                         clearDim(root)
                         popupWindow.dismiss()
                         true
@@ -156,6 +160,7 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
             if (isProfileImageSet) {
                 profileImageView.isDrawingCacheEnabled = true
                 profileImageView.buildDrawingCache()
+                // Get the latest profile image which has been set
                 val profileBitmap = (profileImageView.drawable as BitmapDrawable).bitmap
                 val baos = ByteArrayOutputStream()
                 profileBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -163,6 +168,8 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
                 val profileImageRef =
                     storageRef.child("profile_image/" + Firebase.auth.currentUser?.email.toString() + ".jpg")
                 val uploadTask = profileImageRef.putBytes(data)
+
+                // Upload image to Firebase Cloud Storage
                 uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful) {
                         task.exception?.let {
@@ -171,6 +178,7 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
                     }
                     profileImageRef.downloadUrl
                 }.addOnCompleteListener { task ->
+                    // Get the URI and set it to the Firebase user profile details
                     if (task.isSuccessful) {
                         profileImageUri = profileImageRef.downloadUrl.toString()
                         val userProfileUpdates = userProfileChangeRequest {
@@ -182,10 +190,20 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
                             .show()
                     }
                 }.addOnSuccessListener { uri ->
+                    // Get the URI and update the URI field in the Firestore user details collection
                     profileImageUri = uri.toString()
-                    FireStoreSingleton.updateDataField("users", Firebase.auth.currentUser?.email.toString(), "photoUri", profileImageUri) {
+                    FireStoreSingleton.updateDataField(
+                        "users",
+                        Firebase.auth.currentUser?.email.toString(),
+                        "photoUri",
+                        profileImageUri
+                    ) {
                         if (!it) {
-                            Toast.makeText(this, "Failed to update profile image URI", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this,
+                                "Failed to update profile image URI",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     }
                 }
@@ -217,6 +235,9 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         }
     }
 
+    /**
+     * Get the user's profile details from Firestore
+     */
     private fun setupProfileDetails() {
         FireStoreSingleton.getData(
             "users",
@@ -226,10 +247,18 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         )
     }
 
+    /**
+     * Callback function that is called fetching user details from Firestore has failed
+     */
     private fun getUserDataOnFailure() {
         Toast.makeText(this, "Error fetching user details!", Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Callback function that is called when user details have been successfully fetched from Firestore
+     *
+     * @param doc user details document from the Firestore "user" collection
+     */
     private fun getUserDataOnSuccess(doc: DocumentSnapshot) {
         val userDetails = doc.data
         profileDetailName.text = userDetails?.get("name").toString()
@@ -282,6 +311,12 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Dim the background when the popup window is created
+     *
+     * @param parent parent view that has to be dimmed
+     * @param dimAmount alpha value of dimming
+     */
     private fun applyDim(parent: ViewGroup, dimAmount: Float) {
         val dim: Drawable = ColorDrawable(Color.BLACK)
         dim.setBounds(0, 0, parent.width, parent.height)
@@ -290,11 +325,17 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
         overlay.add(dim)
     }
 
+    /**
+     * Remove the previously set dimming
+     */
     private fun clearDim(parent: ViewGroup) {
         val overlay = parent.overlay
         overlay.clear()
     }
 
+    /**
+     * Function to start the camera to capture the profile photo
+     */
     private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         try {
@@ -319,7 +360,7 @@ class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedLis
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val interest = parent?.getItemAtPosition(position)
 
-//        Toast.makeText(this, "$interest ${parent?.id}", Toast.LENGTH_SHORT).show()
+        // Get the item selected in each of the spinners created on this page
         when (parent?.id) {
             R.id.profile_detail_first_interest_spinner -> firstInterestSelected = interest as String
             R.id.profile_detail_second_interest_spinner -> secondInterestSelected =

@@ -6,6 +6,16 @@
     <string name="greetings">Greetings!</string>
     <string name="petitionHeader">Create Petition</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="community_title">Community Channels</string>
+    <string name="community_tab_title1">Chats</string>
+    <string name="community_tab_title2">Channels</string>
+    <string name="community_search_hint">Search by Community Name</string>
+    <string name="community_join_title">Create Community</string>
+    <string name="community_join_name_hint">Enter Community Name</string>
+    <string name="community_join_desc_hint">Enter Community Description</string>
+    <string name="community_join_rules_hint">Enter Community Rules</string>
+    <string name="community_join_save">Save</string>
+    <string name="community_join_close">Close</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="not_a_user_yet">Not a user yet?</string>
@@ -18,6 +28,12 @@
     <string name="enter_new_password_again">Enter New Password Again</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="what_do_you_want_to_poll">What do you want to poll?</string>
+    <string name="create_poll">Create Poll</string>
+    <string name="option_1">Option 1</string>
+    <string name="option_2">Option 2</string>
+    <string name="option_3">Option 3</string>
+    <string name="option_4">Option 4</string>
 
     <string-array name="report_options">
         <item>Spam</item>

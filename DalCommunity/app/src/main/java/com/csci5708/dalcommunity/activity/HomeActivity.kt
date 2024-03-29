@@ -1,5 +1,6 @@
 package com.csci5708.dalcommunity.activity
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -34,6 +35,7 @@ import com.csci5708.dalcommunity.adapter.HomeAdapter
 import com.csci5708.dalcommunity.firestore.FCMTokenManager
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.fragment.CommentFragment
+import com.csci5708.dalcommunity.fragment.CommunityFragments.CommunityFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
@@ -45,22 +47,16 @@ import com.google.firebase.auth.auth
 class HomeActivity : AppCompatActivity() {
     val SHARED_PREFERENCES = "sharedPref"
     val IS_SIGNED_IN = "isSignedIn"
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         askToEnableNotificationsIfNeeded(this)
 
-        val sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE)
-        if (!sharedPreferences.getBoolean(IS_SIGNED_IN, false)) {
-            val intent = Intent(this, LoginSignUpActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
         val fragmentManager = supportFragmentManager
-        fragmentManager.beginTransaction()
-            .replace(R.id.home_fragment_container, TimelineFragment())
-            .commit()
+//        fragmentManager.beginTransaction()
+//            .replace(R.id.home_fragment_container, TimelineFragment())
+//            .commit()
 
         FCMTokenManager.updateOrStoreFCMToken(this)
         val window: Window = this.window
@@ -76,6 +72,7 @@ class HomeActivity : AppCompatActivity() {
         val userIcon = findViewById<ImageView>(R.id.user_icon)
         val petitionIcon = findViewById<ImageView>(R.id.petition_icon)
         val pokeIcon = findViewById<ImageView>(R.id.poke_icon)
+        val communityIcon = findViewById<ImageView>(R.id.community_icon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
         BottomSheetBehavior.from(bottomSheet).apply {
@@ -90,7 +87,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
-
+            communityIcon.setImageResource(R.drawable.groups_outline)
         }
 
 
@@ -101,6 +98,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            communityIcon.setImageResource(R.drawable.groups_outline)
         }
 
         settingsIcon.setOnClickListener{
@@ -110,6 +108,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            communityIcon.setImageResource(R.drawable.groups_outline)
         }
 
         userIcon.setOnClickListener{
@@ -118,6 +117,7 @@ class HomeActivity : AppCompatActivity() {
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_outline)
+            communityIcon.setImageResource(R.drawable.groups_outline)
             val profileActivityIntent = Intent(this, ProfileActivity::class.java)
             startActivity(profileActivityIntent)
         }
@@ -129,6 +129,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            communityIcon.setImageResource(R.drawable.groups_outline)
             val profileActivityIntent = Intent(this, PetitionActivity::class.java)
             startActivity(profileActivityIntent)
         }
@@ -139,9 +140,24 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_filled)
+            communityIcon.setImageResource(R.drawable.groups_outline)
             val profileActivityIntent = Intent(this, PokeActivity::class.java)
             startActivity(profileActivityIntent)
         }
+
+        communityIcon.setOnClickListener{
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user_outline)
+            petitionIcon.setImageResource(R.drawable.petition_filled)
+            pokeIcon.setImageResource(R.drawable.poke_outline)
+            communityIcon.setImageResource(R.drawable.groups_baseline)
+            fragmentManager.beginTransaction()
+                .replace(R.id.home_fragment_container, CommunityFragment())
+                .commit()
+        }
+
     }
     private fun checkNotificationEnabled(context: Context) {
         val alertDialogBuilder = AlertDialog.Builder(context)
