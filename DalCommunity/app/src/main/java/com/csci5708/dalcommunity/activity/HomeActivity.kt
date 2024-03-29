@@ -53,8 +53,6 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         askToEnableNotificationsIfNeeded(this)
 
-        startActivity(Intent(this, SavedPostGroupsActivity::class.java))
-
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction()
             .replace(R.id.home_fragment_container, TimelineFragment())
