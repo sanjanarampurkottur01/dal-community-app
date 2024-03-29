@@ -1,7 +1,7 @@
-package com.csci5708.dalcommunity.fragment
+package com.csci5708.dalcommunity.fragment.petitionfragments
 
 import android.app.Dialog
-import android.content.Context
+import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,7 +18,6 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
-import com.google.firebase.auth.auth
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,9 +27,11 @@ import com.csci5708.dalcommunity.model.Petition
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 
 
-class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
+class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var petitionAdapter: PetitionAdapter
     private val petitions: MutableList<Petition> = mutableListOf()
@@ -39,11 +40,10 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_track_petition, container, false)
-        recyclerView = view.findViewById(R.id.petitionRecyclerView)
+        val view = inflater.inflate(R.layout.fragment_view_petition, container, false)
+        recyclerView = view.findViewById(R.id.petitionViewRecyclerViewOfView)
         return view
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         petitionAdapter = PetitionAdapter(petitions, this)
@@ -52,7 +52,6 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
             adapter = petitionAdapter
         }
     }
-
     private fun fetchPetitions() {
         petitions.clear()
         val auth = Firebase.auth
@@ -66,9 +65,7 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
                     }
                     if (petition != null) {
                         if (currentUser != null) {
-                            if (petition.user == currentUser.email) {
-                                petitions.add(petition)
-                            }
+                            petitions.add(petition)
                         }
                     }
                 }
@@ -92,8 +89,11 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         val close = dialogView.findViewById<RelativeLayout>(R.id.close_icon)
         val checkboxSignIn = dialogView.findViewById<CheckBox>(R.id.petitionSignIn)
         val signInPetitionBtn = dialogView.findViewById<Button>(R.id.signInPetitionBtn)
-        checkboxSignIn.visibility = View.GONE
         signInPetitionBtn.visibility = View.GONE
+
+        checkboxSignIn.setOnCheckedChangeListener { _, isChecked ->
+            signInPetitionBtn.visibility = if (isChecked) View.VISIBLE else View.GONE
+        }
 
         titleOfPetition.text = petition.title
         descriptionOfPetition.text = petition.description
@@ -116,9 +116,58 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         layoutParams.copyFrom(dialog.window?.attributes)
         layoutParams.width = width
         dialog.window?.attributes = layoutParams
-
-
         close.setOnClickListener {
+            dialog.dismiss()
+        }
+        signInPetitionBtn.setOnClickListener {
+            val auth = Firebase.auth
+            val currentUser = auth.currentUser
+            val currentUserEmail = currentUser?.email
+            val firestore = FirebaseFirestore.getInstance()
+            if (currentUserEmail != null) {
+                FireStoreSingleton.getAllDocumentsOfCollection("petitions",
+                    onSuccess = { documents ->
+                        var petitionDoc: DocumentSnapshot? = null
+                        for (document in documents) {
+                            if (document.id == petition.id) {
+                                petitionDoc = document
+                                break
+                            }
+                        }
+                        if (petitionDoc != null) {
+                            val signedUsers: MutableList<String> = (petitionDoc.get("signed_user") as? List<String>)?.toMutableList() ?: mutableListOf()
+                            if (!signedUsers.contains(currentUserEmail)) {
+                                signedUsers.add(currentUserEmail)
+                                val firestore = FirebaseFirestore.getInstance()
+                                petitionDoc.id.let { petitionId ->
+                                    firestore.collection("petitions").document(petitionId)
+                                        .update(mapOf(
+                                            "signed_user" to signedUsers,
+                                            "number_signed" to signedUsers.size
+                                        ))
+                                        .addOnSuccessListener {
+                                            Toast.makeText(context, "Signed petition successfully!", Toast.LENGTH_SHORT).show()
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.e(TAG, "Error updating signed_user field: $e")
+                                            Toast.makeText(context, "Failed to sign petition. Please try again later.", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                            } else {
+                                Toast.makeText(context, "You have already signed this petition.", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(context, "Petition not found.", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    onFailure = { exception ->
+                        Log.e(TAG, "Error fetching petition document: $exception")
+                        Toast.makeText(context, "Failed to fetch petition. Please try again later.", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            } else {
+                Toast.makeText(context, "User not authenticated. Please sign in.", Toast.LENGTH_SHORT).show()
+            }
             dialog.dismiss()
         }
         dialog.show()
