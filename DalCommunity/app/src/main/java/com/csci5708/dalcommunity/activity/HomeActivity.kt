@@ -69,6 +69,7 @@ class HomeActivity : AppCompatActivity() {
         val userIcon = findViewById<ImageView>(R.id.user_icon)
         val petitionIcon = findViewById<ImageView>(R.id.petition_icon)
         val pokeIcon = findViewById<ImageView>(R.id.poke_icon)
+        val interestsIcon = findViewById<ImageView>(R.id.petition1_icon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
         BottomSheetBehavior.from(bottomSheet).apply {
@@ -133,6 +134,18 @@ class HomeActivity : AppCompatActivity() {
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_filled)
             val profileActivityIntent = Intent(this, PokeActivity::class.java)
+            startActivity(profileActivityIntent)
+        }
+
+        interestsIcon.setOnClickListener{
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user)
+            petitionIcon.setImageResource(R.drawable.petition_outline)
+            pokeIcon.setImageResource(R.drawable.poke_outline)
+            petitionIcon.setImageResource(R.drawable.petition_filled)
+            val profileActivityIntent = Intent(this, CommonInterestsActivity::class.java)
             startActivity(profileActivityIntent)
         }
     }
