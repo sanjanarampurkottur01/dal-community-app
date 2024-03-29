@@ -52,7 +52,7 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
             adapter = petitionAdapter
         }
     }
-    private fun fetchPetitions() {
+    fun fetchPetitions() {
         petitions.clear()
         val auth = Firebase.auth
         val currentUser = auth.currentUser
@@ -171,9 +171,5 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
             dialog.dismiss()
         }
         dialog.show()
-    }
-    override fun onResume() {
-        super.onResume()
-        fetchPetitions()
     }
 }

@@ -29,8 +29,8 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:text="Create Your Own Petition"
-                android:textColor="@color/black"
-                android:textSize="10dp"
+                android:textColor="@color/text_color"
+                android:textSize="25dp"
                 android:textStyle="bold"
                 />
 
@@ -41,7 +41,7 @@
                 android:layout_below="@+id/petitionHeader"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/sloganID"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color"
                 android:textSize="16dp"
                 android:textAlignment="center"
                 android:textStyle="italic"

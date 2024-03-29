@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.csci5708.dalcommunity.adapter.PetitionPagerAdapter
+import com.csci5708.dalcommunity.fragment.petitionfragments.ViewPetitionFragment
 import com.example.dalcommunity.R
 import com.google.android.material.tabs.TabLayout
 class PetitionActivity : AppCompatActivity() {
@@ -41,15 +42,58 @@ class PetitionActivity : AppCompatActivity() {
         viewPager.adapter = pagerAdapter
 
         tabLayout.setupWithViewPager(viewPager)
-        tabLayout.getTabAt(0)?.customView = createTabView("Create Petition")
-        tabLayout.getTabAt(1)?.customView = createTabView("View All Petitions")
-        tabLayout.getTabAt(2)?.customView = createTabView("Track Petition")
 
+        // Set custom views for each tab
+        tabLayout.getTabAt(0)?.customView = createTabView("Create Petition", true) // Selecting the first tab
+        tabLayout.getTabAt(1)?.customView = createTabView("View All Petitions", false)
+        tabLayout.getTabAt(2)?.customView = createTabView("Track Petition", false)
+
+        // Add listener for tab selection changes
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                setTabActive(tab)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                setTabInactive(tab)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+            }
+        })
+        viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageSelected(position: Int) {
+                if (position == 1) {
+                    val fragment = pagerAdapter.instantiateItem(viewPager, position) as? ViewPetitionFragment
+                    fragment?.fetchPetitions()
+                }
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+        })
     }
-    private fun createTabView(tabTitle: String): View {
+    private fun setTabActive(tab: TabLayout.Tab) {
+        val tabTextView = tab.customView?.findViewById<TextView>(R.id.tab_text)
+        tabTextView?.setTextColor(ContextCompat.getColor(this, R.color.text_color))
+    }
+
+    private fun setTabInactive(tab: TabLayout.Tab) {
+        val tabTextView = tab.customView?.findViewById<TextView>(R.id.tab_text)
+        tabTextView?.setTextColor(ContextCompat.getColor(this, R.color.black))
+    }
+    private fun createTabView(tabTitle: String, isSelected: Boolean): View {
         val tabView = LayoutInflater.from(this).inflate(R.layout.custom_tab, null)
         val tabTextView = tabView.findViewById<TextView>(R.id.tab_text)
         tabTextView.text = tabTitle
+        if (isSelected) {
+            tabTextView.setTextColor(ContextCompat.getColor(this, R.color.text_color))
+        } else {
+            tabTextView.setTextColor(ContextCompat.getColor(this, R.color.black))
+        }
         return tabView
     }
 }
