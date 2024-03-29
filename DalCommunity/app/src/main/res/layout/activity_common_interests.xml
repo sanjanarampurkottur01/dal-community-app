@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="2dp"
+    android:background="@color/background">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/common_interests_title"
+        android:text="Find people with similar interests!"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/common_interests_instruction"-->
+<!--        android:layout_below="@+id/common_interests_title"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:textSize="16dp"-->
+<!--        android:textStyle="italic"-->
+<!--        android:text="Find your friend here"-->
+<!--        android:textColor="@color/black"-->
+<!--        />-->
+<!--    <androidx.appcompat.widget.SearchView-->
+<!--        android:id="@+id/search_view"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:queryHint="Search by..."-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        app:iconifiedByDefault="false"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        android:layout_below="@+id/poke_instruction"-->
+<!--        android:background="@drawable/rounded_corner"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_marginBottom="20dp"-->
+<!--        />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_below="@+id/common_interests_title"
+        android:background="@color/background"/>
+
+</RelativeLayout>

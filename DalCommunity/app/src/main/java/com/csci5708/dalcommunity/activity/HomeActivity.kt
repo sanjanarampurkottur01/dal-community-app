@@ -72,6 +72,7 @@ class HomeActivity : AppCompatActivity() {
         val userIcon = findViewById<ImageView>(R.id.user_icon)
         val petitionIcon = findViewById<ImageView>(R.id.petition_icon)
         val pokeIcon = findViewById<ImageView>(R.id.poke_icon)
+        val interestsIcon = findViewById<ImageView>(R.id.common_interest_icon)
         val communityIcon = findViewById<ImageView>(R.id.community_icon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
@@ -87,6 +88,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
         }
 
@@ -98,6 +100,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
         }
 
@@ -108,6 +111,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
         }
 
@@ -117,6 +121,7 @@ class HomeActivity : AppCompatActivity() {
             settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
             val profileActivityIntent = Intent(this, ProfileActivity::class.java)
             startActivity(profileActivityIntent)
@@ -129,6 +134,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
             val profileActivityIntent = Intent(this, PetitionActivity::class.java)
             startActivity(profileActivityIntent)
@@ -140,8 +146,22 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_filled)
+            interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
             val profileActivityIntent = Intent(this, PokeActivity::class.java)
+            startActivity(profileActivityIntent)
+        }
+
+        interestsIcon.setOnClickListener{
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user)
+            petitionIcon.setImageResource(R.drawable.petition_outline)
+            pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like)
+            communityIcon.setImageResource(R.drawable.groups_outline)
+            val profileActivityIntent = Intent(this, CommonInterestsActivity::class.java)
             startActivity(profileActivityIntent)
         }
 
@@ -152,6 +172,7 @@ class HomeActivity : AppCompatActivity() {
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_baseline)
             fragmentManager.beginTransaction()
                 .replace(R.id.home_fragment_container, CommunityFragment())
