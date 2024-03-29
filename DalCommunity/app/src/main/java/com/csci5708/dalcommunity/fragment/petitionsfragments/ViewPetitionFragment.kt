@@ -1,4 +1,4 @@
-package com.csci5708.dalcommunity.fragment.petitionfragments
+package com.csci5708.dalcommunity.fragment.petitionsfragments
 
 import android.app.Dialog
 import android.content.ContentValues.TAG
@@ -31,11 +31,28 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 
+/**
+ * A Fragment to display a list of petitions and their details.
+ * Handles fetching petitions from Firestore, displaying petition details in a dialog, and signing petitions.
+ */
 class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
+
+    // RecyclerView to display petitions
     private lateinit var recyclerView: RecyclerView
+
+    // Adapter for the RecyclerView
     private lateinit var petitionAdapter: PetitionAdapter
+
+    // List of petitions to display
     private val petitions: MutableList<Petition> = mutableListOf()
 
+    /**
+     * Inflates the layout for this fragment.
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the fragment
+     * @param container The parent view that the fragment's UI should be attached to
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     * @return Returns the root view of the inflated layout
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,6 +61,13 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         recyclerView = view.findViewById(R.id.petitionViewRecyclerViewOfView)
         return view
     }
+
+    /**
+     * Called immediately after onCreateView() has returned, and allows you to start
+     * interacting with the fragment's view hierarchy.
+     * @param view The View returned by onCreateView()
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         petitionAdapter = PetitionAdapter(petitions, this)
@@ -52,6 +76,10 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
             adapter = petitionAdapter
         }
     }
+
+    /**
+     * Fetches petitions from Firestore and updates the UI.
+     */
     fun fetchPetitions() {
         petitions.clear()
         val auth = Firebase.auth
@@ -77,9 +105,20 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
             }
         )
     }
+
+    /**
+     * Handles the click event on a petition item.
+     * @param petition The petition item clicked
+     */
     override fun onItemClick(petition: Petition) {
         showDialogWithPetitionDetails(petition)
     }
+
+    /**
+     * Displays a dialog showing details of the given petition.
+     * Allows users to sign the petition.
+     * @param petition The petition to display details for
+     */
     private fun showDialogWithPetitionDetails(petition: Petition) {
         val dialogView = layoutInflater.inflate(R.layout.view_petition, null)
         val titleOfPetition = dialogView.findViewById<TextView>(R.id.viewPetitionTitle)
@@ -90,11 +129,9 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         val checkboxSignIn = dialogView.findViewById<CheckBox>(R.id.petitionSignIn)
         val signInPetitionBtn = dialogView.findViewById<Button>(R.id.signInPetitionBtn)
         signInPetitionBtn.visibility = View.GONE
-
         checkboxSignIn.setOnCheckedChangeListener { _, isChecked ->
             signInPetitionBtn.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
-
         titleOfPetition.text = petition.title
         descriptionOfPetition.text = petition.description
         numberOfPetition.text = "Total Signatures: "+petition.number_signed.toString()
@@ -105,7 +142,6 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         } else {
             imageOfPetition.visibility = View.GONE
         }
-
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
@@ -138,7 +174,6 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
                             val signedUsers: MutableList<String> = (petitionDoc.get("signed_user") as? List<String>)?.toMutableList() ?: mutableListOf()
                             if (!signedUsers.contains(currentUserEmail)) {
                                 signedUsers.add(currentUserEmail)
-                                val firestore = FirebaseFirestore.getInstance()
                                 petitionDoc.id.let { petitionId ->
                                     firestore.collection("petitions").document(petitionId)
                                         .update(mapOf(
