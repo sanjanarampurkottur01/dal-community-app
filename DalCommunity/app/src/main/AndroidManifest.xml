@@ -42,7 +42,7 @@
             android:name="com.csci5708.dalcommunity.activity.PokeActivity"
             android:exported="false" />
         <activity
-            android:name="com.csci5708.dalcommunity.activity.TempActivity"
+            android:name="com.csci5708.dalcommunity.activity.SavedPostGroupsActivity"
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.UserPostsActivity"

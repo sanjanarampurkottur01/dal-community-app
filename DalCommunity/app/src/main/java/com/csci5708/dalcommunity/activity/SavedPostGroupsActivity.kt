@@ -24,8 +24,7 @@ class SavedPostGroupsActivity : AppCompatActivity(), HomeAdapter.OnImageInItemCl
             id = Firebase.auth.currentUser?.email.toString(),
             onSuccess = { document ->
                 // Convert the DocumentSnapshot to an array of posts
-                Log.e("TEST", document.toString())
-//                savedPostsArray = document
+                Log.e("TEST", document.get("value").toString())
                 // Now you can use the savedPostsArray variable containing the posts
                 // You may want to perform further operations here, such as updating UI
             }
