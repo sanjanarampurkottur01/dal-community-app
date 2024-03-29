@@ -1,4 +1,4 @@
-package com.csci5708.dalcommunity.fragment
+package com.csci5708.dalcommunity.fragment.petitionsfragments
 
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -45,7 +46,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import java.io.ByteArrayOutputStream
 
@@ -68,6 +68,9 @@ class CreatePetitionFragment : Fragment() {
     private var isImageInPetition: Boolean =  false
     var imgUrlForFireStore = ""
 
+    private lateinit var dialog: Dialog
+
+
 
     /**
      * Called to create the fragment's view hierarchy.
@@ -83,7 +86,6 @@ class CreatePetitionFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_create_petition, container, false)
 
-        // Find EditTexts
         petitionTitleEditText = view.findViewById(R.id.pokeToUserMessage)
         petitionDescEditText = view.findViewById(R.id.petitionDesc)
 
@@ -130,6 +132,9 @@ class CreatePetitionFragment : Fragment() {
         val titleTextView = dialogView.findViewById<TextView>(R.id.preview_petition_title)
         val descTextView = dialogView.findViewById<TextView>(R.id.preview_petition_desc)
         val imageView = dialogView.findViewById<ImageView>(R.id.preview_petition_image)
+        val progressBar = dialogView.findViewById<RelativeLayout>(R.id.progressBar)
+        progressBar.visibility = View.GONE
+
 
         if (imageUri != null) {
             val bitmap = getBitmapFromUri(imageUri)
@@ -146,8 +151,8 @@ class CreatePetitionFragment : Fragment() {
         fetchCommunityGroups()
         titleTextView.text = petitionTitle
         descTextView.text = petitionDesc
-
-        val dialog = Dialog(requireContext())
+        dialog = Dialog(requireContext())
+        dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(dialogView)
@@ -169,6 +174,7 @@ class CreatePetitionFragment : Fragment() {
 
         val publishButton = dialog.findViewById<Button>(R.id.publishBtn)
         publishButton.setOnClickListener {
+            progressBar.visibility = View.VISIBLE
             val bitmap = (imageView.drawable as? BitmapDrawable)?.bitmap
             if (bitmap != null) {
                 uploadImageToFirebaseStorage(bitmap)
@@ -178,7 +184,6 @@ class CreatePetitionFragment : Fragment() {
                 petitionTitleEditText?.setText("")
                 petitionDescEditText?.setText("")
                 petitionImage.setImageResource(R.drawable.upload_placeholder)
-                dialog.dismiss()
                 if (imageUri != null) {
                     deleteImage(imageUri)
                 }
@@ -213,6 +218,10 @@ class CreatePetitionFragment : Fragment() {
                     Log.d("UploadImage", "Image uploaded successfully. URL: $imageUrl")
                     imgUrlForFireStore = imageUrl
                     publishPetition(true, ImageView(context))
+                    dialog.dismiss()
+                    petitionTitleEditText?.setText("")
+                    petitionDescEditText?.setText("")
+                    petitionImage.setImageResource(R.drawable.upload_placeholder)
                 }.addOnFailureListener { exception ->
                     Log.e("UploadImage", "Failed to retrieve image download URL: ${exception.message}")
                     Toast.makeText(context, "Failed to upload image. Please try again.", Toast.LENGTH_SHORT).show()
@@ -428,17 +437,19 @@ class CreatePetitionFragment : Fragment() {
                         } else {
                             Toast.makeText(requireContext(), "Failed to publish petition", Toast.LENGTH_SHORT).show()
                         }
+                        dialog.dismiss()
                     }
                 } else {
                     Toast.makeText(requireContext(), "Community group not found", Toast.LENGTH_SHORT).show()
+                    dialog.dismiss()
                 }
             },
             { exception ->
                 Toast.makeText(requireContext(), "Failed to retrieve community group: ${exception.message}", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
             }
 
         )
-
         imageView.setImageResource(R.drawable.upload_placeholder)
     }
 

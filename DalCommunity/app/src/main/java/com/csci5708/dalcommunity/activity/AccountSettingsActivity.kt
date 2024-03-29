@@ -3,7 +3,7 @@ package com.csci5708.dalcommunity.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -29,7 +29,7 @@ class AccountSettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        val changePasswdLayout: LinearLayout = findViewById(R.id.acc_sett_change_passwd)
+        val changePasswdLayout: TextView = findViewById(R.id.acc_sett_change_passwd)
         changePasswdLayout.setOnClickListener {
             val changePasswordIntent = Intent(this, ChangePasswordActivity::class.java)
             startActivity(changePasswordIntent)

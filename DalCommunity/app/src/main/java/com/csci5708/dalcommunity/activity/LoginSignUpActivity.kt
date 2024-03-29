@@ -16,8 +16,13 @@ import com.csci5708.dalcommunity.fragment.SignUpFragment
 import com.example.dalcommunity.R
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-
+/**
+ * This class handles the functionality related to the login and sign up activities.
+ */
 class LoginSignUpActivity : AppCompatActivity() {
+    /**
+     * Initializes the activity and sets up necessary UI components.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)

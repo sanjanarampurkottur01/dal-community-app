@@ -28,7 +28,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="By Login, you are agreeing to \n to our Terms and Conditions"
+            android:text="By logging in, you agree to \n our terms and conditions"
             android:layout_below="@+id/loginTextID"
             android:layout_centerHorizontal="true"
             android:id="@+id/disclaimerID"
