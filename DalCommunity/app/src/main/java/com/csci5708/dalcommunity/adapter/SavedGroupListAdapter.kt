@@ -8,10 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.csci5708.dalcommunity.model.SavedPostGroup
 import com.example.dalcommunity.R
+import com.google.firebase.storage.FirebaseStorage
 
-class SavedGroupListAdapter(private val dataset: ArrayList<SavedPostGroup>, private val context: Context) :
+class SavedGroupListAdapter(private val context: Context, private val dataset: List<SavedPostGroup>) :
     RecyclerView.Adapter<SavedGroupListAdapter.ViewHolder>(){
 
     private var itemClickListener: OnItemClickListener? = null
@@ -50,11 +52,20 @@ class SavedGroupListAdapter(private val dataset: ArrayList<SavedPostGroup>, priv
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val post = dataset[position]
 
-        viewHolder.titleView.text = post.groupTitle
-        if (post.imageUrl.isNotEmpty()) {
-            Glide.with(context).load(post.imageUrl).into(viewHolder.cardImage)
-        } else {
-            viewHolder.cardImage.setImageDrawable(null)
+        viewHolder.titleView.text = post.name
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val image = storageRef.child("/post-images/${post.posts[0]}.jpg")
+
+        image.downloadUrl.addOnSuccessListener { uri ->
+            val imageUrl = uri.toString()
+            Glide.with(context)
+                .load(imageUrl) // Use the imageUrl directly
+                .error(R.drawable.error_icon)
+                .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache the image
+                .into(viewHolder.cardImage)
+        }.addOnFailureListener { exception ->
+            // Handle any errors
         }
 
         viewHolder.itemView.setOnClickListener {

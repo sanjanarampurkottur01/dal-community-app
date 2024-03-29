@@ -1,6 +1,7 @@
 package com.csci5708.dalcommunity.firestore
 
 import com.csci5708.dalcommunity.model.Post
+import com.csci5708.dalcommunity.model.SavedPostGroup
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -117,23 +118,31 @@ object FireStoreSingleton {
             }
     }
 
-    fun getSavedPostsForUser(id: String, onSuccess: (DocumentSnapshot) -> Unit, onFailure: (Exception) -> Unit) {
+    fun getSavedPostGroupsForUser(id: String, onSuccess: (List<SavedPostGroup>) -> Unit, onFailure: (Exception) -> Unit) {
         fireStoreInstance.collection("savedPosts")
             .document(id)
             .get()
             .addOnSuccessListener { document ->
-                // Check if the document exists
                 if (document.exists()) {
-                    // Call onSuccess with the document
-                    onSuccess(document)
+                    val savedPostGroups = mutableListOf<SavedPostGroup>()
+
+                    val data = document.data
+                    data?.forEach { (groupName, groupData) ->
+                        if (groupData is Map<*, *>) {
+                            val name = groupData["name"] as? String ?: ""
+                            val posts = (groupData["posts"] as? List<*>)?.filterIsInstance<String>()?.toTypedArray()
+                                ?: emptyArray()
+                            val savedPostGroup = SavedPostGroup(name, posts)
+                            savedPostGroups.add(savedPostGroup)
+                        }
+                    }
+
+                    onSuccess(savedPostGroups)
                 } else {
-                    // Handle the case when the document doesn't exist
-                    // For example, you can call onFailure with an appropriate exception
                     onFailure(Exception("Document not found"))
                 }
             }
             .addOnFailureListener { exception ->
-                // Handle the failure case
                 onFailure(exception)
             }
     }
