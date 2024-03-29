@@ -6,5 +6,5 @@
     android:gravity="center"
     android:textColor="@android:color/black"
     android:textStyle="bold"
-    android:textSize="14dp"
+    android:textSize="13dp"
     android:text="EG"/>

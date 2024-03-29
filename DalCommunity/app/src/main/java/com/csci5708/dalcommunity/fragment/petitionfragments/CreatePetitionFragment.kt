@@ -1,4 +1,4 @@
-package com.csci5708.dalcommunity.fragment
+package com.csci5708.dalcommunity.fragment.petitionfragments
 
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
@@ -26,7 +26,6 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Spinner
 import android.widget.TextView
@@ -47,7 +46,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import java.io.ByteArrayOutputStream
 
