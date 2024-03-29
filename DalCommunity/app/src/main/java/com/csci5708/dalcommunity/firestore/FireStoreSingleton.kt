@@ -93,7 +93,14 @@ object FireStoreSingleton {
         fireStoreInstance.collection(collection).document(document).update(fieldName, value)
             .addOnSuccessListener { onComplete(true) }.addOnFailureListener { onComplete(false) }
     }
-    fun get(collection: String, field: String, value: Any, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
+
+    fun get(
+        collection: String,
+        field: String,
+        value: Any,
+        onSuccess: (List<DocumentSnapshot>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         fireStoreInstance.collection(collection)
             .whereEqualTo(field, value)
             .get()
@@ -104,7 +111,12 @@ object FireStoreSingleton {
                 onFailure(exception)
             }
     }
-    fun getAllDocumentsOfCollection(collection: String, onSuccess: (List<DocumentSnapshot>) -> Unit, onFailure: (Exception) -> Unit) {
+
+    fun getAllDocumentsOfCollection(
+        collection: String,
+        onSuccess: (List<DocumentSnapshot>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
         fireStoreInstance.collection(collection)
             .get()
             .addOnSuccessListener { documents ->
@@ -113,5 +125,20 @@ object FireStoreSingleton {
             .addOnFailureListener { exception ->
                 onFailure(exception)
             }
+    }
+
+    fun getAllDocumentsOfCollectionWhereEqualTo(
+        collection: String,
+        fieldName: String,
+        value: Any,
+        onSuccess: (List<DocumentSnapshot>) -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        fireStoreInstance.collection(collection).whereEqualTo(fieldName, value).get()
+            .addOnSuccessListener { documents ->
+                onSuccess(documents.documents)
+            }.addOnFailureListener { exception ->
+            onFailure(exception)
+        }
     }
 }
