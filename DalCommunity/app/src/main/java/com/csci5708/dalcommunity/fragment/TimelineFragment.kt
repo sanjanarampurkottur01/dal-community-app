@@ -74,7 +74,10 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
         // Register back stack listener
         activity?.supportFragmentManager?.addOnBackStackChangedListener(this)
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_timeline, container, false)
+        val view: View = if (userEmail != null)
+            inflater.inflate(R.layout.fragment_timeline_user, container, false)
+        else
+            inflater.inflate(R.layout.fragment_timeline, container, false)
         val addPostButton = view.findViewById<FloatingActionButton>(R.id.create_post_fab)
 
         if (userEmail != null) {
