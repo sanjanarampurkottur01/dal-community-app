@@ -118,6 +118,10 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         val numberOfPetition = dialogView.findViewById<TextView>(R.id.viewPetitionSignedNumber)
         val imageOfPetition = dialogView.findViewById<ImageView>(R.id.viewImagePetition)
         val close = dialogView.findViewById<RelativeLayout>(R.id.close_icon)
+        val checkboxSignIn = dialogView.findViewById<CheckBox>(R.id.petitionSignIn)
+        val signInPetitionBtn = dialogView.findViewById<Button>(R.id.signInPetitionBtn)
+        checkboxSignIn.visibility = View.GONE
+        signInPetitionBtn.visibility = View.GONE
         titleOfPetition.text = petition.title
         descriptionOfPetition.text = petition.description
         numberOfPetition.text = "Total Signatures: "+petition.number_signed.toString()
