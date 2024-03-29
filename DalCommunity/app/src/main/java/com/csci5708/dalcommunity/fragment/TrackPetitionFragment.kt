@@ -72,6 +72,7 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
                         }
                     }
                 }
+                petitions.sortByDescending { it.creation_date }
                 petitionAdapter.notifyDataSetChanged()
             },
             { exception ->
