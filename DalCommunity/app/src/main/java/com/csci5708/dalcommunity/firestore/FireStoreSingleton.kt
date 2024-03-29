@@ -1,5 +1,6 @@
 package com.csci5708.dalcommunity.firestore
 
+import com.csci5708.dalcommunity.model.SavedPostGroup
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -121,6 +122,36 @@ object FireStoreSingleton {
             .get()
             .addOnSuccessListener { documents ->
                 onSuccess(documents.documents)
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
+    fun getSavedPostGroupsForUser(id: String, onSuccess: (List<SavedPostGroup>) -> Unit, onFailure: (Exception) -> Unit) {
+        fireStoreInstance.collection("savedPosts")
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val savedPostGroups = mutableListOf<SavedPostGroup>()
+
+                    val data = document.data
+                    data?.forEach { (groupName, groupData) ->
+                        if (groupData is Map<*, *>) {
+                            val name = groupData["name"] as? String ?: ""
+                            val posts = (groupData["posts"] as? List<*>)?.filterIsInstance<String>()
+                                ?.toTypedArray()
+                                ?: emptyArray()
+                            val savedPostGroup = SavedPostGroup(name, posts)
+                            savedPostGroups.add(savedPostGroup)
+                        }
+                    }
+
+                    onSuccess(savedPostGroups)
+                } else {
+                    onFailure(Exception("Document not found"))
+                }
             }
             .addOnFailureListener { exception ->
                 onFailure(exception)
