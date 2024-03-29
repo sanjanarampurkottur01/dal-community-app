@@ -54,9 +54,9 @@ class HomeActivity : AppCompatActivity() {
         askToEnableNotificationsIfNeeded(this)
 
         val fragmentManager = supportFragmentManager
-//        fragmentManager.beginTransaction()
-//            .replace(R.id.home_fragment_container, TimelineFragment())
-//            .commit()
+        fragmentManager.beginTransaction()
+            .replace(R.id.home_fragment_container, TimelineFragment())
+            .commit()
 
         FCMTokenManager.updateOrStoreFCMToken(this)
         val window: Window = this.window
