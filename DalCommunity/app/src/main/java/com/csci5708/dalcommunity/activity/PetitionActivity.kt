@@ -17,12 +17,13 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.csci5708.dalcommunity.adapter.PetitionPagerAdapter
+import com.csci5708.dalcommunity.fragment.ViewPetitionFragment
 import com.example.dalcommunity.R
 import com.google.android.material.tabs.TabLayout
-
 class PetitionActivity : AppCompatActivity() {
 
     lateinit var petitionImage: ImageView

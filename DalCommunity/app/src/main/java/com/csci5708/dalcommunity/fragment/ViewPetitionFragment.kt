@@ -20,11 +20,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.csci5708.dalcommunity.adapter.PetitionAdapter
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
-import com.csci5708.dalcommunity.firestore.FireStoreSingleton.getAllDocumentsOfCollection
 import com.csci5708.dalcommunity.model.Petition
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
@@ -34,8 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 
 class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
-
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var petitionAdapter: PetitionAdapter
     private val petitions: MutableList<Petition> = mutableListOf()
@@ -45,7 +41,7 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_view_petition, container, false)
-        recyclerView = view.findViewById(R.id.petitionViewRecyclerView)
+        recyclerView = view.findViewById(R.id.petitionViewRecyclerViewOfView)
         return view
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +54,9 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
     }
     private fun fetchPetitions() {
         petitions.clear()
-        getAllDocumentsOfCollection("petitions",
+        val auth = Firebase.auth
+        val currentUser = auth.currentUser
+        FireStoreSingleton.getAllDocumentsOfCollection("petitions",
             { documents ->
                 for (document in documents) {
                     val petition = document.toObject(Petition::class.java)
@@ -66,9 +64,14 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
                         petition.id = document.id
                     }
                     if (petition != null) {
-                        petitions.add(petition)
+                        if (currentUser != null) {
+                            if (petition.user == currentUser.email) {
+                                petitions.add(petition)
+                            }
+                        }
                     }
                 }
+                petitions.sortByDescending { it.creation_date }
                 petitionAdapter.notifyDataSetChanged()
             },
             { exception ->
@@ -124,7 +127,7 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
             val currentUserEmail = currentUser?.email
             val firestore = FirebaseFirestore.getInstance()
             if (currentUserEmail != null) {
-                getAllDocumentsOfCollection("petitions",
+                FireStoreSingleton.getAllDocumentsOfCollection("petitions",
                     onSuccess = { documents ->
                         var petitionDoc: DocumentSnapshot? = null
                         for (document in documents) {
