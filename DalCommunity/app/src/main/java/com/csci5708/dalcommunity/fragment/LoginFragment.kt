@@ -16,10 +16,15 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
-
+/**
+ * Fragment for user login functionality.
+ */
 class LoginFragment : Fragment() {
     val SHARED_PREFERENCES = "sharedPref"
     val IS_SIGNED_IN = "isSignedIn"
+    /**
+     * Inflates the layout for this fragment.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,6 +32,9 @@ class LoginFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
+    /**
+     * Initializes views and sets up listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

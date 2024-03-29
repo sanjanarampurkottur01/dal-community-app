@@ -1,4 +1,4 @@
-package com.csci5708.dalcommunity.fragment.petitionfragments
+package com.csci5708.dalcommunity.fragment.petitionsfragments
 
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
