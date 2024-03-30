@@ -45,13 +45,13 @@ class CreatePostActivity : AppCompatActivity() {
     private lateinit var postCaption: EditText
     private lateinit var postBtn: Button
     private lateinit var locationTextView: TextView
-    private lateinit var imageView: ImageView
+    lateinit var imageView: ImageView
 
     private val REQUEST_GALLERY = 1
     private val REQUEST_IMAGE_CAPTURE = 2
     private val REQUEST_GET_LOCATION = 3
 
-    private var postType: Int = 0
+    var postType: Int = 0
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
 
@@ -173,7 +173,7 @@ class CreatePostActivity : AppCompatActivity() {
      * @param data An Intent, which can return result data to the caller (various data can be attached to Intent
      * "extras").
      */
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
