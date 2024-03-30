@@ -5,6 +5,9 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Singleton class that provides APIs to the application to interact with FireStore
+ */
 object FireStoreSingleton {
     private val fireStoreInstance: FirebaseFirestore by lazy {
         FirebaseFirestore.getInstance()

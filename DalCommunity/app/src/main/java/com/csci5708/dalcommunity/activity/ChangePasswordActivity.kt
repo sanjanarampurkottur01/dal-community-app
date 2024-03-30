@@ -16,6 +16,10 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
+/**
+ * Activity for changing the user password.
+ * This activity allows users to change their password and handles the process using Firebase authentication.
+ */
 class ChangePasswordActivity : AppCompatActivity() {
     private lateinit var passwordInput1: TextView
     private lateinit var passwordInput2: TextView
@@ -30,12 +34,14 @@ class ChangePasswordActivity : AppCompatActivity() {
             insets
         }
 
+        // Setting up the toolbar
         val changePasswdToolbar: Toolbar = findViewById(R.id.change_password_toolbar)
         setSupportActionBar(changePasswdToolbar)
         supportActionBar?.title = "Change Password"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        // Initialize password input fields
         passwordInput1 = findViewById(R.id.change_password_input_1)
         passwordInput2 = findViewById(R.id.change_password_input_2)
 
@@ -45,6 +51,7 @@ class ChangePasswordActivity : AppCompatActivity() {
             val pass2: String = passwordInput2.text.toString()
 
             if (pass1 != pass2) {
+                // Show toast message if passwords do not match
                 Toast.makeText(
                     this,
                     "Passwords do not match! Please enter again.",
@@ -72,7 +79,7 @@ class ChangePasswordActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(
                             this,
-                            "Password update failed! Please try again.",
+                            "Password update failed! Please re-login and try again.",
                             Toast.LENGTH_LONG
                         ).show()
                     }
