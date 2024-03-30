@@ -103,6 +103,9 @@
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"
             android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.ChatActivity"
+            android:exported="false" />
 
         <service
             android:name="com.csci5708.dalcommunity.firestore.MyFirebaseMessagingService"
