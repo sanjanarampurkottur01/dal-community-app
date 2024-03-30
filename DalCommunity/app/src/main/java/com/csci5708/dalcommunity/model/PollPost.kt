@@ -9,6 +9,10 @@ import com.google.firebase.firestore.Exclude
 import java.util.Calendar
 import kotlin.math.roundToInt
 
+/**
+ * Represents a Poll Post, which is a type of post containing a poll question and options.
+ * Inherits from the Post class.
+ */
 class PollPost : Post {
     override lateinit var postId: String
     override lateinit var userId: String
@@ -25,6 +29,16 @@ class PollPost : Post {
         // Default constructor required for Firebase deserialization
     }
 
+    /**
+     * Constructor to initialize PollPost object with provided parameters.
+     * @param postId The ID of the post.
+     * @param userId The ID of the user who created the post.
+     * @param pollQuestion The question associated with the poll.
+     * @param pollValuesList The list of poll options and their vote counts.
+     * @param isUserVoteComplete Indicates if the current user has voted on this poll.
+     * @param userName The name of the user who created the post.
+     * @param userToVoteMap A map containing user IDs and their corresponding vote options.
+     */
     constructor(
         postId: String,
         userId: String,
@@ -45,13 +59,17 @@ class PollPost : Post {
         refreshPollData()
     }
 
+    /**
+     * Get the size of the poll values list.
+     */
     val pollValuesSize: Int
         get() = pollValuesList.size
 
     /**
-     * Update the vote for a particular option, update Firestore and recalculate all the data (percentages, progress, etc.)
+     * Update the vote for a particular option and refresh poll data.
      *
-     * @param position indicates the position of the poll value item that the user has clicked on
+     * @param position The position of the poll value item that the user has clicked on.
+     * @param context The context used to display toast messages.
      */
     fun updateVote(position: Int, context: Context) {
         pollValuesList[position].votes += 1
@@ -98,6 +116,9 @@ class PollPost : Post {
         }
     }
 
+    /**
+     * Get the position of the voted option. Dummy method to indicate user has already voted.
+     */
     fun getVotedOptionPosition(): Int {
         if (isUserVoteComplete) {
             return 1

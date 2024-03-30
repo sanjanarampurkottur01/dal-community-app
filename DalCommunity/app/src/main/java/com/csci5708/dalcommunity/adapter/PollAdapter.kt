@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.model.PollPost
 import com.example.dalcommunity.R
 
+/**
+ * This adapter generates the option views present in a PollPost and handles the logic for when
+ * a users casts their vote.
+ */
 class PollAdapter(val context: Context, private var pollPost: PollPost) :
     RecyclerView.Adapter<PollAdapter.ViewHolder>() {
     lateinit var view: View

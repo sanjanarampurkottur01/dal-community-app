@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -93,36 +94,45 @@ class ChatActivity : AppCompatActivity() {
 
         sendMessageImageView.setOnClickListener {
             val message = messageBoxEditText.text.toString()
-            val messageObject = Message(message, senderid!!, System.currentTimeMillis())
+           if (message != ""){
+               val messageObject = Message(message, senderid!!, System.currentTimeMillis())
 
-            // Add message to sender room
-            FireStoreSingleton.addData(
-                "chat/$senderRoom/messages",
-                messageObject,
-                onComplete = { success ->
-                    if (success) {
-                        // Message added successfully
-                    } else {
-                        // Failed to add message
-                    }
-                }
-            )
+               // Add message to sender room
+               FireStoreSingleton.addData(
+                   "chat/$senderRoom/messages",
+                   messageObject,
+                   onComplete = { success ->
+                       if (success) {
+                           // Message added successfully
+                       } else {
+                           // Failed to add message
+                       }
+                   }
+               )
 
-            // Add message to receiver room
-            FireStoreSingleton.addData(
-                "chat/$receiverRoom/messages",
-                messageObject,
-                onComplete = { success ->
-                    if (success) {
-                        // Message added successfully
-                    } else {
-                        // Failed to add message
-                    }
-                }
-            )
+               // Add message to receiver room
+               FireStoreSingleton.addData(
+                   "chat/$receiverRoom/messages",
+                   messageObject,
+                   onComplete = { success ->
+                       if (success) {
+                           // Message added successfully
+                       } else {
+                           // Failed to add message
+                       }
+                   }
+               )
 
-            // Clear the message box
-            messageBoxEditText.setText("")
+               // Clear the message box
+               messageBoxEditText.setText("")
+           } else {
+               // Notify user that no message has been entered
+               Toast.makeText(
+                   this@ChatActivity,
+                   "Please enter message",
+                   Toast.LENGTH_SHORT
+               ).show()
+           }
         }
 
     }
