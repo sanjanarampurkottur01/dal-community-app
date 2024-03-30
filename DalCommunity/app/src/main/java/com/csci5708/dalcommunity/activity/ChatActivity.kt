@@ -65,7 +65,7 @@ class ChatActivity : AppCompatActivity() {
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = adapter
 
-        fs.getDataRealTime(
+        fs.getChatsData(
             "chat",
             senderRoom!!,
             EventListener<QuerySnapshot> { snapshot, e ->

@@ -178,7 +178,7 @@ object FireStoreSingleton {
         }
     }
 
-    fun getDataRealTime(
+    fun getChatsData(
         collection: String,
         document: String,
         listener: EventListener<QuerySnapshot>,
