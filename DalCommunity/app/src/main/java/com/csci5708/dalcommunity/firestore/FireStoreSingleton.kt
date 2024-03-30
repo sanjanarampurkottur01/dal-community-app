@@ -4,6 +4,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
 object FireStoreSingleton {
     private val fireStoreInstance: FirebaseFirestore by lazy {
@@ -146,16 +147,16 @@ object FireStoreSingleton {
     fun getDataRealTime(
         collection: String,
         document: String,
-        listener: EventListener<DocumentSnapshot>,
+        listener: EventListener<QuerySnapshot>, // Change the listener type to QuerySnapshot
         onFailure: (Exception) -> Unit
     ) {
-        val docRef = fireStoreInstance.collection(collection).document(document)
-        docRef.addSnapshotListener{snapshot, e ->
-            if(e != null) {
+        val collectionRef = fireStoreInstance.collection("$collection/$document/messages")
+        collectionRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
                 onFailure(e)
                 return@addSnapshotListener
             }
-            if(snapshot!=null && snapshot.exists()){
+            if (snapshot != null) {
                 listener.onEvent(snapshot, null)
             }
         }

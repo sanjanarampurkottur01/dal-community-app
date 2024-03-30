@@ -8,7 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.model.Message
 import com.example.dalcommunity.R
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class MessageAdapter(val context: Context, val messageList: ArrayList<Message>): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -33,7 +34,7 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Message>):
 
     override fun getItemViewType(position: Int): Int {
         val currentMessage = messageList[position]
-        if (FirebaseAuth.getInstance().currentUser?.uid.equals(currentMessage.senderId)) {
+        if (Firebase.auth.currentUser?.email.equals(currentMessage.senderId)) {
             return ITEM_SENT
         } else {
             return ITEM_RECEIVED

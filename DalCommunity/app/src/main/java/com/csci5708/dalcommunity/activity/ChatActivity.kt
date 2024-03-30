@@ -1,10 +1,12 @@
 package com.csci5708.dalcommunity.activity
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.MessageAdapter
@@ -12,13 +14,14 @@ import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.Message
 import com.example.dalcommunity.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.QuerySnapshot
 
 class ChatActivity : AppCompatActivity() {
 
     private lateinit var messageBoxEditText: EditText
     private lateinit var sendMessageImageView: ImageView
+    private lateinit var chatToolbar: androidx.appcompat.widget.Toolbar
 
     private lateinit var chatRecyclerView: RecyclerView
     private lateinit var adapter: MessageAdapter
@@ -34,15 +37,22 @@ class ChatActivity : AppCompatActivity() {
 
         val fs = FireStoreSingleton
 
-        val name = intent.getStringExtra("name")
-        val receiverUid = intent.getStringExtra("email")
+        val receiverName = intent.getStringExtra("username")
+        val receiverid = intent.getStringExtra("email")
 
-        val senderUid = FirebaseAuth.getInstance().currentUser?.uid
+        chatToolbar = findViewById(R.id.tbChat)
+        setSupportActionBar(chatToolbar)
+        supportActionBar?.setTitle(receiverName)
+        chatToolbar.setTitleTextColor(Color.WHITE)
+        chatToolbar.navigationIcon = ContextCompat.getDrawable(this, R.drawable.arrow_back_baseline)
+        chatToolbar.setNavigationOnClickListener{
+            onBackPressed()
+        }
 
-        senderRoom = receiverUid + senderUid
-        receiverRoom = senderUid + receiverUid
+        val senderid = FirebaseAuth.getInstance().currentUser?.email
 
-        supportActionBar?.title =name
+        senderRoom = receiverid + senderid
+        receiverRoom = senderid + receiverid
 
         messageBoxEditText = findViewById(R.id.etMessageBox)
         sendMessageImageView = findViewById(R.id.ivSendMessage)
@@ -54,61 +64,59 @@ class ChatActivity : AppCompatActivity() {
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = adapter
 
-        fs.getDataRealTime("chat", senderRoom!!, EventListener<DocumentSnapshot> {snapshot, e ->
-            if(e!= null){
-                Log.w("TAG", "Listen failed", e)
-                return@EventListener
-            }
-            if(snapshot != null && snapshot.exists()){
-                messageList.clear()
-                val messages = snapshot.get("message") as? List<HashMap<String, Any>>
-
-                // Convert message data to Message objects and add them to messageList
-                messages?.forEach { messageData ->
-                    val message = Message(
-                        messageData["message"] as String?,
-                        messageData["senderId"] as String?
-                    )
-                    messageList.add(message)
+        fs.getDataRealTime(
+            "chat",
+            senderRoom!!,
+            EventListener<QuerySnapshot> { snapshot, e ->
+                if (e != null) {
+                    Log.w("TAG", "Listen failed", e)
+                    return@EventListener
                 }
-
-                // Notify adapter of data change
-                adapter.notifyDataSetChanged()
-            } else {
-                Log.d("TAG", "Current data: null")
+                if (snapshot != null) {
+                    messageList.clear()
+                    var sortedDocs = snapshot.documents.sortedBy { it.getLong("sentTime") }
+                    for (doc in sortedDocs) {
+                        val message = doc.toObject(Message::class.java)
+                        if (message != null) {
+                            messageList.add(message)
+                        }
+                    }
+                    adapter.notifyDataSetChanged()
+                } else {
+                    Log.d("TAG", "Current data: null")
+                }
+            },
+            onFailure = { exception ->
+                // Handle failure
             }
-        }, onFailure = {exception ->
-
-        })
+        )
 
         sendMessageImageView.setOnClickListener {
             val message = messageBoxEditText.text.toString()
-            val messageObject = Message(message, senderUid)
+            val messageObject = Message(message, senderid!!, System.currentTimeMillis())
 
             // Add message to sender room
-            fs.addData(
-                "chat",
-                senderRoom!!,
-                mapOf("message" to messageObject), // Data to add
+            FireStoreSingleton.addData(
+                "chat/$senderRoom/messages",
+                messageObject,
                 onComplete = { success ->
                     if (success) {
-                        // Message added to sender room successfully
+                        // Message added successfully
                     } else {
-                        // Failed to add message to sender room
+                        // Failed to add message
                     }
                 }
             )
 
             // Add message to receiver room
-            fs.addData(
-                "chat",
-                receiverRoom!!,
-                mapOf("message" to messageObject), // Data to add
+            FireStoreSingleton.addData(
+                "chat/$receiverRoom/messages",
+                messageObject,
                 onComplete = { success ->
                     if (success) {
-                        // Message added to receiver room successfully
+                        // Message added successfully
                     } else {
-                        // Failed to add message to receiver room
+                        // Failed to add message
                     }
                 }
             )

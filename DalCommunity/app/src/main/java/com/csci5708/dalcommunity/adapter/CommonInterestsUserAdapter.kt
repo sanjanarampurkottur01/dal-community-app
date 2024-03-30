@@ -29,7 +29,7 @@ class CommonInterestsUsersAdapter(private val context: Context, private val user
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ChatActivity::class.java)
-            intent.putExtra("name", user.name)
+            intent.putExtra("username", user.name)
             intent.putExtra("email", user.email)
             context.startActivity(intent)
         }
