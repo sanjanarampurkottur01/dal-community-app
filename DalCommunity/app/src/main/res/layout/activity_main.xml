@@ -67,12 +67,12 @@
                         android:src="@drawable/time_table_outline" />
 
                     <ImageView
-                        android:id="@+id/settings_icon"
+                        android:id="@+id/community_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="20"
-                        android:src="@drawable/settings_outline" />
+                        android:src="@drawable/groups_outline" />
 
                     <ImageView
                         android:id="@+id/user_icon"
@@ -100,26 +100,19 @@
 
                     <ImageView
                         android:id="@+id/poke_icon"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_weight="42"
+                        android:layout_weight="20"
                         android:src="@drawable/poke_outline" />
 
-                    <ImageView
-                        android:id="@+id/community_icon"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="40"
-                        android:src="@drawable/groups_outline" />
 
                     <ImageView
                         android:id="@+id/common_interest_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_weight="25"
+                        android:layout_weight="20"
                         android:src="@drawable/like_outline"
                         />
 
@@ -128,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_weight="25"
+                        android:layout_weight="20"
                         android:src="@drawable/baseline_content_paste_search_24"
                         />
 
@@ -137,38 +130,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_weight="25"
+                        android:layout_weight="20"
                         android:src="@drawable/outline_person_search_24"
                         />
 
-                    <RelativeLayout
+                    <ImageView
+                        android:id="@+id/scannerIcon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:layout_weight="20"
-                        >
-
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="20"
-                        >
-
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="20"
-                        >
-
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="20"
-                        >
-
-                    </RelativeLayout>
+                        android:src="@drawable/scanner_outline"
+                        />
 
                 </LinearLayout>
 
