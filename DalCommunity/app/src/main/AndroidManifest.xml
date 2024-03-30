@@ -2,13 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" /> <!-- <uses-permission android:name="android.permission.CAMERA" /> -->
+        android:required="false" />
+
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.NOTIFICATION_POLICY_ACCESS_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -20,11 +29,47 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.CreatePollPostActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.LoginSignUpActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.CommonInterestsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.GetLocationActivity"
+            android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.PokeActivity"
             android:exported="false" />
         <activity
-            android:name="com.csci5708.dalcommunity.activity.TempActivity"
+            android:name="com.csci5708.dalcommunity.activity.SavedPostGroupsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.SavedPostsActivity"
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.UserPostsActivity"
@@ -44,18 +89,24 @@
         <activity
             android:name="com.csci5708.dalcommunity.activity.PetitionActivity"
             android:exported="false" />
+        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="android:screenOrientation"/>
         <activity
             android:name="com.csci5708.dalcommunity.activity.CreatePostActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.CommunityChatActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.ChatActivity"
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <service
             android:name="com.csci5708.dalcommunity.firestore.MyFirebaseMessagingService"
             android:exported="false">
@@ -68,6 +119,10 @@
             android:name="com.csci5708.dalcommunity.provider.ImageContentProvider"
             android:authorities="com.example.dalcommunity.imageprovider"
             android:exported="true" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

@@ -5,6 +5,9 @@ import android.os.Bundle
 import com.csci5708.dalcommunity.fragment.ProfileFragment
 import com.example.dalcommunity.R
 
+/**
+ * Display the ProfileFragment once this activity is launched
+ */
 class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

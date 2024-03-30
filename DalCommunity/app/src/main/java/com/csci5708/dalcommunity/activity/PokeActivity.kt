@@ -26,12 +26,19 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
-
+/**
+ * Activity for poking other users.
+ * Manages the display of users in a RecyclerView and handles user interactions.
+ */
 class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
     private lateinit var usersAdapter: UsersAdapter
     private lateinit var originalUsers: List<Pair<String, String>>
 
-
+    /**
+     * Called when the activity is first created.
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     * shut down, this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle)
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,6 +53,11 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
         recyclerView.adapter = usersAdapter
         val searchView: SearchView = findViewById(R.id.search_view)
         searchView.queryHint = "Search by name"
+        val editText: EditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+        editText.setTextColor(ContextCompat.getColor(this, R.color.text_color))
+        editText.setHintTextColor(ContextCompat.getColor(this, R.color.text_hint))
+
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 filterUsers(query, usersAdapter)
@@ -62,11 +74,20 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
             }
         })
     }
+    /**
+     * Called when a user item is clicked.
+     * @param userName The name of the user clicked
+     * @param userId The ID of the user clicked
+     */
 
     override fun onItemClick(userName: String, userId: String) {
         showUserInfoDialog(userName, userId)
     }
-
+    /**
+     * Displays a dialog showing user information and handles the poke action.
+     * @param userName The name of the user to poke
+     * @param userEmail The email of the user to poke
+     */
     private fun showUserInfoDialog(userName: String, userEmail: String) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.poke_dialog, null)
         val alertDialogBuilder = AlertDialog.Builder(this)
@@ -89,6 +110,11 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
         }
     }
 
+    /**
+     * Handles the poke action when the poke button is clicked.
+     * @param message The message to send in the poke
+     * @param userEmail The email of the user to poke
+     */
     private fun onPokeClicked(message: String, userEmail: String){
         val db = FirebaseFirestore.getInstance()
         val userDocRef = db.collection("users").document(userEmail)
@@ -141,7 +167,10 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
                 showToast("Error fetching user document: $e")
             }
     }
-
+    /**
+     * Fetches all users from Firestore and updates the RecyclerView.
+     * @param usersAdapter The adapter for the RecyclerView
+     */
     private fun fetchAllUsers(usersAdapter: UsersAdapter) {
         val auth = Firebase.auth
         val currentUser = auth.currentUser
@@ -167,9 +196,18 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
             }
         )
     }
+    /**
+     * Displays a toast message.
+     * @param message The message to display in the toast
+     */
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+    /**
+     * Filters users based on the search query.
+     * @param query The search query
+     * @param usersAdapter The adapter for the RecyclerView
+     */
     private fun filterUsers(query: String, usersAdapter: UsersAdapter) {
         if (query.isBlank()) {
             usersAdapter.users = originalUsers
