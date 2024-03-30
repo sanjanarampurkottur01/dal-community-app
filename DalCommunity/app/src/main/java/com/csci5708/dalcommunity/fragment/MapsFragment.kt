@@ -1,10 +1,15 @@
 package com.csci5708.dalcommunity.fragment
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.view.Window
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.LatLng
@@ -12,11 +17,22 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.example.dalcommunity.UserMap
 import com.example.dalcommunity.R
+import com.squareup.picasso.Picasso
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var userMap: UserMap
+    private lateinit var profileImage: ImageView
+    private lateinit var userNameTextView:TextView
+    private lateinit var emailTextView: TextView
+    private lateinit var itemTitleTextView: TextView
+    private lateinit var dateTextView: TextView
+    private lateinit var descriptionTextView: TextView
+    private lateinit var itemImage: ImageView
+    private lateinit var locationTitleTextView: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,24 +43,67 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         arguments?.let {
             userMap = it.getSerializable("EXTRA_USER_MAP") as UserMap
         }
-        val saveButton:Button = view.findViewById(R.id.save)
-        saveButton.setOnClickListener {
-            if (isAdded && activity != null) {
-                // Remove the fragment from its parent activity
-                val result = Bundle().apply {
-                    putInt("resultData", 2)
-                }
-                //activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-                parentFragmentManager.setFragmentResult("result", result)
-                parentFragmentManager.popBackStack()
-                //activity?.supportFragmentManager?.popBackStack()
-            }
+        profileImage = view.findViewById(R.id.profileImageView)
+        userNameTextView = view.findViewById(R.id.userName)
+        emailTextView = view.findViewById(R.id.email)
+        itemTitleTextView = view.findViewById(R.id.itemTitle)
+        dateTextView = view.findViewById(R.id.itemDate)
+        descriptionTextView = view.findViewById(R.id.description)
+        itemImage = view.findViewById(R.id.itemImage)
+        itemImage.setOnClickListener {
+            showImageDialog()
         }
+        locationTitleTextView = view.findViewById(R.id.locationTitle)
+        initializeView()
+
+
 
         val mapFragment = childFragmentManager
             .findFragmentById(com.example.dalcommunity.R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         return view;
+    }
+
+    private fun initializeView() {
+        if(userMap.profileImageUri.isNotEmpty()) {
+            Picasso.get().load(userMap.profileImageUri).into(profileImage)
+        }
+        userNameTextView.setText(userMap.name)
+        emailTextView.setText(userMap.email)
+        itemTitleTextView.setText(userMap.itemName)
+        val date = userMap.dateTime
+        val inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val outputFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        val parsedDate = LocalDateTime.parse(date, inputFormatter)
+        val formattedDate = parsedDate.format(outputFormatter)
+        val category = if (userMap.category.equals("lost")) "Lost" else "Found"
+        dateTextView.text = category + " around "+formattedDate
+        descriptionTextView.setText(userMap.description)
+        Picasso.get().load(userMap.imageUri).into(itemImage)
+        if(userMap.category.equals("found")) {
+            locationTitleTextView.setText("Found at this place")
+        }
+    }
+
+    private fun showImageDialog() {
+        val imageDialog = Dialog(requireContext())
+        imageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        imageDialog.setContentView(R.layout.image_dialog_layout)
+
+        val image = imageDialog.findViewById<ImageView>(R.id.imageViewDialog)
+        Picasso.get().load(userMap.imageUri).into(image)
+
+        // Making the dialog full-screen
+        val window = imageDialog.window
+        window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        // Adding click listener to close the dialog
+        image.setOnClickListener {
+            imageDialog.dismiss()
+        }
+
+        imageDialog.show()
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -58,7 +117,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             mMap.addMarker(MarkerOptions().position(latLng).title(place.title).snippet(place.description))
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundBuilder.build(),1000,1000,0))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundBuilder.build(),1000,1000,300))
+        mMap.setOnCameraIdleListener(object : GoogleMap.OnCameraIdleListener {
+            override fun onCameraIdle() {
+                // This part of the code will be executed after the bounds adjustment animation completes
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15f))
+
+                // Remove the listener to prevent this code from running on subsequent idle events
+                mMap.setOnCameraIdleListener(null)
+            }
+        })
     }
 
 }

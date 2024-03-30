@@ -18,4 +18,10 @@
     <string name="enter_new_password_again">Enter New Password Again</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string-array name="dropdown_items">
+        <item>All Items</item>
+        <item>Lost Items</item>
+        <item>Found Items</item>
+    </string-array>
 </resources>

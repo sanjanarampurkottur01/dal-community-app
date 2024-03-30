@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -44,7 +45,7 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
         arguments?.let {
             userMap = it.getSerializable("EXTRA_USER_MAP") as UserMap
         }
-        val saveButton: Button = view.findViewById(R.id.save)
+        val saveButton: AppCompatButton = view.findViewById(R.id.save)
          searchView = view.findViewById(R.id.searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -82,7 +83,7 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
                     putSerializable("EXTRA_USER_MAP",userMap)
                 }
                 //activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
-                parentFragmentManager.setFragmentResult("result", result)
+                parentFragmentManager.setFragmentResult("addMarker", result)
                 parentFragmentManager.popBackStack()
                 //activity?.supportFragmentManager?.popBackStack()
             }
@@ -104,6 +105,11 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
         mMap = googleMap
 
         val boundBuilder = LatLngBounds.builder()
+
+        mMap.setOnMarkerClickListener { marker ->
+            showMarkerInfoDialog(marker)
+            true // Return true to consume the click event
+        }
 
         for (place in userMap.places) {
             val latLng = LatLng(place.latitude, place.longitude)
@@ -127,7 +133,30 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
 
         }
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundBuilder.build(), 1000, 1000, 0))
+        if(userMap.places.size>0) {
+            mMap.animateCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                    boundBuilder.build(),
+                    1000,
+                    1000,
+                    0
+                )
+            )
+            mMap.setOnCameraIdleListener(object : GoogleMap.OnCameraIdleListener {
+                override fun onCameraIdle() {
+                    // This part of the code will be executed after the bounds adjustment animation completes
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15f))
+
+                    // Remove the listener to prevent this code from running on subsequent idle events
+                    mMap.setOnCameraIdleListener(null)
+                }
+            })
+        }
+        else {
+            val sydney = LatLng(44.639, -63.584)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 14f))
+
+        }
     }
 
     private fun showAlertDialog(latLng: LatLng) {
@@ -160,5 +189,21 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
             dialog.dismiss()
         }
 
+    }
+    private fun showMarkerInfoDialog(marker: Marker) {
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setTitle("Title: "+marker.title)
+        dialogBuilder.setMessage("Description: "+marker.snippet)
+        dialogBuilder.setPositiveButton("Delete") { dialogInterface, i ->
+            // Remove marker from the map and from the list of markers
+            markers.remove(marker)
+            marker.remove()
+            // Also, remove the place from userMap if necessary
+            userMap.places.removeIf { place ->
+                LatLng(place.latitude, place.longitude) == marker.position
+            }
+        }
+        dialogBuilder.setNegativeButton("Cancel", null)
+        dialogBuilder.show()
     }
 }

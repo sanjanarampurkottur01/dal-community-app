@@ -10,5 +10,6 @@
     <color name="dark_background">#41418C</color>
     <color name="input_text_background">#F3F5F7</color>
     <color name="input_text_placeholder">#BDBDBD</color>
+    <color name="underline">#D8D6D6</color>
 
 </resources>
