@@ -127,7 +127,7 @@ class CreatePostActivity : AppCompatActivity() {
                     latitude,
                     longitude
                 )
-                postToFirebase(postToPush)
+                postToFirebase(postToPush, postId)
                 finish()
             } else if (postType == 1) {
                 val postToPush = ImagePost(postId,
@@ -141,18 +141,24 @@ class CreatePostActivity : AppCompatActivity() {
                     latitude,
                     longitude
                 )
-                postToFirebase(postToPush)
+                postToFirebase(postToPush, postId)
                 uploadImageToFirebase(postId)
             }
         }
     }
 
-    private fun postToFirebase(postToPush: Post) {
-        FireStoreSingleton.addData("post", postToPush, {
-            Toast.makeText(this, "Post Successful", Toast.LENGTH_SHORT).show()
-        }, {
-            Toast.makeText(this, "Post Failed", Toast.LENGTH_SHORT).show()
-        })
+    private fun postToFirebase(postToPush: Post, postId: String) {
+        FireStoreSingleton.addData("post", postId, postToPush) { b: Boolean ->
+            uploadPostOnComplete(b)
+        }
+    }
+
+    private fun uploadPostOnComplete(b: Boolean) {
+        if (b) {
+            Toast.makeText(this, "Upload successful", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Upload failed", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
