@@ -196,6 +196,7 @@ class HomeActivity : AppCompatActivity() {
             userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
             fragmentManager.beginTransaction()
                 .replace(R.id.home_fragment_container, CommunityFragment())
+                .addToBackStack(null)
                 .commit()
         }
         lostFoundIcon.setOnClickListener{
@@ -211,6 +212,7 @@ class HomeActivity : AppCompatActivity() {
             lostFoundIcon.setImageResource(R.drawable.twotone_content_paste_search_24)
             fragmentManager.beginTransaction()
                 .replace(R.id.home_fragment_container, LostFoundFragment())
+                .addToBackStack(null)
                 .commit()
         }
         userSearchIcon.setOnClickListener{
@@ -226,6 +228,7 @@ class HomeActivity : AppCompatActivity() {
             userSearchIcon.setImageResource(R.drawable.baseline_person_search_24)
             fragmentManager.beginTransaction()
                 .replace(R.id.home_fragment_container, SearchFragment())
+                .addToBackStack(null)
                 .commit()
         }
 
