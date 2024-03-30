@@ -1,0 +1,94 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.csci5708.dalcommunity.activity.PokeActivity"
+    android:background="@drawable/rounded_corner">
+
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:maxHeight="100dp"
+            android:background="@color/background"
+            >
+
+            <TextView
+                android:id="@+id/pokeSlogan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:text="Let's Poke Them!"
+                android:textColor="@color/black"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Unique way to invite friends to attend class!"
+                android:layout_below="@+id/pokeSlogan"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/sloganID"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:textAlignment="center"
+                android:textStyle="italic"
+                />
+            <TextView
+                android:id="@+id/selectedUserToPoke"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You are Poking To ABC!"
+                android:layout_below="@+id/sloganID"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                android:layout_marginTop="18dp"
+                />
+            <EditText
+                android:id="@+id/pokeToUserMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/selectedUserToPoke"
+                android:background="@drawable/rounded_corner"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="56dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:hint="Write your message here"
+                android:padding="20dp"
+                android:textColorHint="@color/text_hint"
+                android:textColor="@color/black"
+                android:drawablePadding="20dp"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:maxLines="10"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/pokeNowBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Poke Now"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:padding="16dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:textSize="18dp"
+                android:layout_below="@+id/pokeToUserMessage"
+                android:background="@drawable/btnbackground"
+                android:textColor="@color/white"
+                android:layout_marginBottom="100dp"
+                />
+
+        </RelativeLayout>
+</FrameLayout>

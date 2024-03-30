@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.model.PollPost
 import com.example.dalcommunity.R
 
+/**
+ * This adapter generates the option views present in a PollPost and handles the logic for when
+ * a users casts their vote.
+ */
 class PollAdapter(val context: Context, private var pollPost: PollPost) :
     RecyclerView.Adapter<PollAdapter.ViewHolder>() {
     lateinit var view: View
@@ -34,12 +38,15 @@ class PollAdapter(val context: Context, private var pollPost: PollPost) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PollAdapter.ViewHolder {
-        view = LayoutInflater.from(context).inflate(R.layout.poll_layout, parent, false)
+        view = LayoutInflater.from(context).inflate(R.layout.item_single_poll_entry, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: PollAdapter.ViewHolder, position: Int) {
         val pollValue = pollPost.pollValuesList[position]
+        if (pollPost.isUserVoteComplete)
+            previousPosition = pollPost.getVotedOptionPosition()
+        // NOTE: This onTouchListener is required to prevent the user from moving the seek bar
         holder.pollSeekBar.setOnTouchListener { v, event ->
             when (event.action) {
                 else -> {
@@ -55,19 +62,21 @@ class PollAdapter(val context: Context, private var pollPost: PollPost) :
             holder.pollTitle.setOnClickListener {
                 val currentPosition: Int = holder.pollTitle.tag as Int
                 if (previousPosition == -1) {
-                    pollPost.updateVote(currentPosition)
+                    pollPost.updateVote(currentPosition, context)
                     previousPosition = currentPosition
+                    holder.pollSeekBar.progress = pollValue.progress
                     holder.pollSeekBar.progressDrawable =
                         ContextCompat.getDrawable(context, R.drawable.poll_highlighted_drawable)
-                    holder.pollSeekBar.progress = pollValue.progress
                     holder.pollPercentage.text = pollValue.percentage
                     pollValue.isSelected = true
+                    // Need to redraw all the poll options because percentages would have changed
+                    notifyDataSetChanged()
                 }
             }
         } else {
+            holder.pollSeekBar.progress = pollValue.progress
             holder.pollSeekBar.progressDrawable =
                 ContextCompat.getDrawable(context, R.drawable.poll_highlighted_drawable)
-            holder.pollSeekBar.progress = pollValue.progress
         }
     }
 

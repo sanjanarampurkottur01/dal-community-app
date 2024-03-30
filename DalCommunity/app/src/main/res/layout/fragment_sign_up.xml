@@ -1,0 +1,174 @@
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.csci5708.dalcommunity.fragment.SignUpFragment">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".LoginActivity"
+            android:background="@color/background">
+
+            <TextView
+                android:id="@+id/signUpTextID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="30dp"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:text="Join Dal Community"
+                android:textColor="@color/text_color"
+                android:textSize="35dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="By Sign Up, you are agreeing to \n to our Terms and Conditions"
+                android:layout_below="@+id/signUpTextID"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/disclaimerID"
+                android:textColor="@color/lavender"
+                android:textSize="20dp"
+                android:textAlignment="center"
+                />
+
+
+            <EditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/disclaimerID"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_corner"
+                android:drawableLeft="@drawable/baseline_person_outline_24"
+                android:drawablePadding="20dp"
+                android:hint="What's your good name?"
+                android:padding="20dp"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/text_hint"
+                android:textCursorDrawable="@drawable/cursorcolor"
+                android:maxLines="1"
+                android:inputType="text"
+                />
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editTextName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/rounded_corner"
+                android:drawableLeft="@drawable/email"
+                android:drawablePadding="20dp"
+                android:hint="Your Email ID"
+                android:padding="20dp"
+                android:textColor="@color/text_color"
+                android:textColorHint="@color/text_hint"
+                android:textCursorDrawable="@drawable/cursorcolor"
+                android:maxLines="1"
+                android:inputType="text"
+                />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextUsername"
+                android:background="@drawable/rounded_corner"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:hint="Secure password"
+                android:padding="20dp"
+                android:drawableLeft="@drawable/baseline_lock_24"
+                android:textColorHint="@color/text_hint"
+                android:textColor="@color/text_color"
+                android:drawablePadding="20dp"
+                android:textCursorDrawable="@drawable/cursorcolor"
+                android:imeOptions="actionSearch"
+                android:inputType="textPassword"/>
+
+            <EditText
+                android:id="@+id/editTextConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/editTextPassword"
+                android:background="@drawable/rounded_corner"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:hint="Confirm your password"
+                android:padding="20dp"
+                android:drawableLeft="@drawable/baseline_lock_24"
+                android:textColorHint="@color/text_hint"
+                android:textColor="@color/text_color"
+                android:drawablePadding="20dp"
+                android:textCursorDrawable="@drawable/cursorcolor"
+                android:imeOptions="actionSearch"
+                android:inputType="textPassword"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/relative_layout_signup"
+                android:layout_below="@+id/editTextConfirmPassword"
+                android:layout_centerHorizontal="true">
+                <TextView
+                    android:id="@+id/profile_detail_first_interest_text_on_signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="What's your interest?"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color"
+                    android:textSize="16dp"/>
+
+                <Spinner
+                    android:id="@+id/profile_detail_first_interest_spinner_on_signup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="20dp"
+                    android:textColor="@color/text_color"
+                    android:layout_toRightOf="@+id/profile_detail_first_interest_text_on_signup" />
+            </RelativeLayout>
+
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign up!"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/white"
+                android:padding="20dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:textSize="23dp"
+                android:textColor="@color/lavender"
+                android:layout_below="@+id/relative_layout_signup"/>
+
+
+        </RelativeLayout>
+
+
+    </FrameLayout>
+</ScrollView>
