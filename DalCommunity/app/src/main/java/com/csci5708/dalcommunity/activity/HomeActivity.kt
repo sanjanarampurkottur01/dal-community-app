@@ -36,6 +36,9 @@ import com.csci5708.dalcommunity.firestore.FCMTokenManager
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.fragment.CommentFragment
 import com.csci5708.dalcommunity.fragment.CommunityFragments.CommunityFragment
+import com.csci5708.dalcommunity.fragment.LostFoundFragment
+import com.csci5708.dalcommunity.fragment.ScannerFragment
+import com.csci5708.dalcommunity.fragment.SearchFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
@@ -68,12 +71,15 @@ class HomeActivity : AppCompatActivity() {
 
         val homeIcon = findViewById<ImageView>(R.id.home_icon)
         val timeTableIcon = findViewById<ImageView>(R.id.time_table_icon)
-        val settingsIcon = findViewById<ImageView>(R.id.settings_icon)
+//        val //settingsIcon = findViewById<ImageView>(R.id.settings_icon)
         val userIcon = findViewById<ImageView>(R.id.user_icon)
         val petitionIcon = findViewById<ImageView>(R.id.petition_icon)
         val pokeIcon = findViewById<ImageView>(R.id.poke_icon)
         val interestsIcon = findViewById<ImageView>(R.id.common_interest_icon)
         val communityIcon = findViewById<ImageView>(R.id.community_icon)
+        val lostFoundIcon = findViewById<ImageView>(R.id.lostFoundIcon)
+        val userSearchIcon = findViewById<ImageView>(R.id.userSearchIcon)
+        val scannerIcon = findViewById<ImageView>(R.id.scannerIcon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
         BottomSheetBehavior.from(bottomSheet).apply {
@@ -84,45 +90,61 @@ class HomeActivity : AppCompatActivity() {
         homeIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
-            settingsIcon.setImageResource(R.drawable.settings_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
             interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
         }
 
 
         timeTableIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table)
-            settingsIcon.setImageResource(R.drawable.settings_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
             interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
         }
 
-        settingsIcon.setOnClickListener{
-            homeIcon.setImageResource(R.drawable.home_outline)
-            timeTableIcon.setImageResource(R.drawable.time_table_outline)
-            settingsIcon.setImageResource(R.drawable.settings)
-            userIcon.setImageResource(R.drawable.user_outline)
-            petitionIcon.setImageResource(R.drawable.petition_outline)
-            pokeIcon.setImageResource(R.drawable.poke_outline)
-            interestsIcon.setImageResource(R.drawable.like_outline)
-            communityIcon.setImageResource(R.drawable.groups_outline)
-        }
+        //settingsIcon.setOnClickListener{
+//            homeIcon.setImageResource(R.drawable.home_outline)
+//            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+//            //settingsIcon.setImageResource(R.drawable.settings)
+//            userIcon.setImageResource(R.drawable.user_outline)
+//            petitionIcon.setImageResource(R.drawable.petition_outline)
+//            pokeIcon.setImageResource(R.drawable.poke_outline)
+//            interestsIcon.setImageResource(R.drawable.like_outline)
+//            communityIcon.setImageResource(R.drawable.groups_outline)
+//            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+//            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+//            scannerIcon.setImageResource(R.drawable.scanner_outline)
+//
+//        }
 
         userIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
-            settingsIcon.setImageResource(R.drawable.settings_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
             val profileActivityIntent = Intent(this, ProfileActivity::class.java)
             startActivity(profileActivityIntent)
         }
@@ -130,24 +152,32 @@ class HomeActivity : AppCompatActivity() {
         petitionIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
-            settingsIcon.setImageResource(R.drawable.settings_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_outline)
             interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
             val profileActivityIntent = Intent(this, PetitionActivity::class.java)
             startActivity(profileActivityIntent)
         }
         pokeIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
-            settingsIcon.setImageResource(R.drawable.settings_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_filled)
             interestsIcon.setImageResource(R.drawable.like_outline)
             communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
             val profileActivityIntent = Intent(this, PokeActivity::class.java)
             startActivity(profileActivityIntent)
         }
@@ -155,12 +185,16 @@ class HomeActivity : AppCompatActivity() {
         interestsIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
-            settingsIcon.setImageResource(R.drawable.settings_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user)
             petitionIcon.setImageResource(R.drawable.petition_outline)
             pokeIcon.setImageResource(R.drawable.poke_outline)
             interestsIcon.setImageResource(R.drawable.like)
             communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
             val profileActivityIntent = Intent(this, CommonInterestsActivity::class.java)
             startActivity(profileActivityIntent)
         }
@@ -168,16 +202,80 @@ class HomeActivity : AppCompatActivity() {
         communityIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home_outline)
             timeTableIcon.setImageResource(R.drawable.time_table_outline)
-            settingsIcon.setImageResource(R.drawable.settings_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
             userIcon.setImageResource(R.drawable.user_outline)
             petitionIcon.setImageResource(R.drawable.petition_filled)
             pokeIcon.setImageResource(R.drawable.poke_outline)
             interestsIcon.setImageResource(R.drawable.like_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
             communityIcon.setImageResource(R.drawable.groups_baseline)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
             fragmentManager.beginTransaction()
                 .replace(R.id.home_fragment_container, CommunityFragment())
+                .addToBackStack(null)
                 .commit()
         }
+        lostFoundIcon.setOnClickListener{
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user_outline)
+            petitionIcon.setImageResource(R.drawable.petition_filled)
+            pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
+            communityIcon.setImageResource(R.drawable.groups_outline)
+            userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
+            lostFoundIcon.setImageResource(R.drawable.twotone_content_paste_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.home_fragment_container, LostFoundFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+        userSearchIcon.setOnClickListener{
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user_outline)
+            petitionIcon.setImageResource(R.drawable.petition_filled)
+            pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
+            communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.baseline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner_outline)
+
+            fragmentManager.beginTransaction()
+                .replace(R.id.home_fragment_container, SearchFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        scannerIcon.setOnClickListener {
+            homeIcon.setImageResource(R.drawable.home_outline)
+            timeTableIcon.setImageResource(R.drawable.time_table_outline)
+            //settingsIcon.setImageResource(R.drawable.settings_outline)
+            userIcon.setImageResource(R.drawable.user_outline)
+            petitionIcon.setImageResource(R.drawable.petition_filled)
+            pokeIcon.setImageResource(R.drawable.poke_outline)
+            interestsIcon.setImageResource(R.drawable.like_outline)
+            communityIcon.setImageResource(R.drawable.groups_outline)
+            lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
+            userSearchIcon.setImageResource(R.drawable.baseline_person_search_24)
+            scannerIcon.setImageResource(R.drawable.scanner)
+
+
+            val scannerFragment = ScannerFragment()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.home_fragment_container, scannerFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+
 
     }
     private fun checkNotificationEnabled(context: Context) {
