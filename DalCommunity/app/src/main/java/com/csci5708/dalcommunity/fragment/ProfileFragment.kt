@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.csci5708.dalcommunity.activity.AccountSettingsActivity
 import com.csci5708.dalcommunity.activity.LoginSignUpActivity
 import com.csci5708.dalcommunity.activity.ProfileDetailActivity
+import com.csci5708.dalcommunity.activity.SavedPostGroupsActivity
 import com.csci5708.dalcommunity.activity.UserPostsActivity
 import com.csci5708.dalcommunity.constants.AppConstants
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
@@ -94,9 +95,15 @@ class ProfileFragment : Fragment() {
             activity?.startActivity(userPostsActivityIntent)
         }
         val mySavedPostsImg: ImageView = view.findViewById(R.id.profile_page_saved_posts_option)
-        mySavedPostsImg.setOnClickListener {}
+        mySavedPostsImg.setOnClickListener {
+            val userPostsActivityIntent = Intent(activity, SavedPostGroupsActivity::class.java)
+            activity?.startActivity(userPostsActivityIntent)
+        }
         val mySavedPostsTxt: TextView = view.findViewById(R.id.profile_page_saved_posts_text)
-        mySavedPostsTxt.setOnClickListener {}
+        mySavedPostsTxt.setOnClickListener {
+            val userPostsActivityIntent = Intent(activity, SavedPostGroupsActivity::class.java)
+            activity?.startActivity(userPostsActivityIntent)
+        }
         val profileLogoutButton: Button = view.findViewById(R.id.profile_page_log_out_button)
         // Logic for logging out the user from the application
         profileLogoutButton.setOnClickListener {
