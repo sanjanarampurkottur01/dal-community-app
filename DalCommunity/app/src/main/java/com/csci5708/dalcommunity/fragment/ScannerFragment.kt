@@ -1,6 +1,7 @@
 package com.csci5708.dalcommunity.fragment
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -21,6 +22,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 class ScannerFragment : Fragment() {
 
     private lateinit var scannerTextView: TextView
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
