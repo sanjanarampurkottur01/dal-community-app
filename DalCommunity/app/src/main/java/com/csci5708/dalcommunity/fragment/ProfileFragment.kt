@@ -94,9 +94,9 @@ class ProfileFragment : Fragment() {
             activity?.startActivity(userPostsActivityIntent)
         }
         val mySavedPostsImg: ImageView = view.findViewById(R.id.profile_page_saved_posts_option)
-        myPostsImg.setOnClickListener {}
+        mySavedPostsImg.setOnClickListener {}
         val mySavedPostsTxt: TextView = view.findViewById(R.id.profile_page_saved_posts_text)
-        myPostsTxt.setOnClickListener {}
+        mySavedPostsTxt.setOnClickListener {}
         val profileLogoutButton: Button = view.findViewById(R.id.profile_page_log_out_button)
         // Logic for logging out the user from the application
         profileLogoutButton.setOnClickListener {
