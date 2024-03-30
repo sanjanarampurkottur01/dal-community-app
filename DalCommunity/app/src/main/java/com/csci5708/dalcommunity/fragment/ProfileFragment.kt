@@ -27,7 +27,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.storage
 
 /**
- * Profile fragment which displays the Profile Page of the current user
+ * Fragment for displaying user profile information.
+ * This fragment shows the user's name, email, profile image, and provides options
+ * to edit profile, view account settings, view user posts, view saved posts, and log out.
  */
 class ProfileFragment : Fragment() {
 
@@ -41,10 +43,12 @@ class ProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Initialize SharedPreferences to check user sign-in status
         sharedPreferences =
             activity?.getSharedPreferences(AppConstants.APP_SHARED_PREFERENCES, MODE_PRIVATE)
         isUserSignedIn = sharedPreferences!!.getBoolean(AppConstants.SP_IS_SIGNED_IN_KEY, false)
 
+        // If user is signed in, fetch user data from Firestore
         if (isUserSignedIn) {
             FireStoreSingleton.getData(
                 "users",
@@ -125,15 +129,28 @@ class ProfileFragment : Fragment() {
         return view
     }
 
+    /**
+     * Function to handle failure in fetching user data from Firestore
+     */
     private fun getUserDataOnFailure() {
         Toast.makeText(activity, "Failed to get user data", Toast.LENGTH_LONG).show()
     }
 
+    /**
+     * Function to handle success in fetching user data from Firestore
+     */
     private fun getUserDataOnSuccess(doc: DocumentSnapshot) {
         val userDetails = doc.data
-        setUserDetails(userDetails?.get("name").toString(), userDetails?.get("email").toString(), userDetails?.get("photoUri").toString())
+        setUserDetails(
+            userDetails?.get("name").toString(),
+            userDetails?.get("email").toString(),
+            userDetails?.get("photoUri").toString()
+        )
     }
 
+    /**
+     * Utility function to set user details on the UI
+     */
     private fun setUserDetails(username: String, email: String, profileImageUri: String) {
         profilePageName.text = username
         profilePageEmail.text = email

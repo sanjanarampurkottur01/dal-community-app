@@ -19,6 +19,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
+/**
+ * Activity for creating a poll post.
+ * This activity allows users to create a poll post by providing a question and multiple options.
+ */
 class CreatePollPostActivity : AppCompatActivity() {
 
     private lateinit var pollQuestionTv: TextView
@@ -50,11 +54,13 @@ class CreatePollPostActivity : AppCompatActivity() {
         pollOption3Tv = findViewById(R.id.poll_post_option_3)
         pollOption4Tv = findViewById(R.id.poll_post_option_4)
         createPollButton = findViewById(R.id.create_poll_post_button)
+        // Handle click on create poll button
         createPollButton.setOnClickListener {
             val pollQuestion: String = pollQuestionTv.text.toString()
             val pollValues: ArrayList<PollValue> = ArrayList()
 
             if (pollQuestion.isNotEmpty()) {
+                // Add poll options to the list
                 if (pollOption1Tv.text.toString().isNotEmpty()) {
                     pollValues.add(
                         PollValue(
@@ -93,6 +99,7 @@ class CreatePollPostActivity : AppCompatActivity() {
 
                 // Ensure that the user has provided at least 2 options
                 if (pollValues.size >= 2) {
+                    // Create a poll post object
                     val pollPost = PollPost(
                         FirebaseFirestore.getInstance().collection("post").document().id,
                         Firebase.auth.currentUser?.email.toString(),
@@ -103,6 +110,7 @@ class CreatePollPostActivity : AppCompatActivity() {
                         HashMap()
                     )
 
+                    // Upload PollPost to FireStore "post" collection
                     FireStoreSingleton.addData(
                         "post",
                         pollPost.postId,
