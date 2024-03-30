@@ -123,6 +123,24 @@
                         android:src="@drawable/like_outline"
                         />
 
+                    <ImageView
+                        android:id="@+id/lostFoundIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="25"
+                        android:src="@drawable/baseline_content_paste_search_24"
+                        />
+
+                    <ImageView
+                        android:id="@+id/userSearchIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="25"
+                        android:src="@drawable/outline_person_search_24"
+                        />
+
                     <RelativeLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
