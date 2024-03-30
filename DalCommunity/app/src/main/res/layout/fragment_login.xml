@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.csci5708.dalcommunity.fragment.LoginFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".LoginActivity"
+        android:background="@color/background">
+
+        <TextView
+            android:id="@+id/loginTextID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="30dp"
+            android:gravity="center"
+            android:text="Welcome Back!"
+            android:textColor="@color/text_color"
+            android:textSize="35dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="By logging in, you agree to \n our terms and conditions"
+            android:layout_below="@+id/loginTextID"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/disclaimerID"
+            android:textColor="@color/lavender"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            />
+
+        <EditText
+            android:id="@+id/editTextUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/disclaimerID"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rounded_corner"
+            android:drawableLeft="@drawable/email"
+            android:drawablePadding="20dp"
+            android:hint="Your Email ID"
+            android:padding="20dp"
+            android:textColor="@color/text_color"
+            android:textColorHint="@color/text_hint"
+            android:textCursorDrawable="@drawable/cursorcolor"
+            android:maxLines="1"
+            android:inputType="text"
+            />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/editTextUsername"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:hint="Password"
+            android:padding="20dp"
+            android:drawableLeft="@drawable/baseline_lock_24"
+            android:textColorHint="@color/text_hint"
+            android:textColor="@color/text_color"
+            android:drawablePadding="20dp"
+            android:textCursorDrawable="@drawable/cursorcolor"
+            android:imeOptions="actionSearch"
+            android:inputType="textPassword"/>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log In"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/white"
+            android:padding="20dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:textSize="23dp"
+            android:textColor="@color/text_color"
+            android:layout_below="@+id/editTextPassword"/>
+
+
+    </RelativeLayout>
+
+</FrameLayout>
