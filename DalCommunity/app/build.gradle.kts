@@ -85,6 +85,7 @@ android {
 
 dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
+    implementation("androidx.fragment:fragment-testing:1.6.2")
     val fragment_version = "1.6.2"
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
