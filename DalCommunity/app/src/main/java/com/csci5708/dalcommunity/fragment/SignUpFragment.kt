@@ -22,7 +22,10 @@ import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
-
+import com.google.firebase.auth.userProfileChangeRequest
+/**
+ * Fragment for user sign up functionality.
+ */
 class SignUpFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
@@ -30,7 +33,9 @@ class SignUpFragment : Fragment() {
     val IS_SIGNED_IN = "isSignedIn"
     private val interestsArray = arrayOf("Sports", "Hiking", "Programming", "Arts")
     private var firstInterestSelected: String = "Sports"
-
+    /**
+     * Inflates the layout for this fragment.
+     */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,7 +43,9 @@ class SignUpFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
-
+    /**
+     * Initializes views and sets up listeners.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -137,6 +144,9 @@ class SignUpFragment : Fragment() {
                 }
         }
     }
+    /**
+     * Creates a new user entry in Firestore.
+     */
     private fun createUserEntryInFirestore(name: String, email: String, firstInterest: String) {
         val userDetails = User(
             name,
@@ -149,6 +159,10 @@ class SignUpFragment : Fragment() {
         )
         val onComplete = { b: Boolean ->
             if (b) {
+                val profileUpdates = userProfileChangeRequest {
+                    displayName = name
+                }
+                Firebase.auth.currentUser?.updateProfile(profileUpdates)
                 Toast.makeText(requireContext(), "User created in Firestore!", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(requireContext(), "Failed to create user in Firestore!", Toast.LENGTH_LONG).show()

@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.csci5708.dalcommunity.fragment.CreatePetitionFragment"
+    tools:context="com.csci5708.dalcommunity.fragment.petitionsfragments.CreatePetitionFragment"
     android:background="@color/background">
-
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="10dp"
         android:background="@color/background">
+
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
@@ -29,8 +29,8 @@
                 android:layout_marginBottom="10dp"
                 android:gravity="center"
                 android:text="Create Your Own Petition"
-                android:textColor="@color/black"
-                android:textSize="30dp"
+                android:textColor="@color/text_color"
+                android:textSize="25dp"
                 android:textStyle="bold"
                 />
 
@@ -41,7 +41,7 @@
                 android:layout_below="@+id/petitionHeader"
                 android:layout_centerHorizontal="true"
                 android:id="@+id/sloganID"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color"
                 android:textSize="16dp"
                 android:textAlignment="center"
                 android:textStyle="italic"
@@ -84,7 +84,7 @@
                 android:drawablePadding="20dp"
                 android:inputType="textMultiLine"
                 android:minLines="3"
-                android:maxLines="10"
+                android:maxLines="7"
                 />
 
             <ImageView
