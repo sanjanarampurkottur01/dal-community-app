@@ -15,6 +15,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Contacts
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -47,7 +48,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), SearchFragment.OnUserSelectedListener {
     val SHARED_PREFERENCES = "sharedPref"
     val IS_SIGNED_IN = "isSignedIn"
     @SuppressLint("MissingInflatedId")
@@ -254,7 +255,9 @@ class HomeActivity : AppCompatActivity() {
             scannerIcon.setImageResource(R.drawable.scanner_outline)
 
             fragmentManager.beginTransaction()
-                .replace(R.id.home_fragment_container, SearchFragment())
+                .replace(R.id.home_fragment_container, SearchFragment.newInstance(this, Bundle().apply {
+                    putString("activity", "Home")
+                }))
                 .addToBackStack(null)
                 .commit()
         }
@@ -330,6 +333,10 @@ class HomeActivity : AppCompatActivity() {
     private fun dpToPx(dp: Int): Int {
         val density = resources.displayMetrics.density
         return (dp * density).toInt()
+    }
+
+    override fun onUserSelected(user: User) {
+     Log.e("","")
     }
 
 }
