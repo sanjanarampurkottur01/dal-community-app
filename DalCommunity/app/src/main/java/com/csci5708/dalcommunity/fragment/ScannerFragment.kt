@@ -22,6 +22,15 @@ import com.journeyapps.barcodescanner.ScanOptions
 class ScannerFragment : Fragment() {
 
     private lateinit var scannerTextView: TextView
+
+    /**
+     * Overrides the onCreateView method of Fragment to inflate the layout and initialize views.
+     *
+     * @param inflater           LayoutInflater object to inflate views
+     * @param container          ViewGroup object to contain the fragment UI
+     * @param savedInstanceState Bundle object containing the saved state
+     * @return View inflated fragment view
+     */
     @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,11 +41,20 @@ class ScannerFragment : Fragment() {
         return view
     }
 
+    /**
+     * Overrides the onViewCreated method of Fragment to check camera permission when the view is created.
+     *
+     * @param view               View object representing the fragment's UI
+     * @param savedInstanceState Bundle object containing the saved state
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkPermissionCamera()
     }
 
+    /**
+     * Checks whether the CAMERA permission is granted, denied, or needs to be requested.
+     */
     private fun checkPermissionCamera() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             showCamera()
@@ -47,6 +65,9 @@ class ScannerFragment : Fragment() {
         }
     }
 
+    /**
+     * Displays the camera for QR code scanning.
+     */
     private fun showCamera() {
         val options = ScanOptions()
         options.setDesiredBarcodeFormats(ScanOptions.QR_CODE)
@@ -58,6 +79,9 @@ class ScannerFragment : Fragment() {
         scanLauncher.launch(options)
     }
 
+    /**
+     * Launches the QR code scanning and handles the result.
+     */
     private val scanLauncher = registerForActivityResult(ScanContract()) { result ->
         if (result.contents == null) {
             Toast.makeText(requireContext(), "Scanning cancelled", Toast.LENGTH_SHORT).show()
@@ -66,6 +90,11 @@ class ScannerFragment : Fragment() {
         }
     }
 
+    /**
+     * Handles the result of the QR code scanning.
+     *
+     * @param contents String containing the scanned QR code contents
+     */
     private fun handleScanResult(contents: String) {
         if (contents.startsWith("http://") || contents.startsWith("https://")) {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(contents))
@@ -75,6 +104,9 @@ class ScannerFragment : Fragment() {
         }
     }
 
+    /**
+     * Displays an alert dialog requesting camera permission.
+     */
     private fun showAlertDialog() {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setTitle("Camera Permission Required")
@@ -92,10 +124,16 @@ class ScannerFragment : Fragment() {
         dialog.show()
     }
 
+    /**
+     * Requests camera permission.
+     */
     private fun makePermissionRequest(){
         requestPermissionLauncher.launch(Manifest.permission.CAMERA)
     }
 
+    /**
+     * Launches the QR code scanning and handles the result.
+     */
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             showCamera()

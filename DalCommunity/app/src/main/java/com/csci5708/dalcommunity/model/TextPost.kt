@@ -10,6 +10,7 @@ class TextPost : Post {
     var taggedUsers: List<String> = listOf()
     var latLocation: Double = 0.0
     var longLocation: Double = 0.0
+    var place: String = ""
 
     constructor()
 
@@ -22,7 +23,8 @@ class TextPost : Post {
         caption: String,
         taggedUsers: List<String>,
         latLocation: Double,
-        longLocation: Double
+        longLocation: Double,
+        place: String
     ) {
         this.postId = postId
         this.userId = userId
@@ -33,5 +35,6 @@ class TextPost : Post {
         this.taggedUsers = taggedUsers
         this.latLocation = latLocation
         this.longLocation = longLocation
+        this.place = place
     }
 }

@@ -85,7 +85,7 @@ android {
 
 dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
-    implementation("androidx.fragment:fragment-testing:1.6.2")
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     val fragment_version = "1.6.2"
     implementation("androidx.core:core-ktx:1.12.0")
@@ -98,6 +98,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("androidx.fragment:fragment:$fragment_version")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("com.airbnb.android:lottie:6.4.0")
+    implementation ("nl.joery.timerangepicker:timerangepicker:1.0.0")
+    // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-storage")
     implementation ("com.squareup.picasso:picasso:2.8")
@@ -107,11 +110,12 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.7.0")
     testImplementation("org.robolectric:robolectric:4.12")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
