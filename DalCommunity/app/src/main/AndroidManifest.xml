@@ -6,6 +6,8 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -37,6 +39,14 @@
         <activity
             android:name="com.csci5708.dalcommunity.activity.AnswerBroadcastQuestionActivity"
             android:exported="true" />
+        <!-- Theme is optional and only needed if default theme has no action bar. -->
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"
+            />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.AddStudentIDActivity"
+            android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.CreatePollPostActivity"
             android:exported="false" />
@@ -91,6 +101,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.CommunityChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
