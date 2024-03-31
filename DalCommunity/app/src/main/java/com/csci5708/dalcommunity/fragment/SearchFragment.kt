@@ -48,7 +48,7 @@ class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
-        data = arguments?.getBundle(ARG_DATA)?.getString("activity")!!
+        data = arguments?.getBundle(ARG_DATA)!!.getString("activity")!!
         searchUsers = view.findViewById(R.id.searchUsers)
         usersRecyclerView = view.findViewById(R.id.usersRecyclerView)
         searchAdapter = SearchAdapter(this)
