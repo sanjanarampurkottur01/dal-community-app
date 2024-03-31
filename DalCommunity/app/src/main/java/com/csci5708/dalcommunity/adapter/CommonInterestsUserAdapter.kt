@@ -58,8 +58,9 @@ class CommonInterestsUsersAdapter(private val context: Context, private val user
         chip.text = text
         chip.isClickable = false
         chip.isCheckable = false
-        chip.setChipBackgroundColorResource(R.color.black)
-        chip.setTextColor(context.resources.getColor(R.color.white))
+        chip.setChipBackgroundColorResource(R.color.background)
+        chip.setTextColor(context.resources.getColor(R.color.text_color))
+        chip.chipCornerRadius = 30F
         chip.setPadding(16, 8, 16, 8)
         return chip
     }

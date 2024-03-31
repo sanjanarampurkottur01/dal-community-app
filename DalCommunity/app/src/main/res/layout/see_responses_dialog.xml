@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/statement"
+        android:text="@string/your_broadcast_questions"
+        android:textColor="@color/text_color"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="16dp"
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/statement"
+        />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/emptyAnimation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:lottie_rawRes="@raw/empty_animation"
+        app:lottie_autoPlay="true"
+        app:lottie_repeatCount="1"
+        />
+
+</RelativeLayout>

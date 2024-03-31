@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "319188895413",
+    "project_id": "dal-community-01",
+    "storage_bucket": "dal-community-01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319188895413:android:88e550585503e02ddc20fc",
+        "android_client_info": {
+          "package_name": "com.example.dalcommunity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAm2rCGXdGoloUHkSNyThiN_3jz8Pi463o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
