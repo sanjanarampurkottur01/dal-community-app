@@ -32,9 +32,9 @@ import com.google.firebase.Firebase
  * Manages the display of petitions in a RecyclerView and handles fetching and displaying petition details.
  */
 class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
-    private lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: RecyclerView
     private lateinit var petitionAdapter: PetitionAdapter
-    private val petitions: MutableList<Petition> = mutableListOf()
+    val petitions: MutableList<Petition> = mutableListOf()
 
     /**
      * Inflates the layout for this fragment.
@@ -111,7 +111,7 @@ class TrackPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
      * Does not allow signing the petition.
      * @param petition The petition to display details for
      */
-    private fun showDialogWithPetitionDetails(petition: Petition) {
+    fun showDialogWithPetitionDetails(petition: Petition) {
         val dialogView = layoutInflater.inflate(R.layout.view_petition, null)
         val titleOfPetition = dialogView.findViewById<TextView>(R.id.viewPetitionTitle)
         val descriptionOfPetition = dialogView.findViewById<TextView>(R.id.viewDescriptionPetition)

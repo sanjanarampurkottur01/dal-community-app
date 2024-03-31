@@ -3,6 +3,7 @@ package com.csci5708.dalcommunity.fragment.petitionsfragments
 import android.app.Activity.RESULT_OK
 import android.app.Dialog
 import android.content.ContentValues
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
@@ -55,9 +56,9 @@ import java.io.ByteArrayOutputStream
  */
 class CreatePetitionFragment : Fragment() {
 
-    private var petitionTitleEditText: EditText? = null
-    private var petitionDescEditText: EditText? = null
-    private lateinit var petitionImage: ImageView
+    var petitionTitleEditText: EditText? = null
+    var petitionDescEditText: EditText? = null
+    lateinit var petitionImage: ImageView
     private val PREF_NAME = "user_details"
     private val KEY_USER_ID = "user_id"
     companion object {
@@ -69,6 +70,13 @@ class CreatePetitionFragment : Fragment() {
     var imgUrlForFireStore = ""
 
     private lateinit var dialog: Dialog
+    var provideContext: (() -> Context)? = null
+
+    // Method to get the context
+    fun getContextOfView(): Context {
+        return provideContext?.invoke() ?: throw IllegalStateException("Context not set")
+    }
+
 
 
 
@@ -115,7 +123,7 @@ class CreatePetitionFragment : Fragment() {
      *
      * @return true if any field has been edited, false otherwise.
      */
-    private fun isFieldsEdited(): Boolean {
+    fun isFieldsEdited(): Boolean {
         val petitionTitle = petitionTitleEditText?.text.toString().trim()
         val petitionDesc = petitionDescEditText?.text.toString().trim()
         return petitionTitle.isNotEmpty() || petitionDesc.isNotEmpty()
@@ -123,7 +131,7 @@ class CreatePetitionFragment : Fragment() {
     /**
      * Displays a preview dialog showing the petition title, description, and optionally the image.
      */
-    private fun showPreviewDialog() {
+    fun showPreviewDialog() {
         val petitionTitle = petitionTitleEditText?.text.toString()
         val petitionDesc = petitionDescEditText?.text.toString()
         val imageUri = saveImageToContentProvider()
@@ -486,7 +494,7 @@ class CreatePetitionFragment : Fragment() {
      * @param communityGroupRef The reference to the document of the community group.
      * @return A list of email addresses of users in the community group.
      */
-    private suspend fun getAllEmails(communityGroupRef: DocumentReference): MutableList<String> {
+    suspend fun getAllEmails(communityGroupRef: DocumentReference): MutableList<String> {
         val userEmails = mutableListOf<String>()
         try {
             val documentSnapshot = communityGroupRef.get().await()
