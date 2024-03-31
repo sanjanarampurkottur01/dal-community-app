@@ -70,10 +70,12 @@
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.SavedPostGroupsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName="com.csci5708.dalcommunity.activity.HomeActivity" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.SavedPostsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName="com.csci5708.dalcommunity.activity.SavedPostGroupsActivity" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.UserPostsActivity"
             android:exported="false" />
@@ -101,8 +103,6 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.CommunityChatActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
