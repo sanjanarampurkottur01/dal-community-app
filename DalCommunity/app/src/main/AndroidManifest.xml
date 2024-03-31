@@ -25,6 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
+        <!-- Theme is optional and only needed if default theme has no action bar. -->
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"
+            />
         <activity
             android:name="com.csci5708.dalcommunity.activity.AddStudentIDActivity"
             android:exported="false" />
