@@ -7,7 +7,7 @@
     tools:context="com.csci5708.dalcommunity.activity.ChatActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tbAnnouncement"
+        android:id="@+id/tbChat"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
         android:background="@drawable/toolbar_background"
@@ -18,20 +18,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvAnnouncement"
+        android:id="@+id/rvChat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/llAnnouncement"
+        app:layout_constraintBottom_toTopOf="@+id/llChat"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tbAnnouncement"
+        app:layout_constraintTop_toBottomOf="@+id/tbChat"
         app:layout_constraintVertical_bias="1.0" />
 
     <LinearLayout
-        android:id="@+id/llAnnouncement"
+        android:id="@+id/llChat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <EditText
-            android:id="@+id/etAnnouncementBox"
+            android:id="@+id/etMessageBox"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="80"
@@ -54,7 +54,7 @@
             android:inputType="text" />
 
         <ImageView
-            android:id="@+id/ivSendAnnouncement"
+            android:id="@+id/ivSendMessage"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="20"

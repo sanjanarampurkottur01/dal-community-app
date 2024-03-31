@@ -41,7 +41,7 @@ class ChatActivity : AppCompatActivity() {
         val receiverName = intent.getStringExtra("username")
         val receiverid = intent.getStringExtra("email")
 
-        chatToolbar = findViewById(R.id.tbAnnouncement)
+        chatToolbar = findViewById(R.id.tbChat)
         setSupportActionBar(chatToolbar)
         supportActionBar?.setTitle(receiverName)
         chatToolbar.setTitleTextColor(Color.WHITE)
@@ -55,13 +55,13 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = receiverid + senderid
         receiverRoom = senderid + receiverid
 
-        messageBoxEditText = findViewById(R.id.etAnnouncementBox)
-        sendMessageImageView = findViewById(R.id.ivSendAnnouncement)
+        messageBoxEditText = findViewById(R.id.etMessageBox)
+        sendMessageImageView = findViewById(R.id.ivSendMessage)
 
         messageList = ArrayList()
         adapter = MessageAdapter(this, messageList)
 
-        chatRecyclerView = findViewById(R.id.rvAnnouncement)
+        chatRecyclerView = findViewById(R.id.rvChat)
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = adapter
 
@@ -94,45 +94,45 @@ class ChatActivity : AppCompatActivity() {
 
         sendMessageImageView.setOnClickListener {
             val message = messageBoxEditText.text.toString()
-           if (message != ""){
-               val messageObject = Message(message, senderid!!, System.currentTimeMillis())
+            if (message != ""){
+                val messageObject = Message(message, senderid!!, System.currentTimeMillis())
 
-               // Add message to sender room
-               FireStoreSingleton.addData(
-                   "chat/$senderRoom/messages",
-                   messageObject,
-                   onComplete = { success ->
-                       if (success) {
-                           // Message added successfully
-                       } else {
-                           // Failed to add message
-                       }
-                   }
-               )
+                // Add message to sender room
+                FireStoreSingleton.addData(
+                    "chat/$senderRoom/messages",
+                    messageObject,
+                    onComplete = { success ->
+                        if (success) {
+                            // Message added successfully
+                        } else {
+                            // Failed to add message
+                        }
+                    }
+                )
 
-               // Add message to receiver room
-               FireStoreSingleton.addData(
-                   "chat/$receiverRoom/messages",
-                   messageObject,
-                   onComplete = { success ->
-                       if (success) {
-                           // Message added successfully
-                       } else {
-                           // Failed to add message
-                       }
-                   }
-               )
+                // Add message to receiver room
+                FireStoreSingleton.addData(
+                    "chat/$receiverRoom/messages",
+                    messageObject,
+                    onComplete = { success ->
+                        if (success) {
+                            // Message added successfully
+                        } else {
+                            // Failed to add message
+                        }
+                    }
+                )
 
-               // Clear the message box
-               messageBoxEditText.setText("")
-           } else {
-               // Notify user that no message has been entered
-               Toast.makeText(
-                   this@ChatActivity,
-                   "Please enter message",
-                   Toast.LENGTH_SHORT
-               ).show()
-           }
+                // Clear the message box
+                messageBoxEditText.setText("")
+            } else {
+                // Notify user that no message has been entered
+                Toast.makeText(
+                    this@ChatActivity,
+                    "Please enter message",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
     }
