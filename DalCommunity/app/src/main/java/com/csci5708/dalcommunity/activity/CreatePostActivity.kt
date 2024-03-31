@@ -13,14 +13,15 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.csci5708.dalcommunity.TaggingFragment
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
-import com.csci5708.dalcommunity.fragment.SearchFragment
 import com.csci5708.dalcommunity.model.ImagePost
 import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.TextPost
@@ -38,7 +39,7 @@ import java.util.Locale
 /**
  * Activity for creating a new post.
  */
-class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedListener {
+class CreatePostActivity : AppCompatActivity(), TaggingFragment.OnUserSelectedListener {
 
     private lateinit var btnToChooseFromGallery: ImageView
     private lateinit var btnToClickPicture: ImageView
@@ -48,6 +49,7 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
     private lateinit var postCaption: EditText
     private lateinit var postBtn: Button
     private lateinit var locationTextView: TextView
+    private lateinit var tagTextView: TextView
     private lateinit var imageView: ImageView
 
     private val REQUEST_GALLERY = 1
@@ -58,6 +60,7 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
     private var place: String = ""
+    private var taggedUsers = mutableListOf<String>()
 
     /**
      * Called when the activity is starting.
@@ -81,12 +84,13 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
         postBtn = findViewById(R.id.post_button)
 
         locationTextView = findViewById(R.id.location_added_value)
+        tagTextView = findViewById(R.id.tags_added_value)
 
         postCaption.requestFocus()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
 
-        val searchFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? SearchFragment
-        searchFragment?.setUserSelectedListener(this)
+        val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? TaggingFragment
+        fragment?.setUserSelectedListener(this)
 
         btnToChooseFromGallery.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -117,11 +121,12 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
         }
 
         btnToAddTag.setOnClickListener {
+            findViewById<FrameLayout>(R.id.fragment_container).visibility = View.VISIBLE
             val fragmentTransaction = supportFragmentManager.beginTransaction()
-            val searchFragment = SearchFragment.newInstance(this, Bundle().apply {
+            val taggingFragment = TaggingFragment.newInstance(this, Bundle().apply {
                 putString("activity", "CreatePost")
             })
-            fragmentTransaction.replace(R.id.fragment_container, searchFragment)
+            fragmentTransaction.replace(R.id.fragment_container, taggingFragment)
             fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
@@ -143,7 +148,7 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
                     Firebase.auth.currentUser?.displayName.toString(),
                     dateFormat.format(currentDate),
                     postCaption.text.toString(),
-                    listOf(""),
+                    taggedUsers,
                     latitude,
                     longitude,
                     place
@@ -158,7 +163,7 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
                     dateFormat.format(currentDate),
                     "gs://dal-community-01.appspot.com/post-images/$postId.jpg",
                     postCaption.text.toString(),
-                    listOf(""),
+                    taggedUsers,
                     latitude,
                     longitude,
                     place
@@ -278,7 +283,15 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
     override fun onUserSelected(user: User) {
         val userName = user.name
 
-        Toast.makeText(this, "User selected: $userName", Toast.LENGTH_SHORT).show()
+        taggedUsers.add(userName)
         supportFragmentManager.popBackStack()
+        findViewById<FrameLayout>(R.id.fragment_container).visibility = View.GONE
+
+        if (taggedUsers.size > 0) {
+            tagTextView.visibility = View.VISIBLE
+            tagTextView.text = taggedUsers.joinToString(", ")
+        } else {
+            tagTextView.visibility = View.INVISIBLE
+        }
     }
 }
