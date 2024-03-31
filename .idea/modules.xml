@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/csci-5708-g07-g.iml" filepath="$PROJECT_DIR$/.idea/csci-5708-g07-g.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DalCommunity.iml" filepath="$PROJECT_DIR$/.idea/modules/DalCommunity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.main.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DalCommunity.app.unitTest.iml" />
     </modules>
   </component>
 </project>

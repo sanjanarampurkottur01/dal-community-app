@@ -41,7 +41,7 @@ class ChatActivity : AppCompatActivity() {
         val receiverName = intent.getStringExtra("username")
         val receiverid = intent.getStringExtra("email")
 
-        chatToolbar = findViewById(R.id.tbChat)
+        chatToolbar = findViewById(R.id.tbAnnouncement)
         setSupportActionBar(chatToolbar)
         supportActionBar?.setTitle(receiverName)
         chatToolbar.setTitleTextColor(Color.WHITE)
@@ -55,13 +55,13 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = receiverid + senderid
         receiverRoom = senderid + receiverid
 
-        messageBoxEditText = findViewById(R.id.etMessageBox)
-        sendMessageImageView = findViewById(R.id.ivSendMessage)
+        messageBoxEditText = findViewById(R.id.etAnnouncementBox)
+        sendMessageImageView = findViewById(R.id.ivSendAnnouncement)
 
         messageList = ArrayList()
         adapter = MessageAdapter(this, messageList)
 
-        chatRecyclerView = findViewById(R.id.rvChat)
+        chatRecyclerView = findViewById(R.id.rvAnnouncement)
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = adapter
 

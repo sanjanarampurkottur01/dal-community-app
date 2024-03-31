@@ -2,11 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -29,7 +27,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
-
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.AnnouncementUserActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.AnnouncementPostActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.csci5708.dalcommunity.activity.AnnouncementAdminActivity"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -44,12 +50,13 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
+
         <activity
             android:name="com.csci5708.dalcommunity.activity.CreatePollPostActivity"
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.LoginSignUpActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,17 +96,18 @@
         <activity
             android:name="com.csci5708.dalcommunity.activity.PetitionActivity"
             android:exported="false" />
-        <activity android:name="com.journeyapps.barcodescanner.CaptureActivity"
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="fullSensor"
-            tools:replace="android:screenOrientation"/>
+            tools:replace="android:screenOrientation" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.CreatePostActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.CommunityChatActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"
             android:exported="false" />
