@@ -37,6 +37,7 @@ class AnswerBroadcastQuestionActivity : AppCompatActivity() {
         val loadingPB = findViewById<ProgressBar>(R.id.loadingPB)
         var answers = arrayListOf<String>()
         loadingPB.visibility = View.VISIBLE
+        questionStatementTextView.visibility = View.GONE
 
         val broadcastDocumentRef = Firebase.firestore.collection("broadcastQuestions").document(userId!!)
         broadcastDocumentRef.get().addOnSuccessListener { documentSnapshot ->
@@ -49,6 +50,7 @@ class AnswerBroadcastQuestionActivity : AppCompatActivity() {
                             questionStatement = map["message"].toString()
                             questionStatementTextView.text = questionStatement
                             loadingPB.visibility = View.GONE
+                            questionStatementTextView.visibility = View.VISIBLE
                             if (map.keys.contains("answers")) {
                                 answers = map["answers"] as ArrayList<String>
                             }

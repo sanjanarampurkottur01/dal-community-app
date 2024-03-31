@@ -14,9 +14,12 @@ import com.example.dalcommunity.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
+
 class MyFirebaseMessagingService : FirebaseMessagingService() {
+    var onMsgReceivedCalled = false
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
+        onMsgReceivedCalled = true
         remoteMessage.notification?.let {
             if (it.title!!.contentEquals("Help a peer out!")) {
                 sendBroadcastNotification(it.title, it.body!!)
@@ -27,6 +30,30 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             }
         }
     }
+
+    override fun handleIntent(intent: Intent?) {
+        if (!onMsgReceivedCalled) {
+            val bundle = intent?.extras
+            val dataReceived: MutableMap<String, String?> = HashMap()
+            if (bundle != null) {
+                for (key in bundle.keySet()) {
+                    val value = bundle[key]
+                    dataReceived[key] = value.toString()
+                }
+                val title = dataReceived["title"]
+                val msg = dataReceived["message"]
+                Log.d("DATARECEIVED", dataReceived.toString())
+                Log.d("DATARECEIVED_TITLE", title.toString())
+                Log.d("DATARECEIVED_MSG", msg.toString())
+                sendBroadcastNotification(title, msg.toString())
+                onMsgReceivedCalled = false
+            }
+        } else {
+            super.handleIntent(intent)
+        }
+    }
+
+
     private fun sendNotification(title: String?, messageBody: String?) {
         val intent = Intent(this, HomeActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)

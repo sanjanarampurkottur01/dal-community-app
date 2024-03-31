@@ -81,12 +81,12 @@ class BroadcastQuestionFragment(fragmentManager: FragmentManager) : Fragment() {
 
                 val sdf = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
                 val currentDate = sdf.format(Date())
-//                if (lastQuestionBroadcastOn == currentDate) {
-//                    Toast.makeText(context, "You can broadcast again tomorrow!", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    saveLastQuestionBroadcastOn(requireActivity(), currentDate)
+                if (lastQuestionBroadcastOn == currentDate) {
+                    Toast.makeText(context, "You can broadcast again tomorrow!", Toast.LENGTH_SHORT).show()
+                } else {
+                    saveLastQuestionBroadcastOn(requireActivity(), currentDate)
                     sendMessage(questionET.text.toString())
-//                }
+                }
             }
         }
         return view

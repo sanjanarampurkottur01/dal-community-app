@@ -39,6 +39,7 @@
         android:layout_below="@id/pickAName"
         android:textColor="@color/text_color"
         android:hint="Class name.."
+        android:textColorHint="@color/text_hint"
         />
 
     <TextView
@@ -147,6 +148,11 @@
         app:trp_thumbIconEnd="@drawable/end"
         android:layout_marginTop="8dp"
         app:trp_stepTimeMinutes="30"
+        app:trp_sliderColor="#C0C0FE"
+        app:trp_sliderRangeColor="@color/text_color"
+        app:trp_thumbColor="@color/text_color"
+        app:trp_clockTickColor="@color/text_color"
+        app:trp_clockLabelColor="@color/text_color"
         app:trp_hourFormat="FORMAT_12"
         app:trp_startTime="10:00"
         app:trp_endTime="11:30"
