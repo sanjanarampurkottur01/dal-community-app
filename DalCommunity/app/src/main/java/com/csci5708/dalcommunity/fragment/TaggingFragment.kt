@@ -1,4 +1,4 @@
-package com.csci5708.dalcommunity
+package com.csci5708.dalcommunity.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

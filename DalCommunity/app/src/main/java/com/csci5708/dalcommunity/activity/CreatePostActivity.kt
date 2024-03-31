@@ -20,7 +20,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.csci5708.dalcommunity.TaggingFragment
+import com.csci5708.dalcommunity.fragment.TaggingFragment
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.ImagePost
 import com.csci5708.dalcommunity.model.Post
