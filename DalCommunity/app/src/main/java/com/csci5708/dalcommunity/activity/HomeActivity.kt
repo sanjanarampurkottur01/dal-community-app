@@ -82,10 +82,12 @@ class HomeActivity : AppCompatActivity() {
         val scannerIcon = findViewById<ImageView>(R.id.scannerIcon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
-        BottomSheetBehavior.from(bottomSheet).apply {
-            peekHeight = 300
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        val desiredHeight = calculateDesiredHeight()
+        bottomSheet.layoutParams.height = desiredHeight
+        bottomSheet.requestLayout()
+        bottomSheetBehavior.peekHeight = desiredHeight / 2 // Set peek height as half of the dynamic height
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         homeIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home)
@@ -99,7 +101,10 @@ class HomeActivity : AppCompatActivity() {
             lostFoundIcon.setImageResource(R.drawable.baseline_content_paste_search_24)
             userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
             scannerIcon.setImageResource(R.drawable.scanner_outline)
-
+            fragmentManager.beginTransaction()
+                .replace(R.id.home_fragment_container, TimelineFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
 
@@ -290,7 +295,6 @@ class HomeActivity : AppCompatActivity() {
                 context.startActivity(intent)
             }
             setNegativeButton("Cancel") { dialog, _ ->
-                // User clicked Cancel button, dismiss dialog
                 dialog.dismiss()
             }
         }
@@ -300,7 +304,6 @@ class HomeActivity : AppCompatActivity() {
 
     private fun askToEnableNotificationsIfNeeded(context: Context) {
         val notificationManager = NotificationManagerCompat.from(context)
-
         if (!areNotificationsEnabled(notificationManager)) {
             checkNotificationEnabled(context)
         }
@@ -314,4 +317,19 @@ class HomeActivity : AppCompatActivity() {
         }
         else -> true
     }
+
+    private fun calculateDesiredHeight(): Int {
+        val iconHeight = dpToPx(24)
+        val spacingBetweenIcons = dpToPx(8)
+        val numberOfIconsInFirstRow = 5
+        val totalIconsHeight = numberOfIconsInFirstRow * iconHeight
+        val totalSpacingHeight = (11) * spacingBetweenIcons
+        return totalIconsHeight + totalSpacingHeight
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val density = resources.displayMetrics.density
+        return (dp * density).toInt()
+    }
+
 }
