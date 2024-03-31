@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -61,6 +62,36 @@
                 android:layout_alignStart="@id/post_content_edit_text"
                 android:layout_alignEnd="@id/post_content_edit_text"
                 android:layout_below="@id/post_content_edit_text"/>
+
+            <TextView
+                android:id="@+id/location_added_value"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:text="Location"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:visibility="invisible"
+                android:drawablePadding="8dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_message_box"
+                app:drawableStartCompat="@drawable/location_icon"
+                android:layout_below="@id/image_preview"
+                android:layout_alignStart="@id/image_preview" />
+
+            <TextView
+                android:id="@+id/tags_added_value"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:text="Tags"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:drawablePadding="8dp"
+                android:layout_marginTop="16dp"
+                android:visibility="invisible"
+                android:background="@drawable/bg_message_box"
+                app:drawableStartCompat="@drawable/tag_icon"
+                android:layout_below="@id/image_preview"
+                android:layout_toEndOf="@id/location_added_value" />
         </RelativeLayout>
     </ScrollView>
 
@@ -112,6 +143,8 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone" />
 
 </RelativeLayout>

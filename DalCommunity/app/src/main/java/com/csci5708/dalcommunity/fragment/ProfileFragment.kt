@@ -122,6 +122,7 @@ class ProfileFragment : Fragment() {
                     }
                     val intent = Intent(activity, LoginSignUpActivity::class.java)
                     activity?.startActivity(intent)
+                    activity?.finish()
                 }
             }
         }
