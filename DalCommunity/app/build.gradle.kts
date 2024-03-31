@@ -85,7 +85,7 @@ android {
 
 dependencies {
     implementation("androidx.test.ext:junit-ktx:1.1.5")
-    implementation("androidx.fragment:fragment-testing:1.6.2")
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
     val fragment_version = "1.6.2"
     implementation("androidx.core:core-ktx:1.12.0")
@@ -110,8 +110,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.7.0")
     testImplementation("org.robolectric:robolectric:4.12")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
