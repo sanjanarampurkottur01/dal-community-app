@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.IOException
+import org.json.JSONObject
 
 /**
  * Activity to request and retrieve user's location.
@@ -118,13 +119,12 @@ class GetLocationActivity : AppCompatActivity() {
                             client.newCall(request).execute().use { response ->
                                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-                                Log.e("latitude",latitude.toString())
-                                Log.e("longitude",longitude.toString())
-                                Log.e("place", response.body!!.string())
+                                val place = response.body!!.string().split("display_name\":\"")[1].split(",")[0].trim()
                                 launch(Dispatchers.Main) {
                                     val resultIntent = Intent()
                                     resultIntent.putExtra("latitude", latitude)
                                     resultIntent.putExtra("longitude", longitude)
+                                    resultIntent.putExtra("place", place)
                                     setResult(Activity.RESULT_OK, resultIntent)
                                     finish()
                                 }

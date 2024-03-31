@@ -48,7 +48,7 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
     private lateinit var postCaption: EditText
     private lateinit var postBtn: Button
     private lateinit var locationTextView: TextView
-    lateinit var imageView: ImageView
+    private lateinit var imageView: ImageView
 
     private val REQUEST_GALLERY = 1
     private val REQUEST_IMAGE_CAPTURE = 2
@@ -57,6 +57,7 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
     var postType: Int = 0
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
+    private var place: String = ""
 
     /**
      * Called when the activity is starting.
@@ -78,6 +79,8 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
         postCaption = findViewById(R.id.post_content_edit_text)
         imageView = findViewById(R.id.image_preview)
         postBtn = findViewById(R.id.post_button)
+
+        locationTextView = findViewById(R.id.location_added_value)
 
         postCaption.requestFocus()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
@@ -142,7 +145,8 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
                     postCaption.text.toString(),
                     listOf(""),
                     latitude,
-                    longitude
+                    longitude,
+                    place
                 )
                 postToFirebase(postToPush, postId)
                 finish()
@@ -156,7 +160,8 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
                     postCaption.text.toString(),
                     listOf(""),
                     latitude,
-                    longitude
+                    longitude,
+                    place
                 )
                 postToFirebase(postToPush, postId)
                 uploadImageToFirebase(postId)
@@ -217,6 +222,10 @@ class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedLis
                     // Handle result from location activity
                     latitude = data!!.getDoubleExtra("latitude", 0.0)
                     longitude = data.getDoubleExtra("longitude", 0.0)
+                    place = data.getStringExtra("place")!!
+
+                    locationTextView.visibility = View.VISIBLE
+                    locationTextView.text = place
                 }
 
                 else -> {
