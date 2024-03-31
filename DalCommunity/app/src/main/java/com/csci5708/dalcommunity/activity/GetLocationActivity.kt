@@ -7,14 +7,22 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.csci5708.dalcommunity.constants.AppConstants
 import com.csci5708.dalcommunity.constants.AppConstants.Companion.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.dalcommunity.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okio.IOException
 
 /**
  * Activity to request and retrieve user's location.
@@ -72,7 +80,8 @@ class GetLocationActivity : AppCompatActivity() {
                     // Permission granted, start accessing location
                     getLocation()
                 } else {
-                    Toast.makeText(this,
+                    Toast.makeText(
+                        this,
                         "Location permission denied. Please grant permission to access your location.",
                         Toast.LENGTH_SHORT
                     ).show()
@@ -97,12 +106,31 @@ class GetLocationActivity : AppCompatActivity() {
                     location?.let {
                         val latitude = it.latitude
                         val longitude = it.longitude
+                        val url =
+                            "https://geocode.maps.co/reverse?lat=$latitude&lon=$longitude&api_key=${AppConstants.LOCATION_API_KEY}"
+                        val client = OkHttpClient()
 
-                        val resultIntent = Intent()
-                        resultIntent.putExtra("latitude", latitude)
-                        resultIntent.putExtra("longitude", longitude)
-                        setResult(Activity.RESULT_OK, resultIntent)
-                        finish()
+                        GlobalScope.launch(Dispatchers.IO) {
+                            val request = Request.Builder()
+                                .url(url)
+                                .build()
+
+                            client.newCall(request).execute().use { response ->
+                                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                                Log.e("latitude",latitude.toString())
+                                Log.e("longitude",longitude.toString())
+                                Log.e("place", response.body!!.string())
+                                launch(Dispatchers.Main) {
+                                    val resultIntent = Intent()
+                                    resultIntent.putExtra("latitude", latitude)
+                                    resultIntent.putExtra("longitude", longitude)
+                                    setResult(Activity.RESULT_OK, resultIntent)
+                                    finish()
+                                }
+                            }
+
+                        }
                     }
                 }
         }
