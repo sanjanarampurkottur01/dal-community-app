@@ -41,7 +41,8 @@
                 android:layout_below="@id/preview_petition_title"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:text="Petition Description"/>
+                android:text="Petition Description"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:id="@+id/preview_petition_image"

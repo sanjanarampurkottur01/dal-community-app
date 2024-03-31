@@ -7,6 +7,8 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.FrameLayout
@@ -25,11 +27,12 @@ import com.csci5708.dalcommunity.fragment.ScannerFragment
 import com.csci5708.dalcommunity.fragment.SearchFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.csci5708.dalcommunity.fragment.TimeTableFragment
+import com.csci5708.dalcommunity.model.User
 import com.csci5708.dalcommunity.util.BroadcastQuestionsSharedValues
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), SearchFragment.OnUserSelectedListener {
     val SHARED_PREFERENCES = "sharedPref"
     val IS_SIGNED_IN = "isSignedIn"
     @SuppressLint("MissingInflatedId")
@@ -64,10 +67,12 @@ class HomeActivity : AppCompatActivity() {
         val broadcastIcon = findViewById<ImageView>(R.id.broadcast_question_icon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
-        BottomSheetBehavior.from(bottomSheet).apply {
-            peekHeight = 300
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        val desiredHeight = calculateDesiredHeight()
+        bottomSheet.layoutParams.height = desiredHeight
+        bottomSheet.requestLayout()
+        bottomSheetBehavior.peekHeight = desiredHeight / 2 // Set peek height as half of the dynamic height
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         homeIcon.setOnClickListener{
             homeIcon.setImageResource(R.drawable.home)
@@ -82,6 +87,10 @@ class HomeActivity : AppCompatActivity() {
             userSearchIcon.setImageResource(R.drawable.outline_person_search_24)
             scannerIcon.setImageResource(R.drawable.scanner_outline)
             broadcastIcon.setImageResource(R.drawable.broadcast_outline)
+            fragmentManager.beginTransaction()
+                .replace(R.id.home_fragment_container, TimelineFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
 
@@ -178,7 +187,9 @@ class HomeActivity : AppCompatActivity() {
             broadcastIcon.setImageResource(R.drawable.broadcast_outline)
 
             fragmentManager.beginTransaction()
-                .replace(R.id.home_fragment_container, SearchFragment())
+                .replace(R.id.home_fragment_container, SearchFragment.newInstance(this, Bundle().apply {
+                    putString("activity", "Home")
+                }))
                 .addToBackStack(null)
                 .commit()
         }
@@ -234,7 +245,6 @@ class HomeActivity : AppCompatActivity() {
                 context.startActivity(intent)
             }
             setNegativeButton("Cancel") { dialog, _ ->
-                // User clicked Cancel button, dismiss dialog
                 dialog.dismiss()
             }
         }
@@ -256,5 +266,23 @@ class HomeActivity : AppCompatActivity() {
             } == null
         }
         else -> true
+    }
+
+    private fun calculateDesiredHeight(): Int {
+        val iconHeight = dpToPx(24)
+        val spacingBetweenIcons = dpToPx(8)
+        val numberOfIconsInFirstRow = 5
+        val totalIconsHeight = numberOfIconsInFirstRow * iconHeight
+        val totalSpacingHeight = (11) * spacingBetweenIcons
+        return totalIconsHeight + totalSpacingHeight
+    }
+
+    private fun dpToPx(dp: Int): Int {
+        val density = resources.displayMetrics.density
+        return (dp * density).toInt()
+    }
+
+    override fun onUserSelected(user: User) {
+        Log.d("","")
     }
 }

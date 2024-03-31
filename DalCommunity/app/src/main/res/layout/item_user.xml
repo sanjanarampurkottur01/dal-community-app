@@ -5,12 +5,12 @@
     android:orientation="vertical"
     android:layout_margin="10dp"
     app:cardCornerRadius="30dp"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/white">
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:background="@color/white">
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profileImageViewInPoke"
         android:layout_width="60dp"

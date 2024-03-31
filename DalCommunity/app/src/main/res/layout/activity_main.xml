@@ -25,11 +25,10 @@
         <FrameLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:background="@drawable/navigation_fragment_background"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-            android:elevation="8dp"
-            >
+            android:elevation="8dp">
 
 
             <RelativeLayout
