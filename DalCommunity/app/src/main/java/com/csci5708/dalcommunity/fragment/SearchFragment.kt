@@ -1,6 +1,7 @@
 package com.csci5708.dalcommunity.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +20,35 @@ class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
     private lateinit var searchUsers: SearchView
     private lateinit var usersRecyclerView: RecyclerView
     private lateinit var searchAdapter: SearchAdapter
+
+    private var userSelectedListener: OnUserSelectedListener? = null
+
+    var data: String = ""
+
+    companion object {
+        private const val ARG_DATA = "DATA"
+
+        fun newInstance(listener: OnUserSelectedListener, data: Bundle?): SearchFragment {
+            val fragment = SearchFragment()
+            fragment.arguments = Bundle().apply {
+                putBundle(ARG_DATA, data)
+            }
+            fragment.setUserSelectedListener(listener)
+            return fragment
+        }
+    }
+
+    fun setUserSelectedListener(listener: OnUserSelectedListener) {
+        userSelectedListener = listener
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_search, container, false)
+        data = arguments?.getBundle(ARG_DATA)?.getString("activity")!!
         searchUsers = view.findViewById(R.id.searchUsers)
         usersRecyclerView = view.findViewById(R.id.usersRecyclerView)
         searchAdapter = SearchAdapter(this)
@@ -82,17 +106,25 @@ class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
         )
     }
 
+    interface OnUserSelectedListener {
+        fun onUserSelected(user: User)
+    }
+
     override fun onClickItem(user: User) {
-        val userDetailsFragment = UserDetailsFragment()
-        val bundle = Bundle()
-        bundle.putSerializable("EXTRA_USER", user)
-        userDetailsFragment.arguments = bundle
+        if (data == "") {
+            val userDetailsFragment = UserDetailsFragment()
+            val bundle = Bundle()
+            bundle.putSerializable("EXTRA_USER", user)
+            userDetailsFragment.arguments = bundle
 
-        activity?.supportFragmentManager?.beginTransaction()?.apply {
-            replace(R.id.home_fragment_container, userDetailsFragment)
-            addToBackStack(null) // Add this line if you want to add the transaction to the back stack
-            commit()
+            activity?.supportFragmentManager?.beginTransaction()?.apply {
+                replace(R.id.home_fragment_container, userDetailsFragment)
+                addToBackStack(null) // Add this line if you want to add the transaction to the back stack
+                commit()
 
+            }
+        } else {
+            userSelectedListener?.onUserSelected(user)
         }
     }
 }

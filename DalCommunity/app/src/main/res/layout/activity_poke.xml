@@ -50,7 +50,9 @@
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_below="@+id/search_view"
-        android:background="@color/background"/>
+        android:background="@color/background"
+        android:layout_marginBottom="20dp"
+        android:paddingBottom="60dp"/>
 
 
 </RelativeLayout>
