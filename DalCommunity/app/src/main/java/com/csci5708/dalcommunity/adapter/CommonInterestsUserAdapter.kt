@@ -21,9 +21,16 @@ class CommonInterestsUsersAdapter(private val users: List<User>, private val cur
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val user = users[position]
+        var photo: String
+        if (user.photoUri.isNullOrBlank()){
+            photo = "https://firebasestorage.googleapis.com/v0/b/dal-community-01.appspot.com/o/profile_image%2Fgoku%40example.com.jpg?alt=media&token=0488377d-08a8-48a4-9acb-1536bf342a64"
+        }
+        else {
+            photo = user.photoUri
+        }
         holder.textViewName.text = user.name
         holder.textViewEmail.text = user.email
-        Glide.with(holder.itemView.context).load(user.photoUri).into(holder.imageViewProfile)
+        Glide.with(holder.itemView.context).load(photo).into(holder.imageViewProfile)
 
         holder.imageViewMessage.setOnClickListener {
         }

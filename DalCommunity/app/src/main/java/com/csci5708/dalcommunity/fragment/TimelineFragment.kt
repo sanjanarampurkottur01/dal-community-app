@@ -7,10 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.csci5708.dalcommunity.activity.AddStudentIDActivity
 import com.csci5708.dalcommunity.activity.CreatePostActivity
 import com.csci5708.dalcommunity.adapter.HomeAdapter
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
@@ -82,6 +84,10 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
 
         if (userEmail != null) {
             addPostButton.visibility = View.GONE
+        }
+        val addStudentIdIcon = view.findViewById<ImageView>(R.id.add_student_id_icon)
+        addStudentIdIcon.setOnClickListener {
+            startActivity(Intent(activity, AddStudentIDActivity::class.java))
         }
 
         recyclerView = view.findViewById(R.id.recyclerView)

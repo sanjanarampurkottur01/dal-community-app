@@ -5,6 +5,8 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,11 +26,14 @@
         android:theme="@style/Theme.DalCommunity"
         tools:targetApi="31">
         <activity
+            android:name="com.csci5708.dalcommunity.activity.AddStudentIDActivity"
+            android:exported="false" />
+        <activity
             android:name="com.csci5708.dalcommunity.activity.CreatePollPostActivity"
             android:exported="false" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.LoginSignUpActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -71,8 +76,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.CommunityChatActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.csci5708.dalcommunity.activity.HomeActivity"
             android:exported="false" />
