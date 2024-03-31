@@ -5,14 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
+import com.google.android.material.imageview.ShapeableImageView
+import com.squareup.picasso.Picasso
 
 /**
  * Adapter for displaying a list of users in a RecyclerView.
  * @param users The list of user data, represented as pairs of (username, userId).
  * @param onItemClick Listener for item click events.
  */
-class UsersAdapter(var users: List<Pair<String, String>>, private val onItemClick: OnItemClickListener) :
+class UsersAdapter(var users: List<User>, private val onItemClick: OnItemClickListener) :
     RecyclerView.Adapter<UsersAdapter.UserViewHolder>() {
 
     /**
@@ -37,7 +40,7 @@ class UsersAdapter(var users: List<Pair<String, String>>, private val onItemClic
         val user = users[position]
         holder.bind(user)
         holder.itemView.setOnClickListener {
-            onItemClick.onItemClick(user.first, user.second)
+            onItemClick.onItemClick(user.name, user.email)
         }
     }
 
@@ -53,12 +56,16 @@ class UsersAdapter(var users: List<Pair<String, String>>, private val onItemClic
      */
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val userNameTextView: TextView = itemView.findViewById(R.id.text_view_user_name)
+        private val profileImageView: ShapeableImageView = itemView.findViewById(R.id.profileImageViewInPoke)
 
         /**
          * Binds user data to the views within the ViewHolder.
          */
-        fun bind(user: Pair<String, String>) {
-            userNameTextView.text = user.first
+        fun bind(user:User) {
+            userNameTextView.text = user.name
+            if (user.photoUri.isNotBlank()) {
+                Picasso.get().load(user.photoUri).into(profileImageView)
+            }
         }
     }
 }
