@@ -77,15 +77,12 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
         })
         saveButton.setOnClickListener {
             if (isAdded && activity != null) {
-                // Remove the fragment from its parent activity
                 val result = Bundle().apply {
                     putInt("resultData", userMap.places.size)
                     putSerializable("EXTRA_USER_MAP",userMap)
                 }
-                //activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
                 parentFragmentManager.setFragmentResult("addMarker", result)
                 parentFragmentManager.popBackStack()
-                //activity?.supportFragmentManager?.popBackStack()
             }
         }
 
@@ -100,7 +97,12 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
         }
         return view;
     }
-
+    
+    /**
+     * Sets up the Google Map when it's ready to be used.
+     *
+     * @param googleMap The GoogleMap object representing the map.
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -144,10 +146,8 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
             )
             mMap.setOnCameraIdleListener(object : GoogleMap.OnCameraIdleListener {
                 override fun onCameraIdle() {
-                    // This part of the code will be executed after the bounds adjustment animation completes
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(15f))
 
-                    // Remove the listener to prevent this code from running on subsequent idle events
                     mMap.setOnCameraIdleListener(null)
                 }
             })
@@ -158,7 +158,12 @@ class AddMarkerFragment: Fragment(), OnMapReadyCallback {
 
         }
     }
-
+    
+    /**
+     * Shows an alert dialog for creating a marker on the map at the specified latitude and longitude.
+     *
+     * @param latLng The latitude and longitude coordinates where the marker will be placed.
+     */
     private fun showAlertDialog(latLng: LatLng) {
         val placeFormView = LayoutInflater.from(context).inflate(R.layout.dialog_create_place, null)
         val dialog =

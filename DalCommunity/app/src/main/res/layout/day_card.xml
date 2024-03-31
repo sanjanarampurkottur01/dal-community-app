@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:background="@drawable/day_card_background"
+    android:layout_margin="3dp"
+    android:elevation="3dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/dayTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/mon"
+        android:textColor="@color/text_color"
+        android:textSize="14sp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/dayTV"
+        android:background="@color/text_color"
+        />
+
+    <TextView
+        android:id="@+id/dateNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_1"
+        android:textColor="@color/text_color"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_below="@id/separator"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/may"
+        android:textColor="@color/text_color"
+        android:layout_below="@id/dateNumber"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024"
+        android:textColor="@color/text_color"
+        android:layout_below="@id/month"
+        android:layout_centerHorizontal="true"
+        />
+
+    </RelativeLayout>
+
+</RelativeLayout>

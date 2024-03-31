@@ -2,6 +2,7 @@ package com.csci5708.dalcommunity.fragment.petitionsfragments
 
 import android.app.Dialog
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -35,16 +36,23 @@ import com.google.firebase.firestore.FirebaseFirestore
  * A Fragment to display a list of petitions and their details.
  * Handles fetching petitions from Firestore, displaying petition details in a dialog, and signing petitions.
  */
-class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
+open class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
+
+    var provideContext: (() -> Context)? = null
+
+    // Method to get the context
+    fun getContextOfView(): Context {
+        return provideContext?.invoke() ?: throw IllegalStateException("Context not set")
+    }
 
     // RecyclerView to display petitions
-    private lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: RecyclerView
 
     // Adapter for the RecyclerView
-    private lateinit var petitionAdapter: PetitionAdapter
+    lateinit var petitionAdapter: PetitionAdapter
 
     // List of petitions to display
-    private val petitions: MutableList<Petition> = mutableListOf()
+    val petitions: MutableList<Petition> = mutableListOf()
 
     /**
      * Inflates the layout for this fragment.
@@ -119,7 +127,7 @@ class ViewPetitionFragment : Fragment(), PetitionAdapter.OnItemClickListener {
      * Allows users to sign the petition.
      * @param petition The petition to display details for
      */
-    private fun showDialogWithPetitionDetails(petition: Petition) {
+    fun showDialogWithPetitionDetails(petition: Petition) {
         val dialogView = layoutInflater.inflate(R.layout.view_petition, null)
         val titleOfPetition = dialogView.findViewById<TextView>(R.id.viewPetitionTitle)
         val descriptionOfPetition = dialogView.findViewById<TextView>(R.id.viewDescriptionPetition)
