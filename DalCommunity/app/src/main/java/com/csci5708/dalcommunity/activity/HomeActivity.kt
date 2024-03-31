@@ -25,8 +25,8 @@ import com.csci5708.dalcommunity.fragment.CommunityFragments.CommunityFragment
 import com.csci5708.dalcommunity.fragment.LostFoundFragment
 import com.csci5708.dalcommunity.fragment.ScannerFragment
 import com.csci5708.dalcommunity.fragment.SearchFragment
-import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.csci5708.dalcommunity.fragment.TimeTableFragment
+import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.csci5708.dalcommunity.model.User
 import com.csci5708.dalcommunity.util.BroadcastQuestionsSharedValues
 import com.example.dalcommunity.R
@@ -64,6 +64,7 @@ class HomeActivity : AppCompatActivity(), SearchFragment.OnUserSelectedListener 
         val lostFoundIcon = findViewById<ImageView>(R.id.lostFoundIcon)
         val userSearchIcon = findViewById<ImageView>(R.id.userSearchIcon)
         val scannerIcon = findViewById<ImageView>(R.id.scannerIcon)
+        val announcementIcon = findViewById<ImageView>(R.id.announcementIcon)
         val broadcastIcon = findViewById<ImageView>(R.id.broadcast_question_icon)
 
         val bottomSheet = findViewById<FrameLayout>(R.id.bottom_sheet)
@@ -213,6 +214,11 @@ class HomeActivity : AppCompatActivity(), SearchFragment.OnUserSelectedListener 
                 .replace(R.id.home_fragment_container, scannerFragment)
                 .addToBackStack(null)
                 .commit()
+        }
+
+        announcementIcon.setOnClickListener {
+            val intent = Intent(this@HomeActivity, AnnouncementActivity::class.java)
+            startActivity(intent)
         }
 
         broadcastIcon.setOnClickListener{
