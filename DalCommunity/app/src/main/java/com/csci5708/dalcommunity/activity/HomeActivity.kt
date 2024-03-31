@@ -229,6 +229,7 @@ class HomeActivity : AppCompatActivity(), SearchFragment.OnUserSelectedListener 
             scannerIcon.setImageResource(R.drawable.scanner_outline)
             fragmentManager.beginTransaction()
                 .replace(R.id.home_fragment_container, BroadcastQuestionFragment(fragmentManager))
+                .addToBackStack(null)
                 .commit()
         }
 
