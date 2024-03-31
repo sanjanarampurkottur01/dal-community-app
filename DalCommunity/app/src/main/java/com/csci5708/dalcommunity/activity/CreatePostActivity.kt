@@ -20,9 +20,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
+import com.csci5708.dalcommunity.fragment.SearchFragment
 import com.csci5708.dalcommunity.model.ImagePost
 import com.csci5708.dalcommunity.model.Post
 import com.csci5708.dalcommunity.model.TextPost
+import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -36,12 +38,13 @@ import java.util.Locale
 /**
  * Activity for creating a new post.
  */
-class CreatePostActivity : AppCompatActivity() {
+class CreatePostActivity : AppCompatActivity(), SearchFragment.OnUserSelectedListener {
 
     private lateinit var btnToChooseFromGallery: ImageView
     private lateinit var btnToClickPicture: ImageView
     private lateinit var btnToGetLocation: ImageView
     private lateinit var btnToCreatePollPost: ImageView
+    private lateinit var btnToAddTag: ImageView
     private lateinit var postCaption: EditText
     private lateinit var postBtn: Button
     private lateinit var locationTextView: TextView
@@ -71,12 +74,16 @@ class CreatePostActivity : AppCompatActivity() {
         btnToClickPicture = findViewById(R.id.image_camera_icon)
         btnToGetLocation = findViewById(R.id.image_location_icon)
         btnToCreatePollPost = findViewById(R.id.image_poll_icon)
+        btnToAddTag = findViewById(R.id.image_tag_icon)
         postCaption = findViewById(R.id.post_content_edit_text)
         imageView = findViewById(R.id.image_preview)
         postBtn = findViewById(R.id.post_button)
 
         postCaption.requestFocus()
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+
+        val searchFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as? SearchFragment
+        searchFragment?.setUserSelectedListener(this)
 
         btnToChooseFromGallery.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
@@ -104,6 +111,16 @@ class CreatePostActivity : AppCompatActivity() {
                 // Permission has already been granted, start accessing location
                 startGetLocationActivity()
             }
+        }
+
+        btnToAddTag.setOnClickListener {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            val searchFragment = SearchFragment.newInstance(this, Bundle().apply {
+                putString("activity", "CreatePost")
+            })
+            fragmentTransaction.replace(R.id.fragment_container, searchFragment)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.commit()
         }
 
         btnToCreatePollPost.setOnClickListener {
@@ -247,5 +264,12 @@ class CreatePostActivity : AppCompatActivity() {
         }
 
         finish()
+    }
+
+    override fun onUserSelected(user: User) {
+        val userName = user.name
+
+        Toast.makeText(this, "User selected: $userName", Toast.LENGTH_SHORT).show()
+        supportFragmentManager.popBackStack()
     }
 }
