@@ -7,5 +7,6 @@ class AppConstants {
         // Key for accessing the boolean value of whether user is signed in the shared preferences
         const val SP_IS_SIGNED_IN_KEY = "isSignedIn"
         const val LOCATION_PERMISSION_REQUEST_CODE = 1001
+        const val LOCATION_API_KEY = "66064da008cbb779334124jdc1f3c05"
     }
 }

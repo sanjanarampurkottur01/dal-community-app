@@ -197,7 +197,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postCaption.text = post.caption
             postTime.text = post.time
             userName.text = post.userName
-            locationTag.text = "${post.latLocation}, ${post.longLocation}"
+            locationTag.text = post.place
 
             val storage = FirebaseStorage.getInstance()
             val storageRef = storage.reference
@@ -369,7 +369,7 @@ class HomeAdapter(private val context: Context, private val posts: List<Post>) :
             postCaption.text = post.caption
             postTime.text = post.time
             userName.text = post.userName
-            locationTag.text = "${post.latLocation}, ${post.longLocation}"
+            locationTag.text = post.place
         }
     }
 }
