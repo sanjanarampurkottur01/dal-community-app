@@ -31,7 +31,6 @@ class LostFoundUserListingFragment : Fragment(), LostAndFoundAdapter.OnClickList
     private lateinit var addListingButton: AppCompatButton
     private var email = "";
     private lateinit var firebaseFirestore: FirebaseFirestore
-//    private lateinit var textView:TextView
     private lateinit var userListingRecyclerView: RecyclerView
     private lateinit var lostAndFoundAdapter: LostAndFoundAdapter
     override fun onCreateView(
@@ -41,7 +40,6 @@ class LostFoundUserListingFragment : Fragment(), LostAndFoundAdapter.OnClickList
     ): View? {
         val view = inflater.inflate(R.layout.fragment_lost_found_user_listing, container, false)
         addListingButton = view.findViewById(R.id.addListingButton)
-//        textView = view.findViewById(R.id.logText)
         firebaseFirestore = FirebaseFirestore.getInstance()
         userListingRecyclerView = view.findViewById(R.id.userListingRecyclerView)
         lostAndFoundAdapter = LostAndFoundAdapter(this)
@@ -51,7 +49,7 @@ class LostFoundUserListingFragment : Fragment(), LostAndFoundAdapter.OnClickList
         addListingButton.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()?.apply {
                 replace(R.id.home_fragment_container, LostFoundItemFragment())
-                addToBackStack(null) // Add this line if you want to add the transaction to the back stack
+                addToBackStack(null) 
                 commit()
             }
         }
@@ -59,7 +57,6 @@ class LostFoundUserListingFragment : Fragment(), LostAndFoundAdapter.OnClickList
         getUserListings()
         parentFragmentManager.setFragmentResultListener("itemModified", this) { _, bundle ->
 
-            // Handle the result. For example, you could update UI or initiate some action based on 'result'.
         }
         return view;
     }
@@ -67,31 +64,29 @@ class LostFoundUserListingFragment : Fragment(), LostAndFoundAdapter.OnClickList
     private fun getUserListings() {
         val collectionRef = firebaseFirestore.collection("lostAndFound")
 
-// Query the collection, filtering by email and ordering by the date field
         collectionRef.whereEqualTo("email", email)
              .orderBy("dateTime", Query.Direction.DESCENDING) // Or Query.Direction.ASCENDING for ascending order
             .get()
             .addOnSuccessListener { documents ->
-                // Iterate through the documents
                 val resultList = mutableListOf<UserMap>()
                 for (document in documents) {
-                    // Access document data here
                     val userMap = document.toObject(UserMap::class.java)
                     userMap.id = document.id
-                    //Toast.makeText(requireContext(),userMap.id,Toast.LENGTH_SHORT).show()
                     resultList.add(userMap)
-                    // Process document data as needed
                 }
                 lostAndFoundAdapter.submitList(resultList)
-//                textView.text = resultList.toString()
             }
             .addOnFailureListener { exception ->
-                // Handle any errors
                 Log.e("Lost", "Error getting documents: ", exception)
                Toast.makeText(requireContext(),exception.toString(),Toast.LENGTH_LONG).show()
             }
-    }
+    }        
 
+    /**
+    * Overrides the onClickItem function to handle the click event on a user map item.
+    *
+    * @param userMap The user map that was clicked.
+    */
     override fun onClickItem(userMap: UserMap) {
         val lostFoundItemFragment = LostFoundItemFragment()
         val bundle = Bundle()
@@ -105,6 +100,11 @@ class LostFoundUserListingFragment : Fragment(), LostAndFoundAdapter.OnClickList
         }
     }
 
+    /**
+     * Displays an image dialog with the given [userMap]'s image.
+     *
+     * @param userMap The user map containing the image URI.
+     */
     override fun showImageDialog(userMap:UserMap) {
         val imageDialog = Dialog(requireContext())
         imageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

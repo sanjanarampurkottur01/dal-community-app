@@ -15,8 +15,8 @@ import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
 
-class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
-    private lateinit var resultList:MutableList<User>
+class SearchFragment : Fragment(), SearchAdapter.OnClickListener {
+    private lateinit var resultList: MutableList<User>
     private lateinit var searchUsers: SearchView
     private lateinit var usersRecyclerView: RecyclerView
     private lateinit var searchAdapter: SearchAdapter
@@ -52,7 +52,7 @@ class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
         searchUsers = view.findViewById(R.id.searchUsers)
         usersRecyclerView = view.findViewById(R.id.usersRecyclerView)
         searchAdapter = SearchAdapter(this)
-        usersRecyclerView.adapter=searchAdapter
+        usersRecyclerView.adapter = searchAdapter
         usersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         usersRecyclerView.setHasFixedSize(true)
         searchUsers.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -73,6 +73,11 @@ class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
         return view;
     }
 
+    /**
+     * Retrieves all users from the "users" collection in the Firestore database.
+     *
+     * @return A list of User objects representing the retrieved users.
+     */
     private fun getUsers() {
         FireStoreSingleton.getAllDocumentsOfCollection("users",
             { documents ->
@@ -82,26 +87,28 @@ class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
                     //Toast.makeText(requireContext(),userMap.id,Toast.LENGTH_SHORT).show()
                     resultList.add(user!!)
                 }
-                val query  = searchUsers.query
+                val query = searchUsers.query
                 val searchString = if (query.isNullOrEmpty()) "" else query.toString()
-                if(!searchString.isNullOrEmpty()) {
+                if (!searchString.isNullOrEmpty()) {
                     searchAdapter.submitList(resultList.filter { item ->
-                        if(item.name.isNullOrEmpty()) {
+                        if (item.name.isNullOrEmpty()) {
                             false
-                        }
-                        else {
+                        } else {
                             (item.name.replace(" ", "").lowercase()
                                 .contains(searchString.replace(" ", "").lowercase())
                                     )
                         }
                     })
-                }
-                else {
+                } else {
                     searchAdapter.submitList(resultList)
                 }
             },
             { exception ->
-                Toast.makeText(requireContext(), "Failed to load: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Failed to load: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         )
     }
@@ -110,21 +117,22 @@ class SearchFragment: Fragment(),SearchAdapter.OnClickListener {
         fun onUserSelected(user: User)
     }
 
+    /**
+     * Handles the click event when an item is clicked in the user list.
+     *
+     * @param user The user object that was clicked.
+     */
     override fun onClickItem(user: User) {
-        if (data == "") {
-            val userDetailsFragment = UserDetailsFragment()
-            val bundle = Bundle()
-            bundle.putSerializable("EXTRA_USER", user)
-            userDetailsFragment.arguments = bundle
+        val userDetailsFragment = UserDetailsFragment()
+        val bundle = Bundle()
+        bundle.putSerializable("EXTRA_USER", user)
+        userDetailsFragment.arguments = bundle
 
-            activity?.supportFragmentManager?.beginTransaction()?.apply {
-                replace(R.id.home_fragment_container, userDetailsFragment)
-                addToBackStack(null) // Add this line if you want to add the transaction to the back stack
-                commit()
+        activity?.supportFragmentManager?.beginTransaction()?.apply {
+            replace(R.id.home_fragment_container, userDetailsFragment)
+            addToBackStack(null) // Add this line if you want to add the transaction to the back stack
+            commit()
 
-            }
-        } else {
-            userSelectedListener?.onUserSelected(user)
         }
     }
 }

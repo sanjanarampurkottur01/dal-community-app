@@ -119,13 +119,9 @@ class LostFoundFragment: Fragment(),LostAndFoundPostsAdapter.OnClickListener {
                 }
 
                 if (isCleared) {
-                    // Handle the case when the search view is cleared
-                    // For example, reset the adapter to show all items
                     lostAndFoundPostsAdapter.submitList(resultList.filter{item->item.category.contains(selectedValue)})
                 }
                 else {
-                    // Perform live search as the user types
-                    // For example, filtering a RecyclerView adapter as the query text changes
                     val searchString = newText.toString()
                     lostAndFoundPostsAdapter.submitList(resultList.filter {
                             item -> (item.itemName.lowercase().contains(searchString.lowercase()) ||
@@ -149,17 +145,24 @@ class LostFoundFragment: Fragment(),LostAndFoundPostsAdapter.OnClickListener {
         listingButton.setOnClickListener {
             activity?.supportFragmentManager?.beginTransaction()?.apply {
                 replace(R.id.home_fragment_container, LostFoundUserListingFragment())
-                addToBackStack(null) // Add this line if you want to add the transaction to the back stack
+                addToBackStack(null)
                 commit()
             }
         }
 
         parentFragmentManager.setFragmentResultListener("result", this) { _, bundle ->
-            // Handle the result. For example, you could update UI or initiate some action based on 'result'.
         }
         return view;
     }
-
+        /**
+     * Retrieves a list of user listings from the "lostAndFound" collection in Firebase Firestore.
+     *
+     * This function queries the collection in descending order based on the "dateTime" field and retrieves the documents.
+     * It then iterates through the documents, converts each document to a UserMap object, and adds it to the resultList.
+     * The resultList is then filtered based on the selected item and search query, and submitted to the lostAndFoundPostsAdapter.
+     *
+     * @throws Exception if there is an error retrieving the data from Firebase Firestore.
+     */
     private fun getUserListings() {
         val collectionRef = firebaseFirestore.collection("lostAndFound")
 
@@ -167,15 +170,11 @@ class LostFoundFragment: Fragment(),LostAndFoundPostsAdapter.OnClickListener {
             .orderBy("dateTime", Query.Direction.DESCENDING) // Or Query.Direction.ASCENDING for ascending order
             .get()
             .addOnSuccessListener { documents ->
-                // Iterate through the documents
                 resultList = mutableListOf<UserMap>()
                 for (document in documents) {
-                    // Access document data here
                     val userMap = document.toObject(UserMap::class.java)
                     userMap.id = document.id
-                    //Toast.makeText(requireContext(),userMap.id,Toast.LENGTH_SHORT).show()
                     resultList.add(userMap)
-                    // Process document data as needed
                 }
                 val query  = searchItems.query
                 val searchString = if (query.isNullOrEmpty()) "" else query.toString()
@@ -192,7 +191,6 @@ class LostFoundFragment: Fragment(),LostAndFoundPostsAdapter.OnClickListener {
                     ) && (item.itemName.lowercase().contains(searchString.lowercase()) ||
                             item.description.lowercase().contains(searchString.lowercase()))
                 })
-//                textView.text = resultList.toString()
             }
             .addOnFailureListener { exception ->
                 // Handle any errors
@@ -201,6 +199,11 @@ class LostFoundFragment: Fragment(),LostAndFoundPostsAdapter.OnClickListener {
             }
     }
 
+    /**
+     * Clicks on an item and performs a map transaction.
+     *
+     * @param userMap the user map to be passed as an extra to the map fragment
+     */
     override fun onClickItem(userMap: UserMap) {
         val mapFragment = MapsFragment()
         val bundle = Bundle()

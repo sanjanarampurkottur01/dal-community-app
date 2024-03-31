@@ -64,6 +64,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         return view;
     }
 
+    /**
+     * Initializes the view with the user's information and map details.
+     *
+     * @param None
+     * @return None
+     */
     private fun initializeView() {
         if(userMap.profileImageUri.isNotEmpty()) {
             Picasso.get().load(userMap.profileImageUri).into(profileImage)
@@ -85,6 +91,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    /**
+     * Initializes the view with the user's information and map details.
+     *
+     * @param None
+     * @return None
+     */
     private fun showImageDialog() {
         val imageDialog = Dialog(requireContext())
         imageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -106,6 +118,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         imageDialog.show()
     }
 
+    /**
+     * Initializes the view with the user's information and map details.
+     *
+     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -120,10 +136,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundBuilder.build(),1000,1000,300))
         mMap.setOnCameraIdleListener(object : GoogleMap.OnCameraIdleListener {
             override fun onCameraIdle() {
-                // This part of the code will be executed after the bounds adjustment animation completes
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15f))
 
-                // Remove the listener to prevent this code from running on subsequent idle events
                 mMap.setOnCameraIdleListener(null)
             }
         })

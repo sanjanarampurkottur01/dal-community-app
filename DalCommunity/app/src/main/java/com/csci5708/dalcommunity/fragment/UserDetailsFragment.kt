@@ -52,6 +52,11 @@ class UserDetailsFragment: Fragment() {
         return view
     }
 
+    /**
+     * Populates the views with the provided user data.
+     *
+     * @param user The user object containing the data to populate the views.
+     */ 
     private fun populateViews(user: User) {
         userNameTextView.setText(user.name)
         if(!user.photoUri.isNullOrEmpty()) {
@@ -86,7 +91,6 @@ class UserDetailsFragment: Fragment() {
             interestGroup.visibility = View.GONE
         }
         else {
-            Toast.makeText(requireContext(),interests.toString(),Toast.LENGTH_SHORT).show()
             interestsTextView.setText(interests.joinToString { it })
         }
     }
