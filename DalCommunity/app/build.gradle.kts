@@ -117,4 +117,12 @@ dependencies {
     implementation("com.google.auth:google-auth-library-oauth2-http:1.1.0")
     implementation("com.google.api-client:google-api-client:1.32.1")
     implementation ("com.google.firebase:firebase-messaging:23.4.1")
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+
+
+
 }
