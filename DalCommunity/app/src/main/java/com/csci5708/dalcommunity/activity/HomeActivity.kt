@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.FrameLayout
@@ -27,6 +28,7 @@ import com.csci5708.dalcommunity.fragment.SearchFragment
 import com.csci5708.dalcommunity.fragment.TimeTableFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.csci5708.dalcommunity.model.User
+import com.csci5708.dalcommunity.util.BroadcastQuestionsSharedValues
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
