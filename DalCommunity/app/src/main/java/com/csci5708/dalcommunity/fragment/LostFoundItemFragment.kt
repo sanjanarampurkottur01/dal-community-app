@@ -106,7 +106,6 @@ class LostFoundItemFragment: Fragment() {
             { e -> getUserDataOnFailure() }
         )
         imageView.setOnClickListener {
-            //Toast.makeText(requireContext(),"Image Clicked",Toast.LENGTH_SHORT).show()
             val checkPermission = checkPermission()
             if(checkPermission()) {
                 showOptions()
@@ -130,13 +129,19 @@ class LostFoundItemFragment: Fragment() {
             if(bundle.containsKey("EXTRA_USER_MAP")) {
                 userMap = bundle.getSerializable("EXTRA_USER_MAP") as UserMap
             }
-//            descriptionEditText.text = Editable.Factory.getInstance().newEditable(userMap.toString())
 
-            // Handle the result. For example, you could update UI or initiate some action based on 'result'.
         }
         return view;
     }
 
+    /**
+     * Deletes an item from the lost and found collection in Firebase Firestore.
+     *
+     * This function is called when an item needs to be deleted from the collection. It first checks if the deletion was successful by passing a callback function to the `deleteData` method of `FireStoreSingleton`. If the deletion is successful, a success toast message is displayed. If the deletion fails, an error toast message is displayed.
+     *
+     * After the deletion, the function checks if the fragment is still added to its parent activity. If it is, it removes the fragment from its parent activity by setting a fragment result with the key "itemModified" and a boolean value of true. It then pops the back stack to navigate back to the previous fragment.
+     *
+     */
     private fun deleteItem() {
         val onComplete = { b: Boolean ->
             if (b) {
@@ -154,19 +159,22 @@ class LostFoundItemFragment: Fragment() {
             }
 
             if (isAdded && activity != null) {
-                // Remove the fragment from its parent activity
                 val result = Bundle().apply {
                     putBoolean("itemModified", true)
                 }
-                //activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
                 parentFragmentManager.setFragmentResult("itemModified", result)
                 parentFragmentManager.popBackStack()
-                //activity?.supportFragmentManager?.popBackStack()
             }
         }
         FireStoreSingleton.deleteData("lostAndFound",userMap.id,onComplete)
     }
 
+    
+    /**
+     * Populates the views with the data from the given UserMap object.
+     *
+     * @param existingUserMap the UserMap object containing the data to populate the views
+     */
     private fun populateViews(existingUserMap: UserMap) {
         userMap = existingUserMap
         itemNameEditText.setText(userMap.itemName)
@@ -194,6 +202,11 @@ class LostFoundItemFragment: Fragment() {
         }
     }
 
+    /**
+     * Saves the listing information entered by the user.
+     *
+     * @return void
+     */
     private fun saveListing() {
         var itemName = itemNameEditText.text.toString()
         var itemDescription = descriptionEditText.text.toString()
@@ -235,6 +248,9 @@ class LostFoundItemFragment: Fragment() {
 
     }
 
+    /**
+     * Adds a marker to the map.
+     */
     private fun addMarker() {
         val mapFragment = AddMarkerFragment()
         val bundle = Bundle()
@@ -249,6 +265,18 @@ class LostFoundItemFragment: Fragment() {
         }
     }
 
+    /**
+     * Sets the date and time values for the current date and time.
+     *
+     * This function retrieves the current date and time using the `Calendar` class and sets the values
+     * for the `date`, `month`, `year`, `hour`, and `minute` variables. It also initializes a `Calendar`
+     * object and sets up a `TimePickerDialog.OnTimeSetListener` to handle the selection of a time. The
+     * selected time is then set in the `myCalendar` object. Finally, a `DatePickerDialog.OnDateSetListener`
+     * is set up to handle the selection of a date. The selected date is set in the `myCalendar` object and
+     * a `TimePickerDialog` is shown to allow the user to select a time.
+     *
+     * @return void
+     */
     private fun setDateTime() {
         val calender = Calendar.getInstance()
         date = calender.get(Calendar.DATE)
@@ -281,6 +309,10 @@ class LostFoundItemFragment: Fragment() {
 
     }
 
+    /**
+     * Shows a dialog with options to take a photo, choose from the gallery, or cancel.
+     *
+     */
     private fun showOptions() {
         val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
         val builder = AlertDialog.Builder(requireContext())
@@ -289,12 +321,16 @@ class LostFoundItemFragment: Fragment() {
             when (which) {
                 0 -> dispatchTakePictureIntent()
                 1 -> dispatchPickImageIntent()
-                // Optionally handle Cancel here
             }
         }
         builder.show()
     }
 
+    /**
+     * Dispatches an intent to take a picture and saves it to the device.
+     *
+     * @return nothing
+     */
     private fun dispatchTakePictureIntent() {
         imageUri = createImageUri()
         imageUri?.let { uri ->
@@ -302,10 +338,23 @@ class LostFoundItemFragment: Fragment() {
         }
     }
 
+    /**
+     * Dispatches an intent to pick an image from the device's media library.
+     *
+     * This function launches an activity that allows the user to select an image from their device's
+     * media library. The selected image is returned as a result, and can be accessed through the
+     * [pickImageLauncher] object.
+     *
+     */
     private fun dispatchPickImageIntent() {
         pickImageLauncher.launch("image/*")
     }
 
+    /**
+     * Creates a new image URI using the content resolver.
+     *
+     * @return The URI of the newly created image, or null if an error occurred.
+     */
     private fun createImageUri(): Uri? {
         val contentResolver = requireActivity().contentResolver
         val contentValues = ContentValues().apply {
@@ -313,6 +362,8 @@ class LostFoundItemFragment: Fragment() {
         }
         return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
     }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
@@ -333,6 +384,11 @@ class LostFoundItemFragment: Fragment() {
         }
     }
 
+    /**
+     * Checks if the camera permission is granted.
+     *
+     * @return true if the camera permission is granted, false otherwise
+     */
     private fun checkPermission(): Boolean {
         return if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
@@ -342,6 +398,16 @@ class LostFoundItemFragment: Fragment() {
         } else true
     }
 
+    /**
+     * Requests the necessary permissions for the camera and external storage.
+     *
+     * This function uses the `ActivityCompat.requestPermissions` method to request the
+     * `CAMERA` and `WRITE_EXTERNAL_STORAGE` permissions. The permissions are requested
+     * through the `requestPermissions` method of the `requireActivity()` object.
+     *
+     * @param None
+     * @return None
+     */  
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             requireActivity(),
@@ -353,6 +419,14 @@ class LostFoundItemFragment: Fragment() {
         )
     }
 
+    /**
+     * Overrides the onRequestPermissionsResult function.
+     *
+     * @param  requestCode   the request code
+     * @param  permissions    the array of permissions
+     * @param  grantResults   the array of grant results
+     * @return                void
+     */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
@@ -369,13 +443,22 @@ class LostFoundItemFragment: Fragment() {
         Toast.makeText(activity, "Failed to get user data", Toast.LENGTH_LONG).show()
     }
 
+    /**
+     * Retrieves user data from the given document snapshot and updates the userMap object.
+     *
+     * @param doc The document snapshot containing the user data.
+     */
     private fun getUserDataOnSuccess(doc: DocumentSnapshot) {
         val userDetails = doc.data
         userMap.name = userDetails?.get("name").toString()
         userMap.profileImageUri = userDetails?.get("photoUri")?.toString() ?: ""
-        //setUserDetails(userDetails?.get("name").toString(), userDetails?.get("email").toString(), userDetails?.get("photoUri").toString())
     }
 
+    /**
+     * Sets the user data based on the current state of the user map and image URI.
+     *
+     * @throws NullPointerException if the user map or image URI is null.
+     */
     private fun setUserData() {
         if (userMap.id.isEmpty()) {
             storageRef = storageRef.child(userMap.email + System.currentTimeMillis().toString())
