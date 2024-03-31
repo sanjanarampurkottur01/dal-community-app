@@ -34,7 +34,7 @@
             android:name="com.csci5708.dalcommunity.activity.AnnouncementPostActivity"
             android:exported="false" />
         <activity
-            android:name="com.csci5708.dalcommunity.activity.AnnouncementAdminActivity"
+            android:name="com.csci5708.dalcommunity.activity.AnnouncementActivity"
             android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.

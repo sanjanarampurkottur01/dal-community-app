@@ -1,6 +1,9 @@
 package com.csci5708.dalcommunity.activity
 
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -8,11 +11,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.csci5708.dalcommunity.firestore.FCMNotificationSender
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.Announcement
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 
 class AnnouncementPostActivity : AppCompatActivity() {
@@ -49,19 +54,67 @@ class AnnouncementPostActivity : AppCompatActivity() {
         }
     }
 
-    private fun addAnnouncementToDatabase(announcement: Announcement) {
+    fun addAnnouncementToDatabase(announcement: Announcement) {
         // Add announcement to Firestore
-        FireStoreSingleton.addData("announcements", announcement,
-            onComplete = { isSuccess ->
-                if (isSuccess) {
-                    Toast.makeText(this, "Announcement posted successfully!", Toast.LENGTH_SHORT).show()
+        FireStoreSingleton.addData("announcements", announcement) { isSuccess ->
+            if (isSuccess) {
+                val title = announcement.title ?: "Announcement"
+                val content = announcement.content ?: "by admin"
+                // Send notification to everyone
+                sendAnnouncementNotificationToEveryone(title, content)
+                Toast.makeText(this, "Announcement posted successfully!", Toast.LENGTH_SHORT).show()
+                // Finish this activity
+                finish()
+            } else {
+                Toast.makeText(this, "Failed to post announcement", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-                    // Finish this activity
-                    finish()
+    val firestore = FirebaseFirestore.getInstance()
+    private fun sendAnnouncementNotificationToEveryone(title: String?, content: String?) {
+        firestore.runTransaction { transaction ->
+
+            var accessToken = ""
+            val SDK_INT = Build.VERSION.SDK_INT
+            if (SDK_INT > 8) {
+                val policy = StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build()
+                StrictMode.setThreadPolicy(policy)
+                accessToken = FCMNotificationSender.getAccessToken(this)
+            }
+            this?.let {
+                if (!title.isNullOrEmpty() && !content.isNullOrEmpty()) {
+                    FireStoreSingleton.getAllDocumentsOfCollection("users",
+                        onSuccess = { documents ->
+                            val tokens = mutableListOf<String>()
+                            for (document in documents) {
+                                val fcmToken = document.getString("fcmToken")
+                                if (!fcmToken.isNullOrEmpty()) {
+                                    tokens.add(fcmToken)
+                                }
+                            }
+
+                            FCMNotificationSender.sendNotificationToMultipleUsers(
+                                targetTokens = tokens,
+                                title = title,
+                                message = content,
+                                context = this,
+                                accessToken = accessToken,
+                                priority = "high"
+                            )
+                            Log.i("MyTag", "${tokens.size}")
+                        },
+                        onFailure = { exception ->
+                            // Handle failure to fetch FCM tokens
+                            exception.printStackTrace()
+                        }
+                    )
                 } else {
-                    Toast.makeText(this, "Failed to post announcement", Toast.LENGTH_SHORT).show()
+                    // Handle the case where title or content is null or empty
                 }
             }
-        )
+            true // Return true to commit the transaction
+        }
     }
 }

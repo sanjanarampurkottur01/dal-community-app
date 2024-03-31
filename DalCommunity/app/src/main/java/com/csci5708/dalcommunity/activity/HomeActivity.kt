@@ -23,7 +23,6 @@ import com.csci5708.dalcommunity.fragment.SearchFragment
 import com.csci5708.dalcommunity.fragment.TimelineFragment
 import com.example.dalcommunity.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.auth.FirebaseAuth
 
 
 class HomeActivity : AppCompatActivity() {
@@ -277,13 +276,8 @@ class HomeActivity : AppCompatActivity() {
             scannerIcon.setImageResource(R.drawable.scanner_outline)
             announcementIcon.setImageResource(R.drawable.icon_announcement)
 
-            if (FirebaseAuth.getInstance().currentUser?.email == "admin@dal.ca"){
-                val intent = Intent(this@HomeActivity, AnnouncementAdminActivity::class.java)
-                startActivity(intent)
-            } else {
-                val intent = Intent(this@HomeActivity, AnnouncementUserActivity::class.java)
-                startActivity(intent)
-            }
+            val intent = Intent(this@HomeActivity, AnnouncementActivity::class.java)
+            startActivity(intent)
         }
     }
     private fun checkNotificationEnabled(context: Context) {
