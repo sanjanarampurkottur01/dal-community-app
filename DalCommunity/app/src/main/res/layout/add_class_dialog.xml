@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/dialog_background"
-    android:padding="8dp"
+    android:padding="16dp"
     android:layout_height="wrap_content">
 
     <TextView
@@ -20,13 +19,36 @@
         />
 
     <TextView
+        android:id="@+id/pickAName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The class is for:"
+        android:textColor="@color/text_color"
+        android:textStyle="normal"
+        android:layout_below="@id/statement"
+        android:textSize="18dp"
+        android:layout_marginTop="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        />
+
+    <EditText
+        android:id="@+id/className"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pickAName"
+        android:textColor="@color/text_color"
+        android:hint="Class name.."
+        />
+
+    <TextView
         android:id="@+id/pickADay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pick a day of the week:"
         android:textColor="@color/text_color"
         android:textStyle="normal"
-        android:layout_below="@id/statement"
+        android:layout_below="@id/className"
         android:textSize="18dp"
         android:layout_marginTop="16dp"
         android:paddingStart="8dp"
@@ -55,7 +77,7 @@
             android:id="@+id/monday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/monday"
+            android:src="@drawable/monday_selected"
             android:layout_weight="1"
             />
 
@@ -123,6 +145,11 @@
         android:layout_centerHorizontal="true"
         app:trp_thumbIconStart="@drawable/start"
         app:trp_thumbIconEnd="@drawable/end"
+        android:layout_marginTop="8dp"
+        app:trp_stepTimeMinutes="30"
+        app:trp_hourFormat="FORMAT_12"
+        app:trp_startTime="10:00"
+        app:trp_endTime="11:30"
         />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -132,6 +159,7 @@
         android:layout_below="@id/timeRangePicker"
         android:background="@drawable/button_background"
         android:text="ADD CLASS"
+        android:layout_marginTop="16dp"
         android:textColor="@color/text_color"
         />
 

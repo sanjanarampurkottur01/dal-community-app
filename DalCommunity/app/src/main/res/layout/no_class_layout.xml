@@ -15,4 +15,17 @@
         android:src="@drawable/timeline"
         />
 
+    <TextView
+        android:id="@+id/timeStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/_11_30_am"
+        android:textSize="12sp"
+        android:layout_marginStart="8dp"
+        android:layout_centerVertical="true"
+        android:textStyle="italic"
+        android:textColor="#7E79DE"
+        android:textAlignment="center"
+        />
+
 </RelativeLayout>

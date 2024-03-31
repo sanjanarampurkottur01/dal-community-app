@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.csci5708.dalcommunity.activity.AnswerBroadcastQuestionActivity"
+    android:padding="16dp"
+    android:background="@color/background"
+    >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="@string/help_a_peer_out"
+        android:textAlignment="center"
+        />
+
+    <ProgressBar
+        android:id="@+id/loadingPB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/title"
+        />
+
+    <TextView
+        android:id="@+id/questionStatement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color"
+        android:layout_marginTop="16dp"
+        android:textStyle="bold"
+        android:text="@string/sample_text_post"
+        android:textSize="18sp"
+        android:layout_below="@id/title"
+        />
+
+    <TextView
+        android:id="@+id/yourAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color"
+        android:textStyle="normal"
+        android:layout_marginTop="16dp"
+        android:text="@string/your_answer"
+        android:layout_below="@id/questionStatement"
+        android:textSize="16sp"
+        />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/questionET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/text_color"
+        android:textColorHint="#7E7EF2"
+        android:textSize="16sp"
+        android:hint="@string/keep_it_brief"
+        android:layout_below="@id/yourAnswer"
+        android:backgroundTint="@color/text_color"
+        android:gravity="bottom"
+        android:lines="5"
+        android:textCursorDrawable="@null"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/answerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/questionET"
+        android:background="@drawable/btnbackground"
+        android:layout_marginTop="16dp"
+        android:text="Submit"
+        android:textColor="@color/white"
+        />
+
+</RelativeLayout>

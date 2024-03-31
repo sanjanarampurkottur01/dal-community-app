@@ -1,0 +1,113 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.csci5708.dalcommunity.fragment.BroadcastQuestionFragment">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:background="@drawable/time_table_background"
+        android:padding="16dp"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "@string/don_t_know_who_to_ask_a_question_you_have"
+            android:textSize="20sp"
+            android:textColor="@color/text_color"
+            />
+
+        <TextView
+            android:id="@+id/broadcast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "@string/broadcast"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_color"
+            android:layout_below="@id/title"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:layout_below="@id/broadcast"
+            android:background="@drawable/dialog_background"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="70dp"
+            >
+
+            <TextView
+                android:id="@+id/statement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text= "@string/briefly_enter_the_question_you_have_in_the_below_text_field"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:textColor="@color/text_color"
+                android:layout_marginTop="16dp"
+                />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/questionET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
+                android:textColorHint="#7E7EF2"
+                android:textSize="16sp"
+                android:hint="@string/keep_it_brief"
+                android:layout_below="@id/statement"
+                android:backgroundTint="@color/text_color"
+                android:gravity="bottom"
+                android:lines="5"
+                android:textCursorDrawable="@null"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/broadcastButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/questionET"
+                android:background="@drawable/btnbackground"
+                android:layout_marginTop="16dp"
+                android:text="@string/broadcast"
+                android:textColor="@color/white"
+                />
+
+            <TextView
+                android:id="@+id/disclaimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_color"
+                android:text="@string/you_get_once_broadcast_a_day_use_it_wisely"
+                android:layout_alignParentBottom="true"
+                android:textSize="11sp"
+                android:gravity="center"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/responsesBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btnbackground"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:padding="12dp"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/responses"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

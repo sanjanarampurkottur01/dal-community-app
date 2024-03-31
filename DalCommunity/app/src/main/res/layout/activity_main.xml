@@ -11,7 +11,7 @@
     <FrameLayout
         android:id="@+id/home_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -25,7 +25,7 @@
         <FrameLayout
             android:id="@+id/bottom_sheet"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="300dp"
             android:background="@drawable/navigation_fragment_background"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             android:elevation="8dp"
@@ -95,6 +95,7 @@
 
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/secondLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="36dp"
@@ -111,7 +112,7 @@
 
                     <ImageView
                         android:id="@+id/common_interest_icon"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_weight="20"
@@ -146,6 +147,16 @@
                         />
 
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/broadcast_question_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="36dp"
+                    android:layout_below="@id/secondLayout"
+                    android:src="@drawable/broadcast_outline"
+                    />
 
             </RelativeLayout>
         </FrameLayout>

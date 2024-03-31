@@ -68,4 +68,15 @@
         <item>Intellectual Property Violation</item>
         <item>Other</item>
     </string-array>
+
+    <string name="don_t_know_who_to_ask_a_question_you_have">Don\'t know who to ask?</string>
+    <string name="broadcast">\ Broadcast!</string>
+    <string name="briefly_enter_the_question_you_have_in_the_below_text_field">Briefly enter the question you have in the below text field.</string>
+    <string name="keep_it_brief">Keep it brief..</string>
+    <string name="you_get_once_broadcast_a_day_use_it_wisely">You get one broadcast a day. Use it wisely :)</string>
+    <string name="your_broadcast_questions">Your broadcast questions:</string>
+    <string name="question_statement">QUESTION STATEMENT</string>
+    <string name="sample_answer">Sample answer.</string>
+    <string name="help_a_peer_out">Help a peer out!</string>
+    <string name="your_answer">Your answer:</string>
 </resources>
