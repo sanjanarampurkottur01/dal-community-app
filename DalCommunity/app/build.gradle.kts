@@ -1,7 +1,24 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")}
+    id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+}
+
+secrets {
+    // Optionally specify a different file name containing your secrets.
+    // The plugin defaults to "local.properties"
+    propertiesFileName = "secrets.properties"
+
+    // A properties file containing default secret values. This file can be
+    // checked in version control.
+    defaultPropertiesFileName = "local.defaults.properties"
+
+    // Configure which keys should be ignored by the plugin by providing regular expressions.
+    // "sdk.dir" is ignored by default.
+    ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
+    ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
+}
 
 android {
     namespace = "com.example.dalcommunity"
@@ -53,10 +70,24 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
-
+    implementation("androidx.test.ext:junit-ktx:1.1.5")
+    debugImplementation("androidx.fragment:fragment-testing:1.6.2")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    val fragment_version = "1.6.2"
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -64,19 +95,39 @@ dependencies {
     implementation("androidx.activity:activity:1.8.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-firestore:24.10.3")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("androidx.fragment:fragment:$fragment_version")
     implementation("com.google.firebase:firebase-auth:22.3.1")
+    implementation ("com.airbnb.android:lottie:6.4.0")
+    implementation ("nl.joery.timerangepicker:timerangepicker:1.0.0")
+    // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-storage")
+    implementation ("com.squareup.picasso:picasso:2.8")
+
+
     implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.vanniktech:android-image-cropper:4.5.0")
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.mockito:mockito-core:5.7.0")
+    testImplementation("org.robolectric:robolectric:4.12")
+    testImplementation("androidx.test.ext:junit:1.1.5")
+    testImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation ("com.journeyapps:zxing-android-embedded:4.3.0")
+
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
     implementation("com.google.auth:google-auth-library-oauth2-http:1.1.0")
     implementation("com.google.api-client:google-api-client:1.32.1")
-    implementation ("com.google.firebase:firebase-messaging:22.0.0")
+    implementation ("com.google.firebase:firebase-messaging:23.4.1")
+    debugImplementation("androidx.fragment:fragment-testing:$fragment_version")
+    androidTestImplementation ("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+
+
+
 }

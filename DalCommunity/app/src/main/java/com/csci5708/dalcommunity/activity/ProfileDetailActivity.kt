@@ -46,6 +46,11 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.storage.storage
 import java.io.ByteArrayOutputStream
 
+/**
+ * Activity for editing profile details.
+ * This activity allows users to edit their profile details including name, email, description,
+ * interests, and profile image.
+ */
 class ProfileDetailActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var profileImageView: ImageView
     private lateinit var imagePicker: ActivityResultLauncher<PickVisualMediaRequest>

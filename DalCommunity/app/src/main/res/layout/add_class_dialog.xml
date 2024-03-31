@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/statement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADD A CLASS!"
+        android:textColor="@color/text_color"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textSize="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        />
+
+    <TextView
+        android:id="@+id/pickAName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The class is for:"
+        android:textColor="@color/text_color"
+        android:textStyle="normal"
+        android:layout_below="@id/statement"
+        android:textSize="18dp"
+        android:layout_marginTop="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        />
+
+    <EditText
+        android:id="@+id/className"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pickAName"
+        android:textColor="@color/text_color"
+        android:hint="Class name.."
+        android:textColorHint="@color/text_hint"
+        />
+
+    <TextView
+        android:id="@+id/pickADay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick a day of the week:"
+        android:textColor="@color/text_color"
+        android:textStyle="normal"
+        android:layout_below="@id/className"
+        android:textSize="18dp"
+        android:layout_marginTop="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pickADay"
+        android:layout_marginTop="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        >
+
+        <ImageView
+            android:id="@+id/sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/saturday"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/monday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/monday_selected"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tuesday"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/wednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/wednesday"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/tuesday"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/friday"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:id="@+id/saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/saturday"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/pickATime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pick class start and end time:"
+        android:textColor="@color/text_color"
+        android:textStyle="normal"
+        android:layout_below="@id/linearLayout"
+        android:textSize="18dp"
+        android:layout_marginTop="16dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        />
+
+    <nl.joery.timerangepicker.TimeRangePicker
+        android:id="@+id/timeRangePicker"
+        android:layout_below="@id/pickATime"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        app:trp_thumbIconStart="@drawable/start"
+        app:trp_thumbIconEnd="@drawable/end"
+        android:layout_marginTop="8dp"
+        app:trp_stepTimeMinutes="30"
+        app:trp_sliderColor="#C0C0FE"
+        app:trp_sliderRangeColor="@color/text_color"
+        app:trp_thumbColor="@color/text_color"
+        app:trp_clockTickColor="@color/text_color"
+        app:trp_clockLabelColor="@color/text_color"
+        app:trp_hourFormat="FORMAT_12"
+        app:trp_startTime="10:00"
+        app:trp_endTime="11:30"
+        />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/addClassBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeRangePicker"
+        android:background="@drawable/button_background"
+        android:text="ADD CLASS"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/text_color"
+        />
+
+</RelativeLayout>

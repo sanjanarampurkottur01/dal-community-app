@@ -21,17 +21,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.UsersAdapter
 import com.csci5708.dalcommunity.firestore.FCMNotificationSender
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
+import com.csci5708.dalcommunity.model.User
 import com.example.dalcommunity.R
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
-
+/**
+ * Activity for poking other users.
+ * Manages the display of users in a RecyclerView and handles user interactions.
+ */
 class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
     private lateinit var usersAdapter: UsersAdapter
-    private lateinit var originalUsers: List<Pair<String, String>>
+    private lateinit var originalUsers: List<User>
 
-
+    /**
+     * Called when the activity is first created.
+     * @param savedInstanceState If the activity is being re-initialized after previously being
+     * shut down, this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle)
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -67,11 +75,20 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
             }
         })
     }
+    /**
+     * Called when a user item is clicked.
+     * @param userName The name of the user clicked
+     * @param userId The ID of the user clicked
+     */
 
     override fun onItemClick(userName: String, userId: String) {
         showUserInfoDialog(userName, userId)
     }
-
+    /**
+     * Displays a dialog showing user information and handles the poke action.
+     * @param userName The name of the user to poke
+     * @param userEmail The email of the user to poke
+     */
     private fun showUserInfoDialog(userName: String, userEmail: String) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.poke_dialog, null)
         val alertDialogBuilder = AlertDialog.Builder(this)
@@ -94,6 +111,11 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
         }
     }
 
+    /**
+     * Handles the poke action when the poke button is clicked.
+     * @param message The message to send in the poke
+     * @param userEmail The email of the user to poke
+     */
     private fun onPokeClicked(message: String, userEmail: String){
         val db = FirebaseFirestore.getInstance()
         val userDocRef = db.collection("users").document(userEmail)
@@ -128,6 +150,7 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
                                         accessToken = accessToken,
                                         priority
                                     )
+                                    showToast("Successfully poked")
                                 } else {
                                     Log.d(TAG, "No such document")
                                 }
@@ -146,21 +169,28 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
                 showToast("Error fetching user document: $e")
             }
     }
-
+    /**
+     * Fetches all users from Firestore and updates the RecyclerView.
+     * @param usersAdapter The adapter for the RecyclerView
+     */
     private fun fetchAllUsers(usersAdapter: UsersAdapter) {
         val auth = Firebase.auth
         val currentUser = auth.currentUser
         FireStoreSingleton.getAllDocumentsOfCollection("users",
             { documents ->
-                val users = mutableListOf<Pair<String, String>>()
+                val users = mutableListOf<User>()
                 for (document in documents) {
                     val name = document.getString("name") ?: "Unknown"
                     val id = document.id
                     val email = document.getString("email") ?: "unknown"
-                    if (currentUser != null) {
-                        if(currentUser.email != email){
-                            users.add(Pair(name, email))
-                        }
+                    val description = document.getString("description") ?: ""
+                    val firstInterest = document.getString("firstInterest") ?: ""
+                    val secondInterest = document.getString("secondInterest") ?: ""
+                    val thirdInterest = document.getString("thirdInterest") ?: ""
+                    val photoUri = document.getString("photoUri") ?: ""
+                    if (currentUser != null && currentUser.email != email) {
+                        val user = User(name, email, description, firstInterest, secondInterest, thirdInterest, photoUri)
+                        users.add(user)
                     }
                 }
                 originalUsers = users
@@ -172,9 +202,18 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
             }
         )
     }
+    /**
+     * Displays a toast message.
+     * @param message The message to display in the toast
+     */
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+    /**
+     * Filters users based on the search query.
+     * @param query The search query
+     * @param usersAdapter The adapter for the RecyclerView
+     */
     private fun filterUsers(query: String, usersAdapter: UsersAdapter) {
         if (query.isBlank()) {
             usersAdapter.users = originalUsers
@@ -183,7 +222,7 @@ class PokeActivity : AppCompatActivity(), UsersAdapter.OnItemClickListener {
         }
 
         val filteredUsers = originalUsers.filter { user ->
-            user.first.contains(query, ignoreCase = true) // Filter based on name
+            user.name.contains(query, ignoreCase = true)
         }
         usersAdapter.users = filteredUsers
         usersAdapter.notifyDataSetChanged()

@@ -39,7 +39,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
     FragmentManager.OnBackStackChangedListener {
 
     // Fragment initialization parameters
-    private var userEmail: String? = null
+    var userEmail: String? = null
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var recyclerView: RecyclerView
 

@@ -3,7 +3,7 @@ package com.csci5708.dalcommunity.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -11,6 +11,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.dalcommunity.R
 
+/**
+ * Activity for managing account settings.
+ * This activity allows users to change their account settings, such as password.
+ */
 class AccountSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +33,8 @@ class AccountSettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        val changePasswdLayout: LinearLayout = findViewById(R.id.acc_sett_change_passwd)
+        // Handle click on change password text view
+        val changePasswdLayout: TextView = findViewById(R.id.acc_sett_change_passwd)
         changePasswdLayout.setOnClickListener {
             val changePasswordIntent = Intent(this, ChangePasswordActivity::class.java)
             startActivity(changePasswordIntent)

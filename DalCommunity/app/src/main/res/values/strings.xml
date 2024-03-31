@@ -28,6 +28,19 @@
     <string name="enter_new_password_again">Enter New Password Again</string>
     <string name="enter_new_password">Enter New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="schedule">Your Schedule</string>
+    <string name="_1">1</string>
+    <string name="may">May</string>
+    <string name="mon">Mon</string>
+    <string name="mobile_computing">Mobile Computing</string>
+    <string name="_14_30_pm">14:30 pm</string>
+    <string name="_11_30_am">11:30 am</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string-array name="dropdown_items">
+        <item>All Items</item>
+        <item>Lost Items</item>
+        <item>Found Items</item>
+    </string-array>
     <string name="what_do_you_want_to_poll">What do you want to poll?</string>
     <string name="create_poll">Create Poll</string>
     <string name="option_1">Option 1</string>
@@ -38,6 +51,13 @@
     <string name="capture_photo">Capture Dal Card</string>
     <string name="update_photo">Update Dal Card</string>
     <string name="delete_photo">Delete Dal Card</string>
+    <string name="my_saved_posts">My Saved Posts</string>
+    <string name="my_posts">My Posts</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="change_password_acc_settings">Change Password</string>
+    <string name="first_interest">First Interest</string>
+    <string name="second_interest">Second Interest</string>
+    <string name="third_interest">Third Interest</string>
 
     <string-array name="report_options">
         <item>Spam</item>
@@ -53,4 +73,14 @@
         <item>Other</item>
     </string-array>
 
+    <string name="don_t_know_who_to_ask_a_question_you_have">Don\'t know who to ask?</string>
+    <string name="broadcast">\ Broadcast!</string>
+    <string name="briefly_enter_the_question_you_have_in_the_below_text_field">Briefly enter the question you have in the below text field.</string>
+    <string name="keep_it_brief">Keep it brief..</string>
+    <string name="you_get_once_broadcast_a_day_use_it_wisely">You get one broadcast a day. Use it wisely :)</string>
+    <string name="your_broadcast_questions">Your broadcast questions:</string>
+    <string name="question_statement">QUESTION STATEMENT</string>
+    <string name="sample_answer">Sample answer.</string>
+    <string name="help_a_peer_out">Help a peer out!</string>
+    <string name="your_answer">Your answer:</string>
 </resources>

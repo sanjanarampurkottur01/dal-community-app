@@ -1,9 +1,15 @@
 package com.csci5708.dalcommunity.firestore
 
+import com.csci5708.dalcommunity.model.SavedPostGroup
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 
+/**
+ * Singleton class that provides APIs to the application to interact with FireStore
+ */
 object FireStoreSingleton {
     private val fireStoreInstance: FirebaseFirestore by lazy {
         FirebaseFirestore.getInstance()
@@ -127,6 +133,36 @@ object FireStoreSingleton {
             }
     }
 
+    fun getSavedPostGroupsForUser(id: String, onSuccess: (List<SavedPostGroup>) -> Unit, onFailure: (Exception) -> Unit) {
+        fireStoreInstance.collection("savedPosts")
+            .document(id)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val savedPostGroups = mutableListOf<SavedPostGroup>()
+
+                    val data = document.data
+                    data?.forEach { (groupName, groupData) ->
+                        if (groupData is Map<*, *>) {
+                            val name = groupData["name"] as? String ?: ""
+                            val posts = (groupData["posts"] as? List<*>)?.filterIsInstance<String>()
+                                ?.toTypedArray()
+                                ?: emptyArray()
+                            val savedPostGroup = SavedPostGroup(name, posts)
+                            savedPostGroups.add(savedPostGroup)
+                        }
+                    }
+
+                    onSuccess(savedPostGroups)
+                } else {
+                    onFailure(Exception("Document not found"))
+                }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
     fun getAllDocumentsOfCollectionWhereEqualTo(
         collection: String,
         fieldName: String,
@@ -139,6 +175,24 @@ object FireStoreSingleton {
                 onSuccess(documents.documents)
             }.addOnFailureListener { exception ->
             onFailure(exception)
+        }
+    }
+
+    fun getChatsData(
+        collection: String,
+        document: String,
+        listener: EventListener<QuerySnapshot>,
+        onFailure: (Exception) -> Unit
+    ) {
+        val collectionRef = fireStoreInstance.collection("$collection/$document/messages")
+        collectionRef.addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                onFailure(e)
+                return@addSnapshotListener
+            }
+            if (snapshot != null) {
+                listener.onEvent(snapshot, null)
+            }
         }
     }
 }
