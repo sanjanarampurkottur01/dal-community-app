@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.csci5708.dalcommunity.fragment.ProfileFragment"
-    android:background="@color/dark_background">
+    android:background="@color/background">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,8 +17,9 @@
             android:layout_width="337dp"
             android:layout_height="88dp"
             android:layout_marginTop="44dp"
+            android:textColor="@color/text_color"
             android:alpha="0.1"
-            android:background="@color/white"
+            android:background="@drawable/dialog_background"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,8 @@
             android:layout_height="20dp"
             android:layout_marginStart="25dp"
             android:layout_marginTop="24dp"
-            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textColor="@color/text_color"
             app:layout_constraintStart_toEndOf="@+id/profile_page_image"
             app:layout_constraintTop_toTopOf="@+id/profile_name_background" />
 
@@ -52,7 +54,7 @@
             android:layout_height="18dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="6dp"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color"
             app:layout_constraintStart_toEndOf="@+id/profile_page_image"
             app:layout_constraintTop_toBottomOf="@+id/profile_page_name" />
 
@@ -95,7 +97,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/account_settings"
-            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textColor="@color/text_color"
             app:layout_constraintBottom_toBottomOf="@+id/profile_page_account_settings_option"
             app:layout_constraintEnd_toEndOf="@+id/profile_page_account_settings_option"
             app:layout_constraintHorizontal_bias="0.0"
@@ -108,7 +111,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_posts"
-            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textColor="@color/text_color"
             app:layout_constraintBottom_toBottomOf="@+id/profile_page_posts_option"
             app:layout_constraintEnd_toEndOf="@+id/profile_page_posts_option"
             app:layout_constraintHorizontal_bias="0.083"
@@ -131,7 +135,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_saved_posts"
-            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textColor="@color/text_color"
             app:layout_constraintBottom_toBottomOf="@+id/profile_page_saved_posts_option"
             app:layout_constraintEnd_toEndOf="@+id/profile_page_saved_posts_option"
             app:layout_constraintHorizontal_bias="0.083"

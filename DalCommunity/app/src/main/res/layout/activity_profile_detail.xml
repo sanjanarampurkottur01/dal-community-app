@@ -43,8 +43,11 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/profile_detail_name_input"
-        android:layout_width="315dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:padding="16dp"
         android:background="@drawable/rounded_corner"
         android:hint="@string/profile_detail_name_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,8 +56,11 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/profile_detail_description_input"
-        android:layout_width="315dp"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:padding="16dp"
         android:background="@drawable/rounded_corner"
         android:gravity="top"
         android:hint="@string/profile_detail_description_placeholder"
@@ -65,8 +71,11 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/profile_detail_email_input"
-        android:layout_width="315dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:padding="16dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/rounded_corner"
         android:hint="@string/profile_detail_email_placeholder"
