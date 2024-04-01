@@ -1,5 +1,4 @@
 package com.csci5708.dalcommunity
-import android.os.Build
 import com.csci5708.dalcommunity.activity.AnnouncementPostActivity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -11,7 +10,7 @@ import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [Build.VERSION_CODES.P])
+@Config(sdk = [Config.OLDEST_SDK])
 class AnnouncementPostActivityTest {
 
     @Test
