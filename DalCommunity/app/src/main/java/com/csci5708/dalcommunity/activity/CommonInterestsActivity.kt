@@ -69,7 +69,6 @@ class CommonInterestsActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchAllUsersWithSimilarInterests(currentUserInterests: List<String>) {
     /**
      * Fetches users with similar interests from Firebase Firestore.
      * @param currentUserInterests List of interests of the current user.
@@ -106,5 +105,4 @@ class CommonInterestsActivity : AppCompatActivity() {
             }
         )
     }
-}
 }
