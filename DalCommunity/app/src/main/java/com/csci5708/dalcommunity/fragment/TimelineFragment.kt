@@ -85,9 +85,15 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
         if (userEmail != null) {
             addPostButton.visibility = View.GONE
         }
-        val addStudentIdIcon = view.findViewById<ImageView>(R.id.add_student_id_icon)
-        addStudentIdIcon.setOnClickListener {
-            startActivity(Intent(activity, AddStudentIDActivity::class.java))
+
+        if (userEmail == null) {
+            /* NOTE: Set student ID icon listener only in the case where this fragment is created
+             * for the HomeActivity.
+             */
+            val addStudentIdIcon = view.findViewById<ImageView>(R.id.add_student_id_icon)
+            addStudentIdIcon.setOnClickListener {
+                startActivity(Intent(activity, AddStudentIDActivity::class.java))
+            }
         }
 
         recyclerView = view.findViewById(R.id.recyclerView)

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -38,16 +39,22 @@ class SavedPostGroupsActivity : AppCompatActivity(), SavedGroupListAdapter.OnIte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_saved_post_groups)
         savedPosts = findViewById(R.id.saved_groups)
+
+        val userPostsToolbar: Toolbar = findViewById(R.id.user_posts_toolbar)
+        setSupportActionBar(userPostsToolbar)
+        supportActionBar?.title = "My Saved Groups"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
     }
 
     private fun setRecyclerViewData(data: List<SavedPostGroup>) {
         val adapter = SavedGroupListAdapter(this, data)
         savedPosts.layoutManager = GridLayoutManager(this, 2)
+        adapter.setOnItemClickListener(this)
         savedPosts.adapter = adapter
     }
 
     override fun onItemClick(position: Int) {
-        Log.e("Test", "test")
         val intent = Intent(this, SavedPostsActivity::class.java)
         intent.putExtra("posts", data[position].posts)
         startActivity(intent)
