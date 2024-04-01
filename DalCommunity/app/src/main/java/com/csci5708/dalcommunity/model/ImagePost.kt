@@ -12,6 +12,7 @@ class ImagePost : Post {
     var latLocation: Double = 0.0
     var longLocation: Double = 0.0
     var place: String = ""
+    override var comments: MutableList<Comment> = mutableListOf()
 
     constructor()
 
@@ -26,7 +27,8 @@ class ImagePost : Post {
         taggedUsers: List<String>,
         latLocation: Double,
         longLocation: Double,
-        place: String
+        place: String,
+        comments: MutableList<Comment>
     ) {
         this.postId = postId
         this.userId = userId
@@ -39,5 +41,6 @@ class ImagePost : Post {
         this.latLocation = latLocation
         this.longLocation = longLocation
         this.place = place
+        this.comments = comments
     }
 }

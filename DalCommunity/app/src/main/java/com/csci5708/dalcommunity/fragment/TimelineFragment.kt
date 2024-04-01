@@ -43,6 +43,9 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
     private lateinit var homeAdapter: HomeAdapter
     private lateinit var recyclerView: RecyclerView
 
+    // Declare posts as a property of the class
+    private var posts = mutableListOf<Post>()
+
     override fun onResume() {
         super.onResume()
 
@@ -132,14 +135,24 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
     // Handle click event for comment button
     override fun onCommentClick(position: Int) {
         view?.findViewById<FloatingActionButton>(R.id.create_post_fab)?.visibility = View.INVISIBLE
-//        Toast.makeText(activity, "test", Toast.LENGTH_LONG).show()
+
+        val postId = posts[position].postId
+
         val fragmentManager = activity?.supportFragmentManager
         val fragmentTransaction = fragmentManager?.beginTransaction()
         fragmentTransaction?.setCustomAnimations(
             R.anim.slide_in_top_comment,
             R.anim.slide_out_down_comment
         )
-        fragmentTransaction?.replace(R.id.fragment_container, CommentFragment())
+
+        // Pass the posts list to the CommentFragment
+        val commentFragment = CommentFragment()
+        val bundle = Bundle().apply {
+            putString("postId", postId)
+        }
+        commentFragment.arguments = bundle
+
+        fragmentTransaction?.replace(R.id.fragment_container, commentFragment)
         fragmentTransaction?.addToBackStack(null)
         fragmentTransaction?.commit()
     }
@@ -187,8 +200,6 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
     }
 
     private fun getAllPostsOnSuccess(documents: List<DocumentSnapshot>) {
-        val posts = mutableListOf<Post>()
-
         for (document in documents) {
             if (document.get("type") == 0L) {
                 val post = document.toObject(TextPost::class.java)
@@ -201,6 +212,7 @@ class TimelineFragment : Fragment(), HomeAdapter.OnImageInItemClickListener,
                 posts.add(post as PollPost)
             }
         }
+        // Initialize homeAdapter only after posts are fetched
         homeAdapter = HomeAdapter(requireContext(), posts)
         homeAdapter.setOnImageInItemClickListener(this)
         recyclerView.adapter = homeAdapter

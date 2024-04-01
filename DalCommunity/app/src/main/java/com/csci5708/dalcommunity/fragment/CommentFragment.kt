@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.animation.ObjectAnimator
 import android.text.Editable
+import android.util.Log
 import com.csci5708.dalcommunity.model.Comment
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.CommentAdapter
@@ -16,9 +17,11 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.EditText
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
 
 
 /**
@@ -29,6 +32,10 @@ class CommentFragment : Fragment() {
     private lateinit var commentsList: RecyclerView
     private lateinit var commentEditText: EditText
     private lateinit var postCommentBtn: Button
+    private lateinit var postId: String
+
+    val comments: MutableList<Comment> = mutableListOf()
+    val adapter = CommentAdapter(comments)
 
     /**
      * Inflates the layout for this fragment.
@@ -60,15 +67,22 @@ class CommentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         commentsList = view.findViewById(R.id.recyclerViewComments)
-        val comments: MutableList<Comment> = mutableListOf(Comment("1", "test"), Comment("2", "test123"))
-        val adapter = CommentAdapter(comments)
+
         commentsList.adapter = adapter
         commentsList.layoutManager = LinearLayoutManager(activity)
+
         commentEditText = view.findViewById(R.id.comment_text_box)
         postCommentBtn = view.findViewById(R.id.button_id)
 
         // Initially, hide the button
         postCommentBtn.visibility = View.GONE
+
+        arguments?.let {
+            postId = it.getString("postId", "")
+            FireStoreSingleton.getData("post", postId, {post ->
+                displayListOfComments(post)
+            }, {})
+        }
 
         // Add TextWatcher to listen for text changes
         commentEditText.addTextChangedListener(object : TextWatcher {
@@ -93,8 +107,32 @@ class CommentFragment : Fragment() {
         postCommentBtn.setOnClickListener {
             comments.add(Comment(Firebase.auth.currentUser?.email.toString(), commentEditText.text.toString()))
             adapter.notifyDataSetChanged()
+            commentEditText.text.clear()
+
+            FireStoreSingleton.updateDataField("post", postId, "comments", comments, {})
         }
     }
+
+    private fun displayListOfComments(post: DocumentSnapshot) {
+        val commentsData = post.get("comments") as? List<Map<String, Any>> // Retrieve the list of comments data
+
+        commentsData?.forEach { commentData ->
+            val commentText = commentData["comment"] as? String
+            val userId = commentData["userId"] as? String
+
+            // Create a Comment object and add it to the list
+            commentText?.let { text ->
+                userId?.let { user ->
+                    val comment = Comment(user, text)
+                    comments.add(comment)
+                }
+            }
+        }
+
+        // Now you have the list of Comment objects
+        adapter.notifyDataSetChanged()
+    }
+
     /**
      * Called when the fragment resumes.
      * Responsible for animating the fragment.
