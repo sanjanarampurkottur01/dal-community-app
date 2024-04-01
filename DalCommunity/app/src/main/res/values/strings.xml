@@ -83,5 +83,16 @@
     <string name="sample_answer">Sample answer.</string>
     <string name="help_a_peer_out">Help a peer out!</string>
     <string name="your_answer">Your answer:</string>
-    <string name="add_your_comment_here">Add your comment here...</string>
+    <string name="make_an_announcement">Make an Announcement!</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="todo">TODO</string>
+    <string name="post_announcement">POST ANNOUNCEMENT</string>
+    <string name="title">TITLE</string>
+    <string name="announcement">ANNOUNCEMENT</string>
+    <string name="announcement_message">Announcement Message</string>
+    <string name="sender_and_date">sender and date</string>
+    <string name="title_smallcase">Title</string>>
+    <string name="this_is_the_message_received">This is the message Received</string>
+    <string name="this_is_the_message_sent">This is the message sent</string>>
+
 </resources>
