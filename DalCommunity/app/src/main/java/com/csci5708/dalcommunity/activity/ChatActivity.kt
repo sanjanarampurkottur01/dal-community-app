@@ -1,7 +1,9 @@
 package com.csci5708.dalcommunity.activity
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
@@ -11,11 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.MessageAdapter
+import com.csci5708.dalcommunity.firestore.FCMNotificationSender
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.Message
 import com.example.dalcommunity.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
 class ChatActivity : AppCompatActivity() {
@@ -32,15 +36,23 @@ class ChatActivity : AppCompatActivity() {
     var senderRoom: String? = null
     var receiverRoom: String? = null
 
+    /**
+     * onCreate method to initialize the activity.
+     * @param savedInstanceState The saved instance state.
+     * @return Unit
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
+        // Initializing Firestore instance
         val fs = FireStoreSingleton
 
+        // Getting receiver's name and email from intent
         val receiverName = intent.getStringExtra("username")
         val receiverid = intent.getStringExtra("email")
 
+        // Setting up the toolbar
         chatToolbar = findViewById(R.id.tbChat)
         setSupportActionBar(chatToolbar)
         supportActionBar?.setTitle(receiverName)
@@ -50,21 +62,27 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        // Getting sender's email
         val senderid = FirebaseAuth.getInstance().currentUser?.email
 
+        // Creating sender and receiver rooms
         senderRoom = receiverid + senderid
         receiverRoom = senderid + receiverid
 
+        // Initializing views
         messageBoxEditText = findViewById(R.id.etMessageBox)
         sendMessageImageView = findViewById(R.id.ivSendMessage)
 
+        // Initializing message list and adapter
         messageList = ArrayList()
         adapter = MessageAdapter(this, messageList)
 
+        // Setting up RecyclerView
         chatRecyclerView = findViewById(R.id.rvChat)
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = adapter
 
+        // Fetching chat data from Firestore
         fs.getChatsData(
             "chat",
             senderRoom!!,
@@ -75,7 +93,7 @@ class ChatActivity : AppCompatActivity() {
                 }
                 if (snapshot != null) {
                     messageList.clear()
-                    var sortedDocs = snapshot.documents.sortedBy { it.getLong("sentTime") }
+                    val sortedDocs = snapshot.documents.sortedBy { it.getLong("sentTime") }
                     for (doc in sortedDocs) {
                         val message = doc.toObject(Message::class.java)
                         if (message != null) {
@@ -88,10 +106,11 @@ class ChatActivity : AppCompatActivity() {
                 }
             },
             onFailure = { exception ->
-                // Handle failure
+                Log.i("MyTag", "${exception.message}")
             }
         )
 
+        // Send message on button click
         sendMessageImageView.setOnClickListener {
             val message = messageBoxEditText.text.toString()
             if (message != ""){
@@ -103,9 +122,9 @@ class ChatActivity : AppCompatActivity() {
                     messageObject,
                     onComplete = { success ->
                         if (success) {
-                            // Message added successfully
+                            Log.i("MyTag", "Message added successfully")
                         } else {
-                            // Failed to add message
+                            Log.i("MyTag", "Failed to add message")
                         }
                     }
                 )
@@ -116,9 +135,11 @@ class ChatActivity : AppCompatActivity() {
                     messageObject,
                     onComplete = { success ->
                         if (success) {
-                            // Message added successfully
+                            Log.i("MyTag", "Message added successfully")
+                            val senderName = FirebaseAuth.getInstance().currentUser?.displayName
+                            sendNotificationToReceiver(receiverid!!, senderName!!, message)
                         } else {
-                            // Failed to add message
+                            Log.i("MyTag", "Failed to add message")
                         }
                     }
                 )
@@ -134,6 +155,50 @@ class ChatActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
 
+    var firestore = FirebaseFirestore.getInstance()
+    private fun sendNotificationToReceiver(receiverId: String, senderName: String, message: String) {
+        // Fetch receiver's FCM token from Firestore and send notification
+        firestore.runTransaction { _ ->
+            var accessToken = ""
+            val SDK_INT = Build.VERSION.SDK_INT
+            if (SDK_INT > 8) {
+                val policy = StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build()
+                StrictMode.setThreadPolicy(policy)
+                accessToken = FCMNotificationSender.getAccessToken(this)
+            }
+            this.let {
+                if (!senderName.isNullOrEmpty() && !message.isNullOrEmpty()) {
+                    // Fetch user document from Firestore
+                    firestore.collection("users").document(receiverId)
+                        .get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val fcmToken = documentSnapshot.getString("fcmToken")
+                            if (!fcmToken.isNullOrEmpty()) {
+                                // Send notification
+                                FCMNotificationSender.sendNotification(
+                                    fcmToken,
+                                    senderName,
+                                    message,
+                                    this,
+                                    accessToken,
+                                    "high"
+                                )
+                                Log.i("MyTag", "${senderName}, ${message}, ${receiverId}, ${fcmToken}")
+                            } else {
+                                Log.i("MyTag", "no token found")
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                           Log.i("MyTag", "${exception.message}")
+                        }
+                } else {
+                    Log.i("ChatActivity", "receiverId, receiverName, or message is null or empty")
+                }
+            }
+            true
+        }
     }
 }
