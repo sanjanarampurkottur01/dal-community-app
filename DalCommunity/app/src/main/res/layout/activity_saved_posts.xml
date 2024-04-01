@@ -5,11 +5,23 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.csci5708.dalcommunity.activity.SavedPostGroupsActivity">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/user_posts_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/text_color"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:titleTextColor="@color/white"
+        app:navigationIconTint="@color/white" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/saved_post_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>
