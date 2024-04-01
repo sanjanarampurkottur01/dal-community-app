@@ -16,31 +16,52 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Message>):
     val ITEM_RECEIVED = 1
     val ITEM_SENT = 2
 
+    /**
+     * Create view holder based on view type.
+     * @param parent The parent view group.
+     * @param viewType The view type.
+     * @return RecyclerView.ViewHolder
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if(viewType == 1){
-            //Inflate received layout
+        if(viewType == ITEM_RECEIVED){
+            // Inflate received layout
             val view: View = LayoutInflater.from(context).inflate(R.layout.message_received_layout, parent, false)
             return ReceivedMessageViewHolder(view)
         } else{
-            //Inflate sent layout
+            // Inflate sent layout
             val view: View = LayoutInflater.from(context).inflate(R.layout.message_sent_layout, parent, false)
             return SentMessageViewHolder(view)
         }
     }
 
+    /**
+     * Get total item count.
+     * @return Int
+     */
     override fun getItemCount(): Int {
         return messageList.size
     }
 
+    /**
+     * Get item view type.
+     * @param position The position of the item.
+     * @return Int
+     */
     override fun getItemViewType(position: Int): Int {
         val currentMessage = messageList[position]
-        if (Firebase.auth.currentUser?.email.equals(currentMessage.senderId)) {
-            return ITEM_SENT
+        return if (Firebase.auth.currentUser?.email.equals(currentMessage.senderId)) {
+            ITEM_SENT
         } else {
-            return ITEM_RECEIVED
+            ITEM_RECEIVED
         }
     }
 
+    /**
+     * Bind data to the view holder.
+     * @param holder The view holder.
+     * @param position The position in the list.
+     * @return Unit
+     */
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val currentMessage = messageList[position]
         if(holder.javaClass == SentMessageViewHolder::class.java){
@@ -54,12 +75,17 @@ class MessageAdapter(val context: Context, val messageList: ArrayList<Message>):
         }
     }
 
+    /**
+     * View holder for sent messages.
+     */
     class SentMessageViewHolder(view: View): RecyclerView.ViewHolder(view){
         val sentMessage = view.findViewById<TextView>(R.id.tvSentMessage)
     }
 
+    /**
+     * View holder for received messages.
+     */
     class ReceivedMessageViewHolder(view: View): RecyclerView.ViewHolder(view){
         val receivedMessage = view.findViewById<TextView>(R.id.tvReceivedMessage)
     }
-
 }
