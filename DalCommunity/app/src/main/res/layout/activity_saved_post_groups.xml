@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:orientation="vertical"
     tools:context="com.csci5708.dalcommunity.activity.SavedPostsActivity">
-    
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/saved_groups"
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/user_posts_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:listitem="@layout/saved_group_item" />
+        android:background="@color/text_color"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:titleTextColor="@color/white"
+        app:navigationIconTint="@color/white" />
 
-</ScrollView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/saved_groups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/saved_group_item" />
+
+    </ScrollView>
+
+</LinearLayout>
