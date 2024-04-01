@@ -151,7 +151,8 @@ class CreatePostActivity : AppCompatActivity(), TaggingFragment.OnUserSelectedLi
                     taggedUsers,
                     latitude,
                     longitude,
-                    place
+                    place,
+                    mutableListOf()
                 )
                 postToFirebase(postToPush, postId)
                 finish()
@@ -166,7 +167,8 @@ class CreatePostActivity : AppCompatActivity(), TaggingFragment.OnUserSelectedLi
                     taggedUsers,
                     latitude,
                     longitude,
-                    place
+                    place,
+                    mutableListOf()
                 )
                 postToFirebase(postToPush, postId)
                 uploadImageToFirebase(postId)

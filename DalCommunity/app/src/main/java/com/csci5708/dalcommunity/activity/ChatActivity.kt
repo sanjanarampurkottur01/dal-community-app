@@ -32,23 +32,15 @@ class ChatActivity : AppCompatActivity() {
     var senderRoom: String? = null
     var receiverRoom: String? = null
 
-    /**
-     * onCreate method to initialize the activity.
-     * @param savedInstanceState The saved instance state.
-     * @return Unit
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        // Initializing Firestore instance
         val fs = FireStoreSingleton
 
-        // Getting receiver's name and email from intent
         val receiverName = intent.getStringExtra("username")
         val receiverid = intent.getStringExtra("email")
 
-        // Setting up the toolbar
         chatToolbar = findViewById(R.id.tbChat)
         setSupportActionBar(chatToolbar)
         supportActionBar?.setTitle(receiverName)
@@ -58,27 +50,21 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        // Getting sender's email
         val senderid = FirebaseAuth.getInstance().currentUser?.email
 
-        // Creating sender and receiver rooms
         senderRoom = receiverid + senderid
         receiverRoom = senderid + receiverid
 
-        // Initializing views
         messageBoxEditText = findViewById(R.id.etMessageBox)
         sendMessageImageView = findViewById(R.id.ivSendMessage)
 
-        // Initializing message list and adapter
         messageList = ArrayList()
         adapter = MessageAdapter(this, messageList)
 
-        // Setting up RecyclerView
         chatRecyclerView = findViewById(R.id.rvChat)
         chatRecyclerView.layoutManager = LinearLayoutManager(this)
         chatRecyclerView.adapter = adapter
 
-        // Fetching chat data from Firestore
         fs.getChatsData(
             "chat",
             senderRoom!!,
@@ -89,7 +75,7 @@ class ChatActivity : AppCompatActivity() {
                 }
                 if (snapshot != null) {
                     messageList.clear()
-                    val sortedDocs = snapshot.documents.sortedBy { it.getLong("sentTime") }
+                    var sortedDocs = snapshot.documents.sortedBy { it.getLong("sentTime") }
                     for (doc in sortedDocs) {
                         val message = doc.toObject(Message::class.java)
                         if (message != null) {
@@ -102,11 +88,10 @@ class ChatActivity : AppCompatActivity() {
                 }
             },
             onFailure = { exception ->
-                Log.i("MyTag", "${exception.message}")
+                // Handle failure
             }
         )
 
-        // Send message on button click
         sendMessageImageView.setOnClickListener {
             val message = messageBoxEditText.text.toString()
             if (message != ""){
@@ -118,9 +103,9 @@ class ChatActivity : AppCompatActivity() {
                     messageObject,
                     onComplete = { success ->
                         if (success) {
-                            Log.i("MyTag", "Message added successfully")
+                            // Message added successfully
                         } else {
-                            Log.i("MyTag", "Failed to add message")
+                            // Failed to add message
                         }
                     }
                 )
@@ -131,9 +116,9 @@ class ChatActivity : AppCompatActivity() {
                     messageObject,
                     onComplete = { success ->
                         if (success) {
-                            Log.i("MyTag", "Message added successfully")
+                            // Message added successfully
                         } else {
-                            Log.i("MyTag", "Failed to add message")
+                            // Failed to add message
                         }
                     }
                 )

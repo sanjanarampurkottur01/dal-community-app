@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.csci5708.dalcommunity.activity.AccountSettingsActivity"
-    android:background="@color/background">
+    android:background="@color/dark_background">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/account_settings_toolbar"
@@ -38,7 +38,6 @@
             app:drawableStartCompat="@drawable/change_password_icon"
             android:drawablePadding="20dp"
             android:text="@string/change_password_acc_settings"
-            android:textColor="@color/text_color"
-            android:textStyle="bold"/>
+            android:textColor="@color/white" />
     </ScrollView>
 </RelativeLayout>

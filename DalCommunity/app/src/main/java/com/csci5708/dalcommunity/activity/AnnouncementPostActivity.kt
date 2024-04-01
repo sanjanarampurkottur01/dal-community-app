@@ -25,12 +25,6 @@ class AnnouncementPostActivity : AppCompatActivity() {
     private lateinit var announcementTitle: EditText
     private lateinit var announcementMessage: EditText
     private lateinit var postAnnouncementButton: Button
-
-    /**
-     * onCreate method to initialize the activity.
-     * @param savedInstanceState The saved instance state.
-     * @return Unit
-     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,12 +35,10 @@ class AnnouncementPostActivity : AppCompatActivity() {
             insets
         }
 
-        // Initializing views
         announcementTitle = findViewById(R.id.etAnnouncementTitle)
         announcementMessage = findViewById(R.id.etAnnouncementMessage)
         postAnnouncementButton = findViewById(R.id.btnPostAnnouncement)
 
-        // Set OnClickListener for postAnnouncementButton
         postAnnouncementButton.setOnClickListener {
             val title = announcementTitle.text.toString().trim()
             val message = announcementMessage.text.toString().trim()
@@ -62,13 +54,8 @@ class AnnouncementPostActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Add announcement to Firestore.
-     * @param announcement The announcement to be added.
-     * @return Unit
-     */
-    private fun addAnnouncementToDatabase(announcement: Announcement) {
-        // Add announcement to FireStore
+    fun addAnnouncementToDatabase(announcement: Announcement) {
+        // Add announcement to Firestore
         FireStoreSingleton.addData("announcements", announcement) { isSuccess ->
             if (isSuccess) {
                 val title = announcement.title ?: "Announcement"
@@ -85,14 +72,8 @@ class AnnouncementPostActivity : AppCompatActivity() {
     }
 
     val firestore = FirebaseFirestore.getInstance()
-    /**
-     * Send announcement notification to all users.
-     * @param title The title of the announcement.
-     * @param content The content of the announcement.
-     * @return Unit
-     */
     private fun sendAnnouncementNotificationToEveryone(title: String?, content: String?) {
-        firestore.runTransaction { _ ->
+        firestore.runTransaction { transaction ->
 
             var accessToken = ""
             val SDK_INT = Build.VERSION.SDK_INT
@@ -102,7 +83,7 @@ class AnnouncementPostActivity : AppCompatActivity() {
                 StrictMode.setThreadPolicy(policy)
                 accessToken = FCMNotificationSender.getAccessToken(this)
             }
-            this.let {
+            this?.let {
                 if (!title.isNullOrEmpty() && !content.isNullOrEmpty()) {
                     FireStoreSingleton.getAllDocumentsOfCollection("users",
                         onSuccess = { documents ->

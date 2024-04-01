@@ -15,9 +15,6 @@ import com.example.dalcommunity.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-/**
- * Activity to display users with common interests
- */
 class CommonInterestsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
 
@@ -25,24 +22,18 @@ class CommonInterestsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_common_interests)
 
-        // Setting up status bar and navigation bar colors to match the app's theme
         val window: Window = this.window
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.background)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.white)
 
-        // Initializing RecyclerView for displaying users
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Fetching interests of the current user from Firebase Firestore
         fetchCurrentUserInterests()
     }
 
-    /**
-     * Fetching interests of the current user from Firebase Firestore
-     */
     private fun fetchCurrentUserInterests() {
         val currentUserEmail = Firebase.auth.currentUser?.email
         if (currentUserEmail != null) {
@@ -51,7 +42,6 @@ class CommonInterestsActivity : AppCompatActivity() {
                 currentUserEmail,
                 onSuccess = { document ->
                     val userInterests = mutableListOf<String>()
-                    // Extracting user's interests from Firestore document
                     val firstInterest = document.getString("firstInterest")
                     if (!firstInterest.isNullOrEmpty()) {
                         userInterests.add(firstInterest)
@@ -64,7 +54,6 @@ class CommonInterestsActivity : AppCompatActivity() {
                     if (!thirdInterest.isNullOrEmpty()) {
                         userInterests.add(thirdInterest)
                     }
-                    // Fetching users with similar interests
                     fetchAllUsersWithSimilarInterests(userInterests)
                 },
                 onFailure = { exception ->
@@ -74,10 +63,6 @@ class CommonInterestsActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * Fetches users with similar interests from Firebase Firestore.
-     * @param currentUserInterests List of interests of the current user.
-     */
     private fun fetchAllUsersWithSimilarInterests(currentUserInterests: List<String>) {
         FireStoreSingleton.getAllDocumentsOfCollection(
             "users",
@@ -95,17 +80,14 @@ class CommonInterestsActivity : AppCompatActivity() {
 
                         val userInterests = listOf(userFirstInterest, userSecondInterest, userThirdInterest)
 
-                        // Filtering users based on interests
                         if (userInterests.all { it == "None" }) {
                             continue
                         } else if (userInterests.any { currentUserInterests.contains(it) && it != "None" }) {
-                            // Creating user objects for users with similar interests
                             val user = User(userName, userEmail, "", userFirstInterest, userSecondInterest, userThirdInterest, userPhotoUri)
                             users.add(user)
                         }
                     }
                 }
-                // Displaying users with common interests in RecyclerView using a custom adapter
                 recyclerView.adapter = CommonInterestsUsersAdapter(this, users, currentUserInterests)
             },
             onFailure = { exception ->

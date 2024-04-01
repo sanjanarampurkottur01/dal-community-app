@@ -107,7 +107,8 @@ class CreatePollPostActivity : AppCompatActivity() {
                         pollValues,
                         false,
                         Firebase.auth.currentUser?.displayName.toString(),
-                        HashMap()
+                        HashMap(),
+                        mutableListOf()
                     )
 
                     // Upload PollPost to FireStore "post" collection
