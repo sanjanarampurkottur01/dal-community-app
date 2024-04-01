@@ -21,4 +21,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="lavender">#8692f7</color>
     <color name="light_grey">#d3d3d3</color>
+    <color name="poll_light_purple">#9575CD</color>
+    <color name="poll_light_blue">#9FA8DA</color>
 </resources>

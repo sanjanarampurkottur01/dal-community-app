@@ -7,7 +7,7 @@
             <corners android:radius="30dp" />
             <stroke
                 android:width="1dp"
-                android:color="#D077F1" />
+                android:color="@color/poll_light_blue" />
         </shape>
     </item>
 
@@ -19,7 +19,7 @@
                     android:state_enabled="false" />
                 <item>
                     <shape android:shape="rectangle">
-                        <solid android:color="#DC7CF1" />
+                        <solid android:color="@color/poll_light_blue" />
                         <size android:height="30dp" />
                         <corners
                             android:bottomLeftRadius="20dp"
