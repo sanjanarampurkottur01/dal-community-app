@@ -15,12 +15,21 @@ import com.csci5708.dalcommunity.adapter.CommentAdapter
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.EditText
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 
 /**
  * A fragment representing comments.
  */
 class CommentFragment : Fragment() {
+
+    private lateinit var commentsList: RecyclerView
+    private lateinit var commentEditText: EditText
+    private lateinit var postCommentBtn: Button
+
     /**
      * Inflates the layout for this fragment.
      *
@@ -50,18 +59,19 @@ class CommentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerViewComments)
-        val comments: List<Comment> = listOf(Comment(1, "test"), Comment(2, "test123"))
+        commentsList = view.findViewById(R.id.recyclerViewComments)
+        val comments: MutableList<Comment> = mutableListOf(Comment("1", "test"), Comment("2", "test123"))
         val adapter = CommentAdapter(comments)
-        recyclerView.adapter = adapter
-        val editText = view.findViewById<EditText>(R.id.comment_text_box)
-        val button = view.findViewById<Button>(R.id.button_id)
+        commentsList.adapter = adapter
+        commentsList.layoutManager = LinearLayoutManager(activity)
+        commentEditText = view.findViewById(R.id.comment_text_box)
+        postCommentBtn = view.findViewById(R.id.button_id)
 
         // Initially, hide the button
-        button.visibility = View.GONE
+        postCommentBtn.visibility = View.GONE
 
         // Add TextWatcher to listen for text changes
-        editText.addTextChangedListener(object : TextWatcher {
+        commentEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 // To establish default behaviour
             }
@@ -73,12 +83,17 @@ class CommentFragment : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // Check if EditText has text, if yes, show the button, else hide it
                 if (s.isNullOrEmpty()) {
-                    button.visibility = View.GONE
+                    postCommentBtn.visibility = View.GONE
                 } else {
-                    button.visibility = View.VISIBLE
+                    postCommentBtn.visibility = View.VISIBLE
                 }
             }
         })
+
+        postCommentBtn.setOnClickListener {
+            comments.add(Comment(Firebase.auth.currentUser?.email.toString(), commentEditText.text.toString()))
+            adapter.notifyDataSetChanged()
+        }
     }
     /**
      * Called when the fragment resumes.
