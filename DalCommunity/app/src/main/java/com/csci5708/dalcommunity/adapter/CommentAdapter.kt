@@ -3,6 +3,8 @@ package com.csci5708.dalcommunity.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.model.Comment
 import com.example.dalcommunity.R
@@ -13,7 +15,6 @@ import com.example.dalcommunity.R
  * @param comments The list of comments to be displayed.
  */
 class CommentAdapter(private val comments: List<Comment>) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
-
     /**
      * Called when RecyclerView needs a new [CommentViewHolder] of the given type to represent an item.
      *
@@ -22,7 +23,7 @@ class CommentAdapter(private val comments: List<Comment>) : RecyclerView.Adapter
      * @return A new [CommentViewHolder] that holds a View of the given view type.
      */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.fragment_add_comment, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_comment, parent, false)
         return CommentViewHolder(view)
     }
 
@@ -53,14 +54,21 @@ class CommentAdapter(private val comments: List<Comment>) : RecyclerView.Adapter
      */
 
     class CommentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private var commentImage: ImageView
+        private var commentText: TextView
+
+        init {
+            commentImage = itemView.findViewById(R.id.comment_image)
+            commentText = itemView.findViewById(R.id.comment_content)
+        }
+
         /**
          * Binds the comment data to the ViewHolder.
          *
          * @param comment The comment object to bind.
          */
         fun bind(comment: Comment) {
-            TODO("Not yet implemented")
+            commentText.text = comment.comment
         }
-
     }
 }

@@ -45,21 +45,19 @@
             android:id="@+id/etMessageBox"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginStart="10dp"
             android:layout_weight="80"
-            android:autofillHints=""
+            android:layout_marginLeft="10dp"
             android:background="@drawable/bg_message_box"
+            android:paddingLeft="10dp"
             android:ems="10"
-            android:hint="@string/type_a_message"
-            android:inputType="text"
-            android:paddingLeft="10dp" />
+            android:hint="Type a message"
+            android:inputType="text" />
 
         <ImageView
             android:id="@+id/ivSendMessage"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="20"
-            android:src="@drawable/ic_send"
-            android:contentDescription="@string/todo" />
+            android:src="@drawable/ic_send" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

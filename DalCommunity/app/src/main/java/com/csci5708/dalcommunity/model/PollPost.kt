@@ -21,6 +21,7 @@ class PollPost : Post {
     lateinit var pollValuesList: List<PollValue>
     lateinit var userName: String
     lateinit var time: String
+    override lateinit var comments: MutableList<Comment>
     @Exclude
     var isUserVoteComplete: Boolean = false
     var userToVoteMap: HashMap<String, String> = HashMap()
@@ -46,7 +47,8 @@ class PollPost : Post {
         pollValuesList: List<PollValue>,
         isUserVoteComplete: Boolean,
         userName: String,
-        userToVoteMap: HashMap<String, String>
+        userToVoteMap: HashMap<String, String>,
+        comments: MutableList<Comment>
     ) : super() {
         this.postId = postId
         this.userId = userId
@@ -56,6 +58,7 @@ class PollPost : Post {
         this.time = Calendar.getInstance().time.toString()
         this.userName = userName
         this.userToVoteMap = userToVoteMap
+        this.comments = comments
         refreshPollData()
     }
 
