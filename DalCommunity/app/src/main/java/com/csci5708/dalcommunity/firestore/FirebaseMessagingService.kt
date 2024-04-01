@@ -45,7 +45,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 Log.d("DATARECEIVED", dataReceived.toString())
                 Log.d("DATARECEIVED_TITLE", title.toString())
                 Log.d("DATARECEIVED_MSG", msg.toString())
-                sendBroadcastNotification(title, msg.toString())
+                if (title!!.contentEquals("Help a peer out!")) {
+                    sendBroadcastNotification(title, msg!!)
+                } else {
+                    sendNotification(title, msg!!)
+                    Log.d("NOTIFICATION", "NORMAL")
+                }
                 onMsgReceivedCalled = false
             }
         } else {
