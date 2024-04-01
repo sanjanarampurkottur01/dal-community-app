@@ -20,7 +20,7 @@
                     android:state_enabled="false" />
                 <item>
                     <shape android:shape="rectangle">
-                        <solid android:color="@color/purple_50" />
+                        <solid android:color="@color/poll_light_blue" />
                         <size android:height="30dp" />
                         <corners
                             android:bottomLeftRadius="20dp"
