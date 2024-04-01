@@ -16,6 +16,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.firestore
 
+/**
+ * This is the activity opened when a user broadcasts a question and a notification is opened by anyone
+ */
 class AnswerBroadcastQuestionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

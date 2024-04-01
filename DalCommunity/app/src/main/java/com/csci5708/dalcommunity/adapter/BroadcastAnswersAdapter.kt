@@ -8,6 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dalcommunity.R
 
+/**
+ * Adapter to sow the user the responses to their broadcast question
+ */
 class BroadcastAnswersAdapter(private val context : Context, private val questions: List<String>) :
     RecyclerView.Adapter<BroadcastAnswersAdapter.ViewHolder>() {
 

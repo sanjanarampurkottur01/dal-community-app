@@ -35,7 +35,9 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Locale
 
-
+/**
+ * Fragment for viewing, adding and following classes.
+ */
 class TimeTableFragment : Fragment() {
     var classes : ArrayList<String> = arrayListOf()
     var classDetailMap = mutableMapOf<String, ArrayList<ClassDetails>>()
@@ -70,6 +72,9 @@ class TimeTableFragment : Fragment() {
         getFirebaseValues(docRef, todaysDay)
     }
 
+    /**
+     * Get the class details from firebase
+     */
     private fun getFirebaseValues(
         docRef: DocumentReference,
         todaysDay: String
@@ -442,6 +447,9 @@ class TimeTableFragment : Fragment() {
         return view
     }
 
+    /**
+     * Sort the classes based on the timings as the timings are stored as strings
+     */
     fun sortTimeStrings(timeStrings: ArrayList<ClassDetails>): ArrayList<ClassDetails> {
         val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
         val sortedTimeStrings = timeStrings.sortedBy { timeString ->

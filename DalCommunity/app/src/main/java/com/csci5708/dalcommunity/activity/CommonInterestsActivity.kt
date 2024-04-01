@@ -15,10 +15,13 @@ import com.example.dalcommunity.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+/**
+ * Activity to display users with common interests
+ */
 class CommonInterestsActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_common_interests)
 
@@ -34,7 +37,10 @@ class CommonInterestsActivity : AppCompatActivity() {
         fetchCurrentUserInterests()
     }
 
-    private fun fetchCurrentUserInterests() {
+    /**
+     * Fetching interests of the current user from Firebase Firestore
+     */
+    fun fetchCurrentUserInterests() {
         val currentUserEmail = Firebase.auth.currentUser?.email
         if (currentUserEmail != null) {
             FireStoreSingleton.getData(
@@ -63,7 +69,11 @@ class CommonInterestsActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchAllUsersWithSimilarInterests(currentUserInterests: List<String>) {
+    /**
+     * Fetches users with similar interests from Firebase Firestore.
+     * @param currentUserInterests List of interests of the current user.
+     */
+    fun fetchAllUsersWithSimilarInterests(currentUserInterests: List<String>) {
         FireStoreSingleton.getAllDocumentsOfCollection(
             "users",
             onSuccess = { documents ->

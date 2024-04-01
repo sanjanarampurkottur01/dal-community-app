@@ -25,7 +25,7 @@ import com.example.dalcommunity.R
 
 class AddStudentIDActivity : AppCompatActivity() {
 
-    private lateinit var sharedPreferences: SharedPreferences
+    lateinit var sharedPreferences: SharedPreferences
     private lateinit var studentIDPhoto: ImageView
     private var currentPhotoUri: Uri? = null
     private var hasImage = false
