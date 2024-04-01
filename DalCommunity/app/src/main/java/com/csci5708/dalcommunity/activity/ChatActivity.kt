@@ -1,7 +1,9 @@
 package com.csci5708.dalcommunity.activity
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
@@ -11,11 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.csci5708.dalcommunity.adapter.MessageAdapter
+import com.csci5708.dalcommunity.firestore.FCMNotificationSender
 import com.csci5708.dalcommunity.firestore.FireStoreSingleton
 import com.csci5708.dalcommunity.model.Message
 import com.example.dalcommunity.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
 class ChatActivity : AppCompatActivity() {
@@ -132,6 +136,8 @@ class ChatActivity : AppCompatActivity() {
                     onComplete = { success ->
                         if (success) {
                             Log.i("MyTag", "Message added successfully")
+                            val senderName = FirebaseAuth.getInstance().currentUser?.displayName
+                            sendNotificationToReceiver(receiverid!!, senderName!!, message)
                         } else {
                             Log.i("MyTag", "Failed to add message")
                         }
@@ -149,6 +155,50 @@ class ChatActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
 
+    var firestore = FirebaseFirestore.getInstance()
+    private fun sendNotificationToReceiver(receiverId: String, senderName: String, message: String) {
+        // Fetch receiver's FCM token from Firestore and send notification
+        firestore.runTransaction { _ ->
+            var accessToken = ""
+            val SDK_INT = Build.VERSION.SDK_INT
+            if (SDK_INT > 8) {
+                val policy = StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build()
+                StrictMode.setThreadPolicy(policy)
+                accessToken = FCMNotificationSender.getAccessToken(this)
+            }
+            this.let {
+                if (!senderName.isNullOrEmpty() && !message.isNullOrEmpty()) {
+                    // Fetch user document from Firestore
+                    firestore.collection("users").document(receiverId)
+                        .get()
+                        .addOnSuccessListener { documentSnapshot ->
+                            val fcmToken = documentSnapshot.getString("fcmToken")
+                            if (!fcmToken.isNullOrEmpty()) {
+                                // Send notification
+                                FCMNotificationSender.sendNotification(
+                                    fcmToken,
+                                    senderName,
+                                    message,
+                                    this,
+                                    accessToken,
+                                    "high"
+                                )
+                                Log.i("MyTag", "${senderName}, ${message}, ${receiverId}, ${fcmToken}")
+                            } else {
+                                Log.i("MyTag", "no token found")
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                           Log.i("MyTag", "${exception.message}")
+                        }
+                } else {
+                    Log.i("ChatActivity", "receiverId, receiverName, or message is null or empty")
+                }
+            }
+            true
+        }
     }
 }

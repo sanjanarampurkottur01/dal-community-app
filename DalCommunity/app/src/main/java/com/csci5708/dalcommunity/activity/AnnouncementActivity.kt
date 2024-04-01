@@ -24,7 +24,7 @@ class AnnouncementActivity : AppCompatActivity() {
     private lateinit var adapter: AnnouncementAdapter
     private lateinit var announcementToolbar: androidx.appcompat.widget.Toolbar
     private lateinit var announcementRecyclerView: RecyclerView
-    private lateinit var announcementButton: Button
+    lateinit var announcementButton: Button
 
     /**
      * onCreate method to initialize the activity.
@@ -81,7 +81,7 @@ class AnnouncementActivity : AppCompatActivity() {
      * Fetch announcements from Firestore.
      * @return Unit
      */
-    private fun fetchAnnouncements() {
+    fun fetchAnnouncements() {
         // Fetch announcements from FireStore
         FireStoreSingleton.getAllDocumentsOfCollection("announcements",
             onSuccess = { documents ->

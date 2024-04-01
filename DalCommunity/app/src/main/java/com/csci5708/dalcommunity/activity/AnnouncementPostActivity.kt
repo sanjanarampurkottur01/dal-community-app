@@ -22,9 +22,9 @@ import java.util.Calendar
 
 class AnnouncementPostActivity : AppCompatActivity() {
 
-    private lateinit var announcementTitle: EditText
-    private lateinit var announcementMessage: EditText
-    private lateinit var postAnnouncementButton: Button
+    lateinit var announcementTitle: EditText
+    lateinit var announcementMessage: EditText
+    lateinit var postAnnouncementButton: Button
 
     /**
      * onCreate method to initialize the activity.
@@ -84,7 +84,7 @@ class AnnouncementPostActivity : AppCompatActivity() {
         }
     }
 
-    val firestore = FirebaseFirestore.getInstance()
+    var firestore = FirebaseFirestore.getInstance()
     /**
      * Send announcement notification to all users.
      * @param title The title of the announcement.
@@ -130,10 +130,10 @@ class AnnouncementPostActivity : AppCompatActivity() {
                         }
                     )
                 } else {
-                    // Handle the case where title or content is null or empty
+                    Log.i("MyTag", "title or content null")
                 }
             }
-            true // Return true to commit the transaction
+            true
         }
     }
 }
